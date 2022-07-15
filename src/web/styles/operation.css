@@ -1,0 +1,82 @@
+section.operation {
+    display: flex;
+    align-items: center;
+    padding: 1em 2em 5em;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    color: #e4e4e4;
+}
+
+section.operation > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 30%;
+    flex-grow: 1;
+    
+    min-width: 430px;
+    padding: 1em;
+    margin: 0.5em 1em;
+    border-radius: 6px;
+    
+    background-color: #505050;
+    text-align: center;
+}
+
+section.operation div > div, section.operation div > table {
+    margin: 1em 0;
+    border-top: 1px solid #636363;
+    border-bottom: 1px solid #367a65;
+    width: 100%;
+}
+
+section.operation .options-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+section.operation .options-container label {
+    cursor: pointer;
+    flex: 1 1 30%;
+}
+
+section.operation .options-container input:checked + span {
+    color: #126e51;
+    background-color: #e4e4e4;
+}
+
+section.operation .options-container label span {
+    display: block;
+    text-align: center;
+    padding: 1em;
+}
+
+section.operation .options-container label:hover span{
+    background-color: #cecece;
+    color: #545454;
+}
+
+section.operation table th {
+    padding-top: 1em;
+}
+
+section.operation table th:first-child, 
+section.operation table td:first-child {
+    border-right: 1px solid #636363;
+}
+
+section.operation table td {
+    padding: 1em;
+}
+
+section.operation table input {
+    text-align: center;
+    width: 100%;
+}
+
+.options-container label input {
+    display: none;
+}
+
+section.operation + button {
+    width: 300px;
+}

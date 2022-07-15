@@ -1,0 +1,42 @@
+<div class = "wallet">
+    <header>
+        <div class="wallet-counter"> 0 </div>
+        <div class="open-wallet" onClick = "openBets()">
+            <h2> 
+                Caderneta de Apostas 
+            </h2>
+        </div>
+        <div class="wallet-balance">
+            <p> Saldo </p>
+            <p> R$0,00 </p>
+        </div>
+        <button class="wallet-close" onClick="closeBets()">
+            <img src="images/x.svg"></img>
+        </button>
+    </header>
+    <div> 
+        <button class="wallet-remove" 
+            onClick = "clearBets()"> 
+            Remover tudo 
+        </button> 
+    </div>
+    <ul class="wallet-bets">
+    </ul>
+    <button class="wallet-operate" onClick = "operate()"> 
+        Iniciar Operação 
+    </button>
+</div>
+<script>
+    function loadBets() {
+        const account = JSON.parse(localStorage.getItem('account'));
+        account.search.forEach(element => {
+            if (typeof(element[1]) !== "string") {
+                element[1] = `${element[1][0]} ${element[1][1]}`;
+            }
+            var input = addBet(element[0], element[1]);
+            input.value = `R$${element[2]}`
+        })
+        calculateAmount();
+    }
+    loadBets();
+</script>

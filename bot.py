@@ -11,7 +11,7 @@ api_id =  7948726
 api_hash = '0e6ac8c3f24c20a7f9bb7b5d6150bf68'
 delay = 0.5
 delay_start = 5
-bet = '0.50'
+bet = '5'
 move_down_bet = 80
 move_right_bet = 350
 
@@ -55,16 +55,13 @@ def browser_bot(msg, url):
     text = text.strip("(H)")
     text = text.strip("(ao vivo)")
      
-
-    print(text)
-
-    Db.add_url(message, msg_team_name[0], url)     
-    bot_escanteio_asiatico(text, url)
+    key = Db.add_url(message, msg_team_name[0], url)     
+    bot_escanteio_asiatico(key, text, url)
 
     
-def bot_escanteio_asiatico(text, url):
+def bot_escanteio_asiatico(key, text, url):
 
-   print('Iniciando escanteio asiático')
+   print('Iniciando escanteio asiático', text)
    start_browser(url)
    time.sleep(delay_start)
 
@@ -95,6 +92,7 @@ def bot_escanteio_asiatico(text, url):
 
 
    time.sleep(1)
+   Db.update_url(key)
    close_browser_tab()
    print('Finalizado')
 

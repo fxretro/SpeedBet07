@@ -25,8 +25,8 @@ db = firebase.database()
 ###########################################################
 
 
-def add_url(msg, url):
-  db.child("betAviso").push({'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss')})
+def add_url(msg, match, url):
+  db.child("betAviso").push({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss')})
 
 
 def get_urls():

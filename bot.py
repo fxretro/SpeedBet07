@@ -29,7 +29,7 @@ api_hash = '0e6ac8c3f24c20a7f9bb7b5d6150bf68'
 delay = 3
 delay_start = 5
 delay_end = 5
-bet = '5'
+bet = '1'
 move_down_bet = 80
 move_right_bet = 350
 

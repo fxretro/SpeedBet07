@@ -197,8 +197,7 @@ async def test():
 
 
 #asyncio.run(test())
-#asyncio.run(telegram_bot())
+asyncio.run(telegram_bot())
 
-scrapper_bot()
 
     

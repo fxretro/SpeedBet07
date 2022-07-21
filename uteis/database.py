@@ -21,7 +21,7 @@ db = firebase.database()
 
 
 ###########################################################
-# Monitoramentos
+# Monitoring
 ###########################################################
 
 
@@ -46,12 +46,21 @@ def get_urls():
          i= i+1
 
     return urlProduct
-        
-
+      
 
 def get_urls_stream(stream_handler):
-
   return db.child("posts").stream(stream_handler)
+
+
+
+###########################################################
+# Scapper
+###########################################################
+
+def add_scrapping(data):
+  key = db.generate_key()
+  db.child("betScrapping/"+key).update(data)
+  return key
 
 ###########################################################
 # Proxies

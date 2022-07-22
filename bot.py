@@ -1,5 +1,4 @@
 from telethon.sync import TelegramClient, events
-from telethon.tl.types import MessageEntityTextUrl
 from pyfiglet import  figlet_format
 from PIL import ImageColor
 from uteis.widget import *
@@ -10,8 +9,6 @@ import six
 import asyncio
 import uteis.database as Db
 import uteis.scrapper as scrapping
-
-
 
 try:
     from termcolor import colored
@@ -26,13 +23,13 @@ except ImportError:
 
 api_id =  7948726 
 api_hash = '0e6ac8c3f24c20a7f9bb7b5d6150bf68'
-delay = 3
+delay = 1
 delay_start = 5
 delay_end = 5
 bet = '1'
 move_down_bet = 80
 move_right_bet = 350
-
+url_search = "https://www.bet365.com/#/AX/K^ "
 
 
 color = ImageColor.getcolor('#FF8800', "RGB")
@@ -67,29 +64,23 @@ async def telegram_bot():
       def my_event_handler(event):
 
          msg = event.message
-         for url_entity, inner_text in msg.get_entities_text(MessageEntityTextUrl):
-               url = url_entity.url
-
-               browser_bot(msg.message, url)
+         browser_bot(msg.message)
                           
-
 
       @client.on(events.NewMessage(pattern='(?i).*Oportunidade! '))
       async def handler(event):
 
-         my_event_handler(event)
-         
-
+         my_event_handler(event)         
          #await event.reply('Hey!')
 
       await client.run_until_disconnected()
 
 
 ###########################################################
-# Browser Bot 
+# Browser Bot - No Headless
 ###########################################################
 
-def browser_bot(msg, url):   
+def browser_bot(msg):   
 
     message = msg
     msg = message.split("\n\n")    
@@ -102,6 +93,9 @@ def browser_bot(msg, url):
     text = text.replace("(ao vivo)", "")
     text = text + 'v '
     text = text.strip()
+
+    url = f'{url_search} {text[:-2]}'
+    print(url)
      
     key = Db.add_url(message, msg_team_name[0], url)     
     bot_escanteio_asiatico(key, text, url)
@@ -112,32 +106,37 @@ def bot_escanteio_asiatico(key, text, url):
    log('Iniciando escanteio asiático ' + text)
    start_browser(url)
    time.sleep(delay_start)
-   
-   time.sleep(delay)   
+
+   log('Clicando em ' + text)   
+   search_text("TEAMS")
    click_selected_text(color, text)
    
-   time.sleep(delay)
    log('Procurando Escanteios/Cart')
+   time.sleep(delay)   
    click_selected_text(color, 'Escanteios/Cart')
 
-   time.sleep(delay)    
    log('Procurando Escanteios Asia')
-   click_selected_text(color, 'Escanteios Asia', 1)
+   time.sleep(delay)       
+   click_selected_text(color, 'Escanteios Asia', 3)
 
-   time.sleep(delay)        
+
+   log('Movendo mouse')
+   time.sleep(delay)          
    x, y = get_position_mouse()
    yy = y + move_down_bet
    xx = x + move_right_bet    
-
    scroll_down_mouse(xx, yy)
-   click_mouse(xx, yy)
-
+   time.sleep(delay)        
+   
+   log('Clicando na aposta')
    time.sleep(delay)       
+   click_mouse(xx, yy)
+   
 
-   log('Procurando ' + text) 
+   log('Informando valor da aposta R$' + bet) 
    click_selected_text(color, 'Valor de Aposta')
    write_text(bet)    
-
+   
    x, y = get_position_mouse()
    click_mouse(x, y)
    click_mouse(x + move_right_bet, y)
@@ -170,9 +169,7 @@ def scrapper_bot():
         time.sleep(10)
         result = scrapping.scraping_live_now("file:///tmp/bet/bet.html")
 
-
         print(result)
-
         
         log('Aguardando próxima sessão....')
         time.sleep(60)
@@ -184,10 +181,14 @@ def scrapper_bot():
 # Tests
 ###########################################################
 
-async def test():
+async def atest():
    #browser_bot('Oportunidade! 🚨📊 \n\nESCANTEIO 1° TEMPOO OLHAR O NUMERO DE ESCANTEIO E ENTRAR +1 ESCANTEIO ASIATICO, QUANDO A LINHA DESCER ENTRAR +0,5 ASIATICO \n\n⚽️ Dorados (H) x Princesa do Solimoes U19 (A) (ao vivo)', 'https://www.bet365.com/#/AX/K^Dorados')
    scrapper_bot()
 
+
+def test():
+   #browser_bot_headless('Oportunidade! 🚨📊 \n\nESCANTEIO 1° TEMPOO OLHAR O NUMERO DE ESCANTEIO E ENTRAR +1 ESCANTEIO ASIATICO, QUANDO A LINHA DESCER ENTRAR +0,5 ASIATICO \n\n⚽️ Dorados (H) x Princesa do Solimoes U19 (A) (ao vivo)')
+   scrapper_bot()
 
 
 
@@ -198,6 +199,8 @@ async def test():
 
 #asyncio.run(test())
 asyncio.run(telegram_bot())
+
+#test()
 
 
     

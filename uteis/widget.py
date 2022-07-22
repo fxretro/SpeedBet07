@@ -4,6 +4,10 @@ import subprocess
 import time
 
 
+###########################################################
+# Visual tools
+###########################################################
+
 def start_browser(url):
     subprocess.call([r'firefox', '-new-tab', url])
     

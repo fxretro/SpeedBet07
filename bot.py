@@ -20,40 +20,36 @@ except ImportError:
 ###########################################################
 
 
-configs = Db.get_configurations()[0]
-
-api_id =  configs.get('api_id') 
-api_hash = configs.get('api_hash') 
-delay = configs.get('delay') 
-delay_start = configs.get('delay_start') 
-delay_end = configs.get('delay_end') 
-bet = configs.get('bet') 
-move_down_bet = configs.get('move_down_bet') 
-move_right_bet = configs.get('move_right_bet') 
 
 color = ImageColor.getcolor('#FF8800', "RGB")
-
-
 
 ###########################################################
 # Auxiliares 
 ###########################################################
 
+def get_configs():
 
-def show_configs():
+    configs = Db.get_configurations()[0]
+    return configs
+    
 
-    log('App Id: '+ str(api_id))
-    log('App Hash: ' + api_hash)
-    log('Delay: '+ str(delay))
-    log('Delay Start: ' + str(delay_start))
-    log('Delay End: ' + str(delay_end))
-    log('Bet Value: ' + bet)
-    log('Move down bet: ' + str(move_down_bet))
-    log('Move right bet: ' + str(move_right_bet))
+def show_configs(config):
+
+    log('App Id: '+ str(config.get("api_id")))
+    log('App Hash: ' + str(config.get("api_hash")))
+    log('Delay: '+ str(config.get("delay")))
+    log('Delay Start: ' + str(config.get("delay_start")))
+    log('Delay End: ' + str(config.get("delay_end")))
+    log('Bet Value: ' + str(config.get("bet")))
+    log('Move down bet: ' + str(config.get("move_down_bet")))
+    log('Move right bet: ' + str(config.get("move_right_bet")))
     
 
 
-def log(text, colour = 'green', font='slant', figlet=False):
+def log(text, colour = 'green', font='slant', figlet=False, key='0'):
+
+    if key != '0':
+        Db.update_url(key, text)
     
     if colored:
         if not figlet:
@@ -73,8 +69,9 @@ def log(text, colour = 'green', font='slant', figlet=False):
 async def telegram_bot():
 
    log('Inicializando bot')
+   config = get_configs()
 
-   async with TelegramClient('name', api_id, api_hash) as client:   
+   async with TelegramClient('name', config.get("api_id"), config.get("api_hash")) as client:   
 
       def my_event_handler(event):
 
@@ -83,15 +80,13 @@ async def telegram_bot():
             for url_entity, inner_text in msg.get_entities_text(MessageEntityTextUrl):
                 url = url_entity.url
 
-            browser_bot(msg.message, url)
+            check_status(msg.message, url)
                           
                           
 
       @client.on(events.NewMessage(pattern='(?i).*Oportunidade! '))
       async def handler(event):
-
-         my_event_handler(event)         
-         #await event.reply('Hey!')
+         my_event_handler(event)                  
 
       await client.run_until_disconnected()
 
@@ -99,6 +94,17 @@ async def telegram_bot():
 ###########################################################
 # Browser Bot - No Headless
 ###########################################################
+
+
+def check_status(msg, url):
+
+    configs = get_configs()
+
+    if configs.get('stopped') == 0:
+        browser_bot(msg, url)
+    else:
+        log('Robo em modo stop efetuado pelo administrador')
+
 
 def browser_bot(msg, url):   
 
@@ -120,52 +126,54 @@ def browser_bot(msg, url):
     
 def bot_escanteio_asiatico(key, text, url):
 
-   log('Iniciando escanteio asiático ' + text)
-   start_browser(url)
-   time.sleep(delay_start)
 
-   log('Clicando em ' + text)   
+   configs = get_configs()
+   show_configs(configs)
+
+   log('Iniciando escanteio asiático ' + text, key=key)
+   start_browser(url)
+   time.sleep(configs.get("delay_start"))
+
+   log('Clicando em ' + text, key=key)   
    search_text("TEAMS")   
    click_selected_text(color, text)
    
-   log('Procurando Odds Asiaticas')
-   time.sleep(delay)   
+   log('Procurando Odds Asiaticas', key=key)
+   time.sleep(configs.get("delay"))
    click_selected_text(color, 'Odds Asiaticas')
    
 
-   log('Procurando Escanteios Asia')
-   time.sleep(delay)       
+   log('Procurando Escanteios Asia', key=key)
+   time.sleep(configs.get("delay"))
    click_selected_text(color, 'Escanteios Asiaticos')
 
-
-   log('Movendo mouse')
-   time.sleep(delay)          
+   log('Movendo mouse', key=key)
+   time.sleep(configs.get("delay"))
    x, y = get_position_mouse()
-   yy = y + move_down_bet
-   xx = x + move_right_bet    
+   yy = y + configs.get("move_down_bet")
+   xx = x + configs.get("move_right_bet")
    scroll_down_mouse(xx, yy)
-   time.sleep(delay)        
+   time.sleep(configs.get("delay")) 
    
-   log('Clicando na aposta')
-   time.sleep(delay)       
+   log('Clicando na aposta', key=key)
+   time.sleep(configs.get("delay")) 
    click_mouse(xx, yy)
    
 
-   log('Informando valor da aposta R$' + bet) 
+   log('Informando valor da aposta R$' + configs.get("bet"), key=key) 
    click_selected_text(color, 'Valor de Aposta')
-   write_text(bet)    
+   write_text(configs.get("bet"))    
    
    x, y = get_position_mouse()
    click_mouse(x, y)
-   click_mouse(x + move_right_bet, y)
+   click_mouse(x + configs.get("move_right_bet"), y)
+   
+   Db.update_url(key, "Finalizado")
 
-   time.sleep(1)
-   Db.update_url(key)
-
-   time.sleep(delay_end)
+   time.sleep(configs.get("delay_end"))
    close_browser_tab()
 
-   log('Finalizado com sucesso')
+   log('Finalizado com sucesso', key=key)
 
 
 ###########################################################
@@ -175,9 +183,7 @@ def bot_escanteio_asiatico(key, text, url):
 
 async def main():
 
-    log('Inicializando sistema')
-
-    show_configs()
+    log('Inicializando sistema')    
     await telegram_bot()
 
 

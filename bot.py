@@ -1,14 +1,18 @@
 from telethon.sync import TelegramClient, events
+from telethon.tl.types import MessageEntityTextUrl
 from pyfiglet import  figlet_format
 from PIL import ImageColor
 from uteis.widget import *
 
+import platform
 import subprocess
 import datetime
 import six
 import asyncio
 import uteis.database as Db
 import uteis.scrapper as scrapping
+
+
 
 try:
     from termcolor import colored
@@ -21,16 +25,16 @@ except ImportError:
 ###########################################################
 
 
-api_id =  7948726 
-api_hash = '0e6ac8c3f24c20a7f9bb7b5d6150bf68'
-delay = 1
-delay_start = 5
-delay_end = 5
-bet = '1'
-move_down_bet = 80
-move_right_bet = 350
-url_search = "https://www.bet365.com/#/AX/K^ "
+configs = Db.get_configurations()[0]
 
+api_id =  configs.get('api_id') 
+api_hash = configs.get('api_hash') 
+delay = configs.get('delay') 
+delay_start = configs.get('delay_start') 
+delay_end = configs.get('delay_end') 
+bet = configs.get('bet') 
+move_down_bet = configs.get('move_down_bet') 
+move_right_bet = configs.get('move_right_bet') 
 
 color = ImageColor.getcolor('#FF8800', "RGB")
 
@@ -42,7 +46,7 @@ color = ImageColor.getcolor('#FF8800', "RGB")
 
 
 def log(text, colour = 'green', font='slant', figlet=False):
-
+    
     if colored:
         if not figlet:
             six.print_(colored('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + '] - ' + text, colour))
@@ -63,8 +67,13 @@ async def telegram_bot():
 
       def my_event_handler(event):
 
-         msg = event.message
-         browser_bot(msg.message)
+            msg = event.message
+            
+            for url_entity, inner_text in msg.get_entities_text(MessageEntityTextUrl):
+                url = url_entity.url
+
+            browser_bot(msg.message, url)
+                          
                           
 
       @client.on(events.NewMessage(pattern='(?i).*Oportunidade! '))
@@ -80,7 +89,7 @@ async def telegram_bot():
 # Browser Bot - No Headless
 ###########################################################
 
-def browser_bot(msg):   
+def browser_bot(msg, url):   
 
     message = msg
     msg = message.split("\n\n")    
@@ -91,12 +100,9 @@ def browser_bot(msg):
     text = text.replace("(A)", "")    
     text = text.replace("(H)", "")
     text = text.replace("(ao vivo)", "")
-    text = text + 'v '
+    text = text[1:]
     text = text.strip()
-
-    url = f'{url_search} {text[:-2]}'
-    print(url)
-     
+        
     key = Db.add_url(message, msg_team_name[0], url)     
     bot_escanteio_asiatico(key, text, url)
 
@@ -108,16 +114,17 @@ def bot_escanteio_asiatico(key, text, url):
    time.sleep(delay_start)
 
    log('Clicando em ' + text)   
-   search_text("TEAMS")
+   search_text("TEAMS")   
    click_selected_text(color, text)
    
-   log('Procurando Escanteios/Cart')
+   log('Procurando Odds Asiaticas')
    time.sleep(delay)   
-   click_selected_text(color, 'Escanteios/Cart')
+   click_selected_text(color, 'Odds Asiaticas')
+   
 
    log('Procurando Escanteios Asia')
    time.sleep(delay)       
-   click_selected_text(color, 'Escanteios Asia', 3)
+   click_selected_text(color, 'Escanteios Asiaticos')
 
 
    log('Movendo mouse')
@@ -149,12 +156,18 @@ def bot_escanteio_asiatico(key, text, url):
 
    log('Finalizado com sucesso')
 
+
+
+
+
     
 ###########################################################
 # Scrapper Bot 
 ###########################################################
 
 def scrapper_bot():   
+
+    print('scrapper_bot')
 
     while True:
 
@@ -187,9 +200,9 @@ async def atest():
 
 
 def test():
-   #browser_bot_headless('Oportunidade! 🚨📊 \n\nESCANTEIO 1° TEMPOO OLHAR O NUMERO DE ESCANTEIO E ENTRAR +1 ESCANTEIO ASIATICO, QUANDO A LINHA DESCER ENTRAR +0,5 ASIATICO \n\n⚽️ Dorados (H) x Princesa do Solimoes U19 (A) (ao vivo)')
+   #browser_bot('Oportunidade! 🚨📊 \n\nESCANTEIO 1° TEMPOO OLHAR O NUMERO DE ESCANTEIO E ENTRAR +1 ESCANTEIO ASIATICO, QUANDO A LINHA DESCER ENTRAR +0,5 ASIATICO \n\n⚽️ Dorados (H) x Princesa do Solimoes U19 (A) (ao vivo)', 'https://www.bet365.com/#/AX/K^Dorados')
    scrapper_bot()
-
+   #Db.add_configurations()
 
 
 ###########################################################

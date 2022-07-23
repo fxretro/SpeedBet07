@@ -48,10 +48,6 @@ def get_urls():
     return urlProduct
       
 
-def get_urls_stream(stream_handler):
-  return db.child("posts").stream(stream_handler)
-
-
 
 ###########################################################
 # Scapper
@@ -86,3 +82,37 @@ def get_proxies():
     i= i+1
 
   return proxies
+
+
+###########################################################
+# Configurations
+###########################################################
+
+
+def add_configurations():
+  data = {
+    'api_id':  7948726, 
+    'api_hash': '0e6ac8c3f24c20a7f9bb7b5d6150bf68',
+    'delay': 1, 
+    'delay_start': 5, 
+    'delay_end': 5, 
+    'bet': '15',
+    'move_down_bet': 80,
+    'move_right_bet': 350
+    }
+  db.child("configs").push(data)
+
+
+
+def get_configurations():
+
+  all = db.child("configs").get()
+  allArray = []
+
+  i = 0
+  for user in all.each():
+        
+        allArray.insert(i , user.val() )
+        i= i+1
+
+  return allArray

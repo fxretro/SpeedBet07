@@ -28,7 +28,8 @@ def click_selected_text(color, text, total_clicks = 2):
 
          if s.getpixel((x, y)) == color and i < total_clicks:
                i = i+1
-               click_mouse(x, y)    
+               click_mouse(x, y) 
+               time.sleep(0.5)   
         
 
 

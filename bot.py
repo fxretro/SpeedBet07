@@ -4,15 +4,10 @@ from pyfiglet import  figlet_format
 from PIL import ImageColor
 from uteis.widget import *
 
-import platform
-import subprocess
 import datetime
 import six
 import asyncio
 import uteis.database as Db
-import uteis.scrapper as scrapping
-
-
 
 try:
     from termcolor import colored
@@ -45,6 +40,19 @@ color = ImageColor.getcolor('#FF8800', "RGB")
 ###########################################################
 
 
+def show_configs():
+
+    log('App Id: '+ str(api_id))
+    log('App Hash: ' + api_hash)
+    log('Delay: '+ str(delay))
+    log('Delay Start: ' + str(delay_start))
+    log('Delay End: ' + str(delay_end))
+    log('Bet Value: ' + bet)
+    log('Move down bet: ' + str(move_down_bet))
+    log('Move right bet: ' + str(move_right_bet))
+    
+
+
 def log(text, colour = 'green', font='slant', figlet=False):
     
     if colored:
@@ -61,7 +69,10 @@ def log(text, colour = 'green', font='slant', figlet=False):
 # Telegram 
 ###########################################################
 
+
 async def telegram_bot():
+
+   log('Inicializando bot')
 
    async with TelegramClient('name', api_id, api_hash) as client:   
 
@@ -157,63 +168,23 @@ def bot_escanteio_asiatico(key, text, url):
    log('Finalizado com sucesso')
 
 
-
-
-
-    
-###########################################################
-# Scrapper Bot 
-###########################################################
-
-def scrapper_bot():   
-
-    print('scrapper_bot')
-
-    while True:
-
-        log('Coletando informações...')
-
-        time.sleep(10)
-        rc = subprocess.Popen("scripts/refresh_scrapping.sh")
-        rc.wait()
-
-        log('Scrappe realizado com sucesso. Organizando informações...')
-
-        time.sleep(10)
-        result = scrapping.scraping_live_now("file:///tmp/bet/bet.html")
-
-        print(result)
-        
-        log('Aguardando próxima sessão....')
-        time.sleep(60)
-        
-
-
-
-###########################################################
-# Tests
-###########################################################
-
-async def atest():
-   #browser_bot('Oportunidade! 🚨📊 \n\nESCANTEIO 1° TEMPOO OLHAR O NUMERO DE ESCANTEIO E ENTRAR +1 ESCANTEIO ASIATICO, QUANDO A LINHA DESCER ENTRAR +0,5 ASIATICO \n\n⚽️ Dorados (H) x Princesa do Solimoes U19 (A) (ao vivo)', 'https://www.bet365.com/#/AX/K^Dorados')
-   scrapper_bot()
-
-
-def test():
-   #browser_bot('Oportunidade! 🚨📊 \n\nESCANTEIO 1° TEMPOO OLHAR O NUMERO DE ESCANTEIO E ENTRAR +1 ESCANTEIO ASIATICO, QUANDO A LINHA DESCER ENTRAR +0,5 ASIATICO \n\n⚽️ Dorados (H) x Princesa do Solimoes U19 (A) (ao vivo)', 'https://www.bet365.com/#/AX/K^Dorados')
-   scrapper_bot()
-   #Db.add_configurations()
-
-
 ###########################################################
 # To the Moon!
 ###########################################################
 
 
-#asyncio.run(test())
-asyncio.run(telegram_bot())
+async def main():
 
-#test()
+    log('Inicializando sistema')
+
+    show_configs()
+    await telegram_bot()
+
+
+
+asyncio.run(main())
+
+
 
 
     

@@ -1,5 +1,6 @@
 from playwright.sync_api import sync_playwright
 import time
+import subprocess
 
 ###########################################################
 # Scrapper Soccer live 
@@ -54,5 +55,25 @@ def scraping_live_team(url, team):
 
     
 
-def click_team(str):
-    print(str)
+def scrapper_bot():   
+
+    print('scrapper_bot')
+
+    while True:
+
+        print('Coletando informações...')
+
+        time.sleep(10)
+        rc = subprocess.Popen("scripts/refresh_scrapping.sh")
+        rc.wait()
+
+        print('Scrappe realizado com sucesso. Organizando informações...')
+
+        time.sleep(10)
+        result = scraping_live_now("file:///tmp/bet/bet.html")
+
+        print(result)
+        
+        print('Aguardando próxima sessão....')
+        time.sleep(60)
+        

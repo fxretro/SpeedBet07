@@ -17,7 +17,7 @@ async def telegram_bot():
       def my_event_handler(event):
 
          msg = event.message
-         browser_bot(msg.message)
+         print(msg.message)
                           
 
       @client.on(events.NewMessage(pattern='(?i).*Oportunidade! '))

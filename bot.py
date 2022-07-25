@@ -27,10 +27,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 color = ImageColor.getcolor('#FF8800', "RGB")
-
-
 uid = config['default']['uid']
-print(uid)
 
 
 ###########################################################

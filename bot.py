@@ -1,9 +1,11 @@
+from logging import exception
 from telethon.sync import TelegramClient, events
 from telethon.tl.types import MessageEntityTextUrl
 from pyfiglet import  figlet_format
 from PIL import ImageColor
 from uteis.widget import *
 
+import configparser
 import datetime
 import six
 import asyncio
@@ -21,7 +23,15 @@ except ImportError:
 
 
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+
 color = ImageColor.getcolor('#FF8800', "RGB")
+
+
+uid = config['default']['uid']
+print(uid)
+
 
 ###########################################################
 # Auxiliares 
@@ -29,8 +39,12 @@ color = ImageColor.getcolor('#FF8800', "RGB")
 
 def get_configs():
 
-    configs = Db.get_configurations()[0]
-    return configs
+    try:
+        configs = Db.get_configurations(uid)[0]
+        return configs
+
+    except exception as e:
+        print(e)
     
 
 def show_configs(config):
@@ -56,9 +70,9 @@ def log(text, colour = 'green', font='slant', figlet=False, key='0'):
             six.print_(colored('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + '] - ' + text, colour))
         else:
             six.print_(colored(figlet_format(
-                ['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + '] + text, font=font), colour))
+                '['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text, font=font), colour))
     else:
-        six.print_(['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + '] + text)
+        six.print_('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text)
 
 
 ###########################################################
@@ -70,6 +84,8 @@ async def telegram_bot():
 
    log('Inicializando bot')
    config = get_configs()
+
+   print(config)
 
    async with TelegramClient('name', config.get("api_id"), config.get("api_hash")) as client:   
 

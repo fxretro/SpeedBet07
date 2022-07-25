@@ -11,7 +11,7 @@ config = {
   "storageBucket": "ghostbot-27831.appspot.com",
   "messagingSenderId": "868283060392",
   "appId": "1:868283060392:web:83fa6cccfbc966565eb29d",
-  "serviceAccount": "/home/diego/Documentos/Projetos/Ghost/Ghost-Bot/sneaker-monitors/monitors/snkrs/ghostbot.json"
+  "serviceAccount": "/tmp/ghostbot.json"
 }
 
 
@@ -38,13 +38,11 @@ def get_urls():
 
     all_users = db.child("betAviso").get()
     urlProduct = []
-
-    i = 0
+        
     for user in all_users.each():
 
          product = user.val()           
-         urlProduct.insert(i , product)
-         i= i+1
+         urlProduct.append(product)         
 
     return urlProduct
       
@@ -72,14 +70,11 @@ def get_proxies():
 
   proxies = []
 
-  all_proxies = db.child("proxies").get()
-  i = 0
+  all_proxies = db.child("proxies").get()  
 
   for px in all_proxies.each():
-
     proxy = px.val()     
-    proxies.insert(i, proxy['url']+":"+proxy['port'])
-    i= i+1
+    proxies.append(proxy['url']+":"+proxy['port'])    
 
   return proxies
 
@@ -89,30 +84,27 @@ def get_proxies():
 ###########################################################
 
 
-def add_configurations():
+def add_configurations(uid):
   data = {
     'api_id':  7948726, 
     'api_hash': '0e6ac8c3f24c20a7f9bb7b5d6150bf68',
     'delay': 1, 
     'delay_start': 5, 
     'delay_end': 5, 
-    'bet': '15',
+    'bet': '5',
     'move_down_bet': 80,
     'move_right_bet': 350
     }
-  db.child("configs").push(data)
+  db.child("configs/"+uid).push(data)
 
 
 
-def get_configurations():
+def get_configurations(uid):
 
-  all = db.child("configs").get()
+  all = db.child("configs/"+uid).get()
   allArray = []
 
-  i = 0
-  for user in all.each():
-        
-        allArray.insert(i , user.val() )
-        i= i+1
+  for user in all.each():        
+        allArray.append(user.val())        
 
   return allArray

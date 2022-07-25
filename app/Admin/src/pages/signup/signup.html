@@ -1,0 +1,93 @@
+<ion-header class="lot-vs-phan">
+  
+  <ion-navbar>
+      <ion-title>{{dataInfo.appName}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="lot-vs-phan">
+
+  <img src="https://cdn.discordapp.com/avatars/822263995524055070/db0befcb10561deb6d68f9f3529d0623.webp?size=128" class="logo">
+
+  <ion-list class="mgb-10">
+
+    <ion-item class="text-grey-5 white" no-lines>        
+
+      <ion-input class="fs-13" 
+        type="text" 
+        placeholder="Nome completo" 
+        [(ngModel)]="fullname" 
+        (keyup.enter)="fullnameInputChanged()"        
+        #fullnameInput>
+      </ion-input>        
+    </ion-item>
+    
+
+    <ion-item class="text-grey-5 white"  no-lines>
+      <ion-input class="fs-13" 
+      type="number" 
+      placeholder="Seu telefone para contato" 
+      [(ngModel)]="tel" 
+      (keyup.enter)="telInputChanged()"        
+      #telInput>
+    </ion-input>
+
+    </ion-item>   
+
+
+    <ion-item class="text-grey-5 white"  no-lines>
+      <ion-input class="fs-13" 
+      type="email" 
+      placeholder="{{data.txtEmail}}" 
+      [(ngModel)]="email" 
+      (keyup.enter)="emailInputChanged()"        
+      #emailInput>
+    </ion-input>
+
+    </ion-item>     
+  
+    <ion-item class="text-grey-5 white"  no-lines>
+      <ion-input class="fs-13" 
+      type="password" 
+      placeholder="Digite sua senha" 
+      [(ngModel)]="password"
+
+      (keyup.enter)="passwordInputChanged()"        
+      #passwordInput>
+    </ion-input>
+
+    </ion-item>
+
+    <ion-note margin-left ion-text color="danger" *ngIf="password && password1 && password.length > 0 && password1.length > 0 && password != password1">{{dataText.passwordNotMatch}}</ion-note>
+
+    <ion-item class="text-grey-5 white"  no-lines>
+        <ion-input class="fs-13" 
+        type="password" 
+        placeholder="Confirmar senha" 
+        [(ngModel)]="password1" 
+        (keyup.enter)="password1InputChanged()"        
+        #password1Input>
+      </ion-input>
+
+    </ion-item>
+    
+     
+    <button ion-button block full text-uppercase color="light" [disabled]="!tel || !fullname || !dataInfo.appUserType || !email || !password || password != password1"      
+      class="mgt-15 text-white pink-vs-red pull-right uppercase fw-600 spacing-1 fs-12" (click)="signupUser()">Adicionar</button>        
+
+    
+  </ion-list>      
+  
+
+</ion-content>
+
+<ion-footer style="background-color: transparent;">
+  
+  <ion-row text-center>
+      <ion-col (click)="goTerms()"><small class="text-theme"><strong class="text-theme">Termos de uso</strong></small></ion-col>
+  </ion-row>    
+
+  <ion-row text-center>
+      <ion-col (click)="goPriv()"><small class="text-theme"><strong class="text-theme">Privacidade</strong></small></ion-col>
+  </ion-row>    
+</ion-footer>

@@ -1,0 +1,36 @@
+<ion-header class="bg-theme text-white">
+
+    <ion-navbar text-center no-border-bottom>      
+      <ion-title> Painel </ion-title>
+      
+      <ion-buttons end>        
+                     
+        <button ion-button style="color: white" (click)="logout()" class="mrg-bt-10">                  
+          <ion-icon name="md-exit"  item-start style="margin-right: 15px;"></ion-icon>        
+          Sair
+        </button>
+
+      </ion-buttons>
+  
+  </ion-navbar>  
+  
+  </ion-header>
+  
+  <ion-content padding>
+
+    <ion-list padding no-lines>
+      
+      <ion-item  (click)="goPageSettings()">
+        Configurações
+      </ion-item>
+
+      <ion-item  (click)="goPageMonitorOnline()">
+        Apostas
+    </ion-item>
+
+                       
+    </ion-list>
+
+
+    </ion-content>
+  

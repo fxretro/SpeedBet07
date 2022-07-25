@@ -1,0 +1,48 @@
+
+<ion-header>
+  <ion-navbar text-center no-border-bottom>
+    <ion-title>Apostas</ion-title>     
+
+    <!--<ion-buttons end>        
+                     
+      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10">                  
+        <ion-icon name="md-stop"  item-start style="margin-right: 15px;"></ion-icon>        
+        Parar robô
+      </button>
+
+    </ion-buttons>-->
+
+  </ion-navbar>     
+</ion-header>
+
+<ion-content class="trips detail-bg">
+
+  <ion-list padding>    
+
+      <ion-card class="trip card" text-wrap *ngFor="let service of snkrs" no-lines>
+
+        <ion-item>     
+          
+             
+          <ion-avatar item-start>
+            <img src="./assets/imgs/default-user.png" *ngIf="! service.thumbnail">
+            <img src="{{service.thumbnail}}" *ngIf="service.thumbnail">
+          </ion-avatar>
+
+          
+          <h2>{{dataText.name}}: {{service.title}}</h2>
+          <p><b>URL:  </b><a href={{service.link}}>Clique para abrir</a></p>              
+          <p *ngIf="service.status"><b>Status:  </b>{{service.status}}</p>
+          <p *ngIf="service.datetimeStr"><b>Atualizado em:  </b>{{service.datetimeStr}}</p>          
+          <p *ngIf="service.match"><b>Palavra-chave:  </b>{{service.match}}</p>
+          <p *ngIf="service.msg"><b>Mensagem:  </b>{{service.msg}}</p>                          
+
+      </ion-item>   
+          
+                          
+    </ion-card>    
+    
+
+  </ion-list>
+
+</ion-content>

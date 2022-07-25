@@ -3,14 +3,19 @@
   <ion-navbar text-center no-border-bottom>
     <ion-title>Apostas</ion-title>     
 
-    <!--<ion-buttons end>        
+    <ion-buttons end>        
                      
-      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10">                  
+      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="!stopped">                  
         <ion-icon name="md-stop"  item-start style="margin-right: 15px;"></ion-icon>        
-        Parar robô
+        Parar apostas
       </button>
 
-    </ion-buttons>-->
+      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="stopped">                  
+        <ion-icon name="md-play"  item-start style="margin-right: 15px;"></ion-icon>        
+        Iniciar apostas
+      </button>
+
+    </ion-buttons>
 
   </ion-navbar>     
 </ion-header>

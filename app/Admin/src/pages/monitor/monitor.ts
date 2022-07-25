@@ -17,6 +17,10 @@ export class MonitorPage {
 
   services: Observable<any>;  
   snkrs: any = []
+
+  stopped = 0
+  bet = 5
+  delay = 1
   
   constructor(public navCtrl: NavController, 
     public uiUtils: UiUtilsProvider,    
@@ -37,7 +41,52 @@ export class MonitorPage {
 
   startInterface(){
 
+    this.stopped = 0
+    this.bet = 5
+    this.delay = 1
+    
+
+    this.getConfig()
     this.get()
+  }
+
+  getConfig(){
+    
+    this.db.getAllSettings()
+
+    .subscribe((payload) => {
+
+      if(payload)
+        this.configContinue(payload)    
+
+    })
+   
+
+  }
+
+
+  configContinue(payload){
+
+    this.stopped = 0
+    this.bet = 5
+    this.delay = 1
+   
+
+    payload.forEach(element => {
+
+      let payload = element.payload.val()
+      payload.key = element.payload.key
+      
+      this.stopped = payload.stopped
+      this.bet = payload.bet
+      this.delay = payload.delay
+  
+      console.log('Configuração carregada com sucesso')
+      
+    });
+
+
+
   }
 
   get(){
@@ -103,8 +152,14 @@ export class MonitorPage {
 
   changeStatusRobot(){
 
-    this.db.changeStatusRobot(this.dataInfo.userInfo.defaultState, 0)    
+    console.log('Mudando status ', this.stopped)
+    this.stopped == 0 ? this.stopped = 1 : this.stopped = 0
+    console.log('Status modificado', this.stopped)
+
+    this.db.changeStatusRobot(this.stopped)    
     .then( () => {
+
+
       this.uiUtils.showAlert(this.dataText.success, this.dataText.removeSuccess)
     })
 

@@ -120,12 +120,15 @@ export class LoginPage {
 
   getCallback(sub, data){
 
-    data.forEach(element => {
-      this.dataInfo.appConfig = element.payload.val()
-      this.dataInfo.appConfig.key = element.payload.key      
-      
-    })
+    data.forEach(element => {      
 
+      let uid = this.authProvider.currentUserUid()    
+      let key = element.payload.key
+
+      if(uid === element){
+
+      }
+    })
   
 
     sub.unsubscribe()
@@ -139,7 +142,6 @@ export class LoginPage {
   goPageHome(){     
 
     console.log(this.dataInfo.isHome)
-
 
     
     if(! this.dataInfo.isHome){

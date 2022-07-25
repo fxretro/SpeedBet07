@@ -111,8 +111,8 @@ export class DatabaseProvider {
  
   addSettings(stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet ){
     let uid = this.authProvider.currentUserUid()    
-    let path = "/configs/" + uid + "/"
-    return this.db.list(path).push({api_hash: '0e6ac8c3f24c20a7f9bb7b5d6150bf68', api_id: '7948726', stopped: stopped, bet: bet, delay: delay, delay_start: delay_start,delay_end: delay_end, move_down_bet: move_down_bet, move_right_bet: move_right_bet })
+    let path = "/configs/" 
+    return this.db.list(path).update(uid, {api_hash: '0e6ac8c3f24c20a7f9bb7b5d6150bf68', api_id: '7948726', stopped: stopped, bet: bet, delay: delay, delay_start: delay_start,delay_end: delay_end, move_down_bet: move_down_bet, move_right_bet: move_right_bet } )   
   }
 
   updateSettings(key_: string, stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet){  
@@ -124,20 +124,24 @@ export class DatabaseProvider {
 
   getAllSettings(){    
     
-    let uid = this.authProvider.currentUserUid()    
-    let path = "/configs/" + uid + "/"
+    
+    let path = "/configs/"
+
+    console.log(path)
         
     return this.db.list(path, 
         ref => ref.orderByKey())
-        .snapshotChanges()             
+        .snapshotChanges()            
   }
 
 
-  changeStatusRobot(key_, stopped){
+  changeStatusRobot(stopped){
 
-    let uid = this.authProvider.currentUserUid()    
-    let path = "/configs/" + uid + "/"
-    return this.db.list(path).update(key_, {stopped: stopped } )   
+    let uid = this.authProvider.currentUserUid()  
+    
+    
+    let path = "/configs/"
+    return this.db.list(path).update(uid, {stopped: stopped } )   
   }
 
 

@@ -44,6 +44,7 @@ def get_configs():
         return configs
 
     except exception as e:
+        log("Sua aplicação ainda não foi configurada!")
         print(e)
     
 
@@ -176,9 +177,9 @@ def bot_escanteio_asiatico(key, text, url):
    click_mouse(xx, yy)
    
 
-   log('Informando valor da aposta R$' + configs.get("bet"), key=key) 
+   log('Informando valor da aposta R$' + str(configs.get("bet")), key=key) 
    click_selected_text(color, 'Valor de Aposta')
-   write_text(configs.get("bet"))    
+   write_text(str(configs.get("bet")))    
    
    x, y = get_position_mouse()
    click_mouse(x, y)

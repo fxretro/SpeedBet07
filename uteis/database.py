@@ -101,10 +101,12 @@ def add_configurations(uid):
 
 def get_configurations(uid):
 
-  all = db.child("configs/"+uid).get()
+  all = db.child("configs").get()
   allArray = []
 
   for user in all.each():        
-        allArray.append(user.val())        
+
+        if user.key() == uid:
+          allArray.append(user.val())        
 
   return allArray

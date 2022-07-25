@@ -54,11 +54,11 @@ export class SettingsPage {
 
   startInterface(){
     this.clear()  
-    this.loadValues()
+    this.getConfig()
   }
 
 
-  loadValues(){
+  getConfig(){
     
     this.db.getAllSettings()
 

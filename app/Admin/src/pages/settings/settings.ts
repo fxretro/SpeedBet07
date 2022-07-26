@@ -6,6 +6,7 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { StorageProvider } from '../../providers/storage/storage';
 import { CameraProvider } from '../../providers/camera/camera'
 import { DataTextProvider } from '../../providers/data-text/data-text'
+import { AuthProvider } from '../../providers/auth/auth';
 
 @IonicPage()
 @Component({
@@ -35,6 +36,7 @@ export class SettingsPage {
   constructor(public navCtrl: NavController, 
     public uiUtils: UiUtilsProvider,    
     public platform: Platform,
+    public authProvider: AuthProvider,
     public dataInfo: DataInfoProvider,
     public actionsheetCtrl: ActionSheetController,
     public camera: CameraProvider,    
@@ -53,6 +55,16 @@ export class SettingsPage {
   }
 
   startInterface(){
+
+
+    this.stopped = 0
+    this.bet = 5
+    this.delay = 1
+    this.delay_start = 5
+    this.delay_end = 5
+    this.move_down_bet = 80
+    this.move_right_bet = 365
+
     this.clear()  
     this.getConfig()
   }
@@ -60,9 +72,11 @@ export class SettingsPage {
 
   getConfig(){
     
-    this.db.getAllSettings()
+    let sub = this.db.getAllSettings()
 
     .subscribe((payload) => {
+
+      sub.unsubscribe()
 
 
       if(payload)
@@ -76,31 +90,40 @@ export class SettingsPage {
 
   configContinue(payload){
 
-    this.stopped = 0
-    this.bet = 5
-    this.delay = 1
-    this.delay_start = 5
-    this.delay_end = 5
-    this.move_down_bet = 80
-    this.move_right_bet = 365
+
+    let uid = this.authProvider.currentUserUid()    
+
+
 
     payload.forEach(element => {
 
+
+
       this.payload = element.payload.val()
-      this.payload.key = element.payload.key
-      this.key = this.payload.key
-      this.stopped = this.payload.stopped
-      this.bet = this.payload.bet
-      this.delay = this.payload.delay
-      this.delay_start = this.payload.delay_start
-      this.delay_end = this.payload.delay_end
-      this.move_down_bet = this.payload.move_down_bet
-      this.move_right_bet = this.payload.move_right_bet
-      
-      this.selectPicture = this.payload.url
-      this.base64Image = this.payload.url
-  
-      console.log('Configuração carregada com sucesso')
+
+      console.log(element.payload.key)
+
+
+      if(element.payload.key === uid){
+
+
+
+        this.payload.key = element.payload.key
+        this.key = this.payload.key
+        this.stopped = this.payload.stopped
+        this.bet = this.payload.bet
+        this.delay = this.payload.delay
+        this.delay_start = this.payload.delay_start
+        this.delay_end = this.payload.delay_end
+        this.move_down_bet = this.payload.move_down_bet
+        this.move_right_bet = this.payload.move_right_bet
+        
+        this.selectPicture = this.payload.url
+        this.base64Image = this.payload.url
+    
+        console.log('Configuração carregada com sucesso')
+
+      }
       
     });
 
@@ -157,6 +180,8 @@ export class SettingsPage {
 
     this.db.addSettings(this.stopped, this.bet, this.delay, this.delay_start, this.delay_end, this.move_down_bet, this.move_right_bet )
       .then( () => {
+
+        this.getConfig()
         this.uiUtils.showAlert(this.dataText.success, this.dataText.addedSuccess).present()
         this.navCtrl.pop()
       })
@@ -169,6 +194,7 @@ export class SettingsPage {
     this.db.updateSettings(this.key, this.stopped, this.bet, this.delay, this.delay_start, this.delay_end, this.move_down_bet, this.move_right_bet)
     .then( () => {
 
+      this.getConfig()
       this.uiUtils.showAlert(this.dataText.success, this.dataText.savedSuccess).present()
       this.navCtrl.pop()
     })  

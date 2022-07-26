@@ -83,8 +83,6 @@ async def telegram_bot():
    log('Inicializando bot')
    config = get_configs()
 
-   print(config)
-
    async with TelegramClient('name', config.get("api_id"), config.get("api_hash")) as client:   
 
       def my_event_handler(event):

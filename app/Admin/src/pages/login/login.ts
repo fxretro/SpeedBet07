@@ -44,8 +44,8 @@ export class LoginPage {
     
     this.autoLogin = this.navParams.get("autoLogin")
 
-    this.username = "admin@dbltecnologia.com.br"        
-    this.password = "123456"    
+    //this.username = "admin@dbltecnologia.com.br"        
+    //this.password = "123456"    
 
 
     this.dataInfo.isHome = false
@@ -79,6 +79,7 @@ export class LoginPage {
   
   goHome(){    
 
+    
     this.userConfig = this.db.getUser().subscribe(data => {  
       
       

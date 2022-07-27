@@ -28,6 +28,8 @@ config.read('config.ini')
 
 color = ImageColor.getcolor('#FF8800', "RGB")
 uid = config['default']['uid']
+file_logo = config['default']['file_logo']
+
 
 
 ###########################################################
@@ -145,9 +147,19 @@ def bot_escanteio_asiatico(key, text, url):
    log('Iniciando escanteio asiático ' + text, key=key)
    start_browser(url)
    time.sleep(configs.get("delay_start"))
+   
+   try:
+       x, y = pyautogui.locateCenterOnScreen(file_logo)
+       print(x, y)
+       pyautogui.click(x, y)
+
+   except:
+       print('Não conseguimos clicar no verde')
+
+
 
    log('Clicando em ' + text, key=key)   
-   search_text("TEAMS")   
+   search_text("Futebol")   
    click_selected_text(color, text)
    
    log('Procurando Odds Asiaticas', key=key)
@@ -178,7 +190,7 @@ def bot_escanteio_asiatico(key, text, url):
    
    x, y = get_position_mouse()
    click_mouse(x, y)
-   click_mouse(x + configs.get("move_right_bet"), y)
+   click_mouse(x + configs.get("move_right_bet") + 100, y)
    
    Db.update_url(key, "Finalizado")
 

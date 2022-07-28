@@ -10,8 +10,6 @@ import datetime
 import six
 import asyncio
 import uteis.database as Db
-import threading
-import moment
 
 try:
     from termcolor import colored
@@ -32,7 +30,7 @@ color = ImageColor.getcolor('#FF8800', "RGB")
 uid = config['default']['uid']
 file_logo = config['default']['file_logo']
 
-master = config['default']['master']
+
 
 
 ###########################################################
@@ -66,7 +64,7 @@ def show_configs(config):
 def log(text, colour = 'green', font='slant', figlet=False, key='0'):
 
     if key != '0':
-        Db.update_url(key, text)
+        Db.update_url_master(key, text)
     
     if colored:
         if not figlet:
@@ -137,13 +135,7 @@ def browser_bot(configs, msg, url):
     text = text[1:]
     text = text.strip()
 
-    key = ""
-        
-    if configs.get("master") == 1:
-        key = Db.add_url_master(message, msg_team_name[0], url, text)     
-    else:
-        key = Db.add_url(message, msg_team_name[0], url, text)     
-    
+    key = Db.add_url_master(message, msg_team_name[0], url, text)         
 
     bot_escanteio_asiatico(configs, key, text, url)
 
@@ -199,66 +191,12 @@ def bot_escanteio_asiatico(configs, key, text, url):
    click_mouse(x, y)
    click_mouse(x + configs.get("move_right_bet") + 100, y)
    
-   if configs.get("master") == 1:
-        Db.update_url_master(key, "Finalizado")
-   else:
-        Db.update_url(key, "Finalizado")
-   
+   Db.update_url_master(key, "Finalizado")
 
    time.sleep(configs.get("delay_end"))
    close_browser_tab()
 
    log('Finalizado com sucesso', key=key)
-
-
-
-###########################################################
-# sync exec
-###########################################################
-
-
-def refresh_bets():
-
-    log('Inicializando verificação')
-
-    bets = Db.get_urls()            
-    my_matches = Db.get_urls_match()      
-    today = datetime.datetime.now()      
-    
-    for bet in bets:
-
-        datetime_match = bet.get("datetime")
-        match = bet.get("link")
-        msg = bet.get("msg")
-
-        now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')
-        now = now + datetime.timedelta(minutes=5)
-                
-        if today < now:
-
-            if not match in my_matches:     
-
-                my_matches.append(match)                 
-                check_status(msg, match)
-                Db.add_match(datetime_match, match)
-            
-    log('Verificação finalizada. Aguardando...')
-
-
-
-def setInterval(func,time):
-
-    e = threading.Event()
-    while not e.wait(time):
-        func()
-
-
-def main_sync():
-
-    log('Inicializando sistema')        
-    setInterval(refresh_bets, 30)    
-
-#main_sync()
 
 
 

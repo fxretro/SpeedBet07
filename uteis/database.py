@@ -55,20 +55,6 @@ def get_urls():
       
 
 ###########################################################
-# Monitoring Client
-###########################################################
-
-def add_url(msg, match, url, text):
-  key = db.generate_key()
-  db.child("betClient/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'status': 'Criado', 'text': text, 'uid': uid})
-  return key
-
-def update_url(key, status):  
-  db.child("betClient/"+key).update({'datetimeChanged': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'status': status})
-
-
-
-###########################################################
 # Monitoring Bets
 ###########################################################
 
@@ -95,6 +81,8 @@ def get_urls_match():
   
   except:
     return urlProduct
+
+
 
 ###########################################################
 # Scapper

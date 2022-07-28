@@ -7,6 +7,8 @@ import configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
 file_firebase_auth = config['default']['file_firebase_auth']
+uid = config['default']['uid']
+
 
 config_firebase = {
   "apiKey": "AIzaSyB81K_ipu20aWEI_LQtVWnOXJmM6UaIVtw",
@@ -26,16 +28,16 @@ db = firebase.database()
 
 
 ###########################################################
-# Monitoring
+# Monitoring Master
 ###########################################################
 
 
-def add_url(msg, match, url):
+def add_url_master(msg, match, url, text):
   key = db.generate_key()
-  db.child("betAviso/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'status': 'Criado'})
+  db.child("betAviso/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'status': 'Criado', 'text': text, 'uid': uid})
   return key
 
-def update_url(key, status):  
+def update_url_master(key, status):  
   db.child("betAviso/"+key).update({'datetimeChanged': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'status': status})
 
 
@@ -52,6 +54,47 @@ def get_urls():
     return urlProduct
       
 
+###########################################################
+# Monitoring Client
+###########################################################
+
+def add_url(msg, match, url, text):
+  key = db.generate_key()
+  db.child("betClient/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'status': 'Criado', 'text': text, 'uid': uid})
+  return key
+
+def update_url(key, status):  
+  db.child("betClient/"+key).update({'datetimeChanged': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'status': status})
+
+
+
+###########################################################
+# Monitoring Bets
+###########################################################
+
+def add_match(match, url):
+  key = db.generate_key()
+  db.child("betClientMatch/"+key).update({'match': match,  'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'uid': uid})
+  return key
+
+
+def get_urls_match():
+
+  urlProduct = []  
+
+  try:
+
+    all_users = db.child("betClientMatch").get()      
+        
+    for user in all_users.each():
+
+         product = user.val()           
+         urlProduct.append(product)         
+
+    return urlProduct
+  
+  except:
+    return urlProduct
 
 ###########################################################
 # Scapper

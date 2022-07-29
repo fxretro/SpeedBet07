@@ -2,5 +2,5 @@
 
 
 cp uteis/ghostbot.json /tmp/
-cp BET365.png /tmp/BET365.png
-python3 bot.py
+cp uteis/BET365.png /tmp/BET365.png
+python3 bot_client.py

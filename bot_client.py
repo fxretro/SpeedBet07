@@ -30,6 +30,8 @@ config.read('config.ini')
 color = ImageColor.getcolor('#FF8800', "RGB")
 uid = config['default']['uid']
 file_logo = config['default']['file_logo']
+timerr = config['default']['timerr']
+timer_check = config['default']['timer_check']
 
 
 ###########################################################
@@ -179,31 +181,37 @@ def refresh_bets():
 
     bets = Db.get_urls()            
     my_matches = Db.get_urls_match()      
-    today = datetime.datetime.now()      
-    
-    for bet in bets:
+    today = datetime.datetime.now() 
 
-        datetime_match = bet.get("datetime")
-        match = bet.get("link")
-        msg = bet.get("msg")
+    try:        
 
-        now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')
-        
-        now = now + datetime.timedelta(minutes=1)
+        for bet in bets:
 
-        diff = today - now
+            datetime_match = bet.get("datetime")
+            match = bet.get("link")
+            msg = bet.get("msg")
 
-        print('Verificando Bet ', today, now, diff)
-                
-        if now > today:
-
-            if not match in my_matches:     
-
-                my_matches.append(match)                 
-                check_status(msg, match)
-                Db.add_match(datetime_match, match)
+            now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')
             
-    log('Verificação finalizada. Aguardando...')
+            now = now + datetime.timedelta(seconds=int(timer_check))
+
+            diff = today - now
+
+            print('Verificando Bet ', today, now, diff)
+                    
+            if now > today:
+
+                if not match in my_matches:     
+
+                    my_matches.append(match)                 
+                    check_status(msg, match)
+                    Db.add_match(datetime_match, match)
+                
+        log('Verificação finalizada. Aguardando...')
+
+    except exception as e:
+        print(e)
+        pass
 
 
 
@@ -217,7 +225,7 @@ def setInterval(func,time):
 def main_sync():
 
     log('Inicializando sistema')           
-    setInterval(refresh_bets, 30)    
+    setInterval(refresh_bets, int(timerr))
 
 main_sync()
 

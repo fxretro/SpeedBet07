@@ -174,11 +174,10 @@ def bot_escanteio_asiatico(configs, key, text, url):
 
    try:
        x, y = pyautogui.locateCenterOnScreen(file_logo)
-       print(x, y)
        pyautogui.click(x, y)
 
    except:
-       print('Não conseguimos clicar no verde')
+       print('Não conseguimos clicar no verde', colour='red')
 
 
    log('Clicando em ' + text, key=key)   

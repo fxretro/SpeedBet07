@@ -131,7 +131,6 @@ def bot_escanteio_asiatico(configs, key, text, url):
 
    try:
        x, y = pyautogui.locateCenterOnScreen(file_logo)
-       print(x, y)
        pyautogui.click(x, y)
 
    except:
@@ -208,9 +207,7 @@ def refresh_bets():
             bet_type = bet.get("bet_type")
             
             now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')            
-            now = now + datetime.timedelta(seconds=int(timer_check))
-
-            diff = today - now            
+            now = now + datetime.timedelta(seconds=int(timer_check))            
                     
             if now > today:
 

@@ -149,8 +149,7 @@ def bot_escanteio_asiatico(configs, key, text, url):
    time.sleep(configs.get("delay_start"))
    
    try:
-       x, y = pyautogui.locateCenterOnScreen(file_logo)
-       print(x, y)
+       x, y = pyautogui.locateCenterOnScreen(file_logo)       
        pyautogui.click(x, y)
 
    except:

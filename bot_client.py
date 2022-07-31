@@ -77,6 +77,8 @@ def log(text, colour = 'green', font='slant', figlet=False, key='0'):
         six.print_('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text)
 
 
+def substring_after(s, delim):
+    return s.partition(delim)[2]
 
 ###########################################################
 # Browser Bot - Verifica tipo de bet
@@ -123,6 +125,8 @@ def bot_escanteio_asiatico(configs, key, text, url):
       
    show_configs(configs)
 
+   text = substring_after(text, " x ")         
+
    log('Iniciando escanteio asiático ' + text, key=key)
    start_browser(url)
    time.sleep(configs.get("delay_start"))
@@ -147,6 +151,7 @@ def bot_escanteio_asiatico(configs, key, text, url):
 
    log('Procurando Escanteios Asia', key=key)
    time.sleep(configs.get("delay"))
+   click_selected_text(color, 'Gols +')
    click_selected_text(color, 'Escanteios Asiaticos')
 
    log('Movendo mouse', key=key)
@@ -212,7 +217,7 @@ def refresh_bets():
                 if not match in my_matches:     
 
                     my_matches.append(match)                 
-                    check_status(msg, match, bet_type)
+                    check_status(match, match, bet_type)
                     Db.add_match(datetime_match, match, bet_type)
                 
         log('Verificação finalizada. Aguardando...')

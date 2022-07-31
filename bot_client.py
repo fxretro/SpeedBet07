@@ -107,7 +107,7 @@ def parse_msg(configs, msg, url, bet_type):
 ###########################################################
 
 
-def bet_check(configs, key, message, text, url, bet_type):
+def bet_check(configs, key, text, url, bet_type):
 
     log('Inicializando bet tipo ' + str(bet_type))
 
@@ -125,8 +125,6 @@ def bot_escanteio_asiatico(configs, key, text, url):
       
    show_configs(configs)
 
-   text = substring_after(text, " x ")         
-
    log('Iniciando escanteio asiático ' + text, key=key)
    start_browser(url)
    time.sleep(configs.get("delay_start"))
@@ -142,7 +140,11 @@ def bot_escanteio_asiatico(configs, key, text, url):
 
    log('Clicando em ' + text, key=key)   
    search_text("Futebol")   
-   click_selected_text(color, text)
+   click_selected_text(color, " v ")
+   
+   log('Procurando Odds Asiaticas', key=key)
+   time.sleep(configs.get("delay"))
+   click_selected_text(color, 'Odds Asiaticas')
    
    log('Procurando Odds Asiaticas', key=key)
    time.sleep(configs.get("delay"))
@@ -211,8 +213,6 @@ def refresh_bets():
             diff = today - now            
                     
             if now > today:
-
-                log('Verificando Bet: ' + today + ' ' + now + ' ' + str(diff))
 
                 if not match in my_matches:     
 

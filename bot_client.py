@@ -77,48 +77,56 @@ def log(text, colour = 'green', font='slant', figlet=False, key='0'):
         six.print_('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text)
 
 
+
 ###########################################################
-# Browser functions
+# Browser Bot - Verifica tipo de bet
 ###########################################################
 
 
-def check_status(msg, url):
+def check_status(msg, url, bet_type):
 
     configs = get_configs()
 
     if configs.get('stopped') == 0:
-        browser_bot(configs, msg, url)
+        parse_msg(configs, msg, url, bet_type)
     else:
         log('Robo em modo stop efetuado pelo administrador')
 
 
-def browser_bot(configs, msg, url):   
+def parse_msg(configs, msg, url, bet_type):   
 
-    message = msg
-    msg = message.split("\n\n")    
-    msg_team = msg[2]
-    msg_team_name = msg_team[2:].split(" x ")
-    text = msg_team_name[0]
-   
-    text = text.replace("(A)", "")    
-    text = text.replace("(H)", "")
-    text = text.replace("(ao vivo)", "")
-    text = text[1:]
-    text = text.strip()
+    key = Db.add_url_client(msg, url)
+    bet_check(configs, key, msg,  url, bet_type)
 
-    key = Db.add_url_master(message, msg_team_name[0], url, text)         
 
-    bot_escanteio_asiatico(configs, key, text, url)
 
-    
+###########################################################
+# Browser Bot - Verifica o tipo de bet
+###########################################################
+
+
+def bet_check(configs, key, message, text, url, bet_type):
+
+    log('Inicializando bet tipo ' + str(bet_type))
+
+    if bet_type == 1:        
+        bot_escanteio_asiatico(configs, key, text, url)
+    else:
+        log('Estratégia cartão vermelho em desenvolvimento', colour='red')
+
+
+###########################################################
+# Browser Bot - Escanteios asiáticos
+###########################################################
+
 def bot_escanteio_asiatico(configs, key, text, url):
-   
+      
    show_configs(configs)
 
    log('Iniciando escanteio asiático ' + text, key=key)
    start_browser(url)
    time.sleep(configs.get("delay_start"))
-   
+
    try:
        x, y = pyautogui.locateCenterOnScreen(file_logo)
        print(x, y)
@@ -190,27 +198,27 @@ def refresh_bets():
             datetime_match = bet.get("datetime")
             match = bet.get("link")
             msg = bet.get("msg")
-
-            now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')
+            bet_type = bet.get("bet_type")
             
+            now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')            
             now = now + datetime.timedelta(seconds=int(timer_check))
 
-            diff = today - now
-
-            print('Verificando Bet ', today, now, diff)
+            diff = today - now            
                     
             if now > today:
+
+                log('Verificando Bet: ' + today + ' ' + now + ' ' + str(diff))
 
                 if not match in my_matches:     
 
                     my_matches.append(match)                 
-                    check_status(msg, match)
-                    Db.add_match(datetime_match, match)
+                    check_status(msg, match, bet_type)
+                    Db.add_match(datetime_match, match, bet_type)
                 
         log('Verificação finalizada. Aguardando...')
 
     except exception as e:
-        print(e)
+        log('Não foi possível verificar. Aguardando...', colour='red')
         pass
 
 

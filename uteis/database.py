@@ -32,10 +32,18 @@ db = firebase.database()
 ###########################################################
 
 
-def add_url_master(msg, match, url, text):
+def add_url_master(msg, match, url, bet_type):
   key = db.generate_key()
-  db.child("betAviso/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'text': text, 'uid': uid})
+  db.child("betAviso/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid, 'bet_type': bet_type})
   return key
+
+
+def add_url_client(msg, url):
+  key = db.generate_key()
+  db.child("betAviso/"+key).update({'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid})
+  return key
+
+
 
 def update_url_master(key, status):  
   db.child("betAviso/"+key).update({'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': status})
@@ -58,9 +66,10 @@ def get_urls():
 # Monitoring Bets
 ###########################################################
 
-def add_match(match, url):
+def add_match(match, url, bet_type):
+  
   key = db.generate_key()
-  db.child("betClientMatch/"+key).update({'match': match,  'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'uid': uid})
+  db.child("betClientMatch/"+key).update({'match': match,  'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'uid': uid, 'bet_type': bet_type})
   return key
 
 

@@ -31,8 +31,6 @@ uid = config['default']['uid']
 file_logo = config['default']['file_logo']
 
 
-
-
 ###########################################################
 # Auxiliares 
 ###########################################################
@@ -82,72 +80,100 @@ def log(text, colour = 'green', font='slant', figlet=False, key='0'):
 
 
 async def telegram_bot():
-
-   log('Inicializando bot')
+   
    config = get_configs()
 
    async with TelegramClient('name', config.get("api_id"), config.get("api_hash")) as client:   
 
       def my_event_handler(event):
+            msg = event.message           
+            check_status(msg.message, 1)
 
-            msg = event.message
-            
-            for url_entity, inner_text in msg.get_entities_text(MessageEntityTextUrl):
-                url = url_entity.url
+      def my_event_handler_red_card(event):
+            msg = event.message           
+            check_status(msg.message, 2)
+                                                           
 
-            check_status(msg.message, url)
-                          
-                          
-
-      @client.on(events.NewMessage(pattern='(?i).*Oportunidade! '))
+      @client.on(events.NewMessage(pattern='(?i).*MEGABOLT PRIMEIRO'))
       async def handler(event):
-         my_event_handler(event)                  
+         my_event_handler(event)          
+
+      @client.on(events.NewMessage(pattern='(?i).*Alerta Estratégia: ESCANTEIOS'))
+      async def handler(event):
+         my_event_handler(event)   
+
+      @client.on(events.NewMessage(pattern='(?i).*SAIU CARTÃO VERMELHO'))
+      async def handler(event):
+         my_event_handler_red_card(event)              
+
 
       await client.run_until_disconnected()
 
 
 ###########################################################
-# Browser Bot - No Headless
+# Browser Bot - Verifica tipo de bet
 ###########################################################
 
 
-def check_status(msg, url):
+def check_status(msg, bet_type):
 
     configs = get_configs()
 
     if configs.get('stopped') == 0:
-        browser_bot(configs, msg, url)
+        parse_msg(configs, msg, bet_type)
     else:
-        log('Robo em modo stop efetuado pelo administrador')
+        log('Robo em modo stop efetuado pelo administrador', colour='red')
 
 
-def browser_bot(configs, msg, url):   
+
+def parse_msg(configs, msg, bet_type):   
 
     message = msg
-    msg = message.split("\n\n")    
-    msg_team = msg[2]
-    msg_team_name = msg_team[2:].split(" x ")
-    text = msg_team_name[0]
-   
-    text = text.replace("(A)", "")    
-    text = text.replace("(H)", "")
-    text = text.replace("(ao vivo)", "")
-    text = text[1:]
-    text = text.strip()
+    msg = message.split("\n")        
+    match = msg[1]    
+    match = match[7:]
 
-    key = Db.add_url_master(message, msg_team_name[0], url, text)         
-
-    bot_escanteio_asiatico(configs, key, text, url)
-
+    text = match.replace("º", "")    
+    text = text.replace("(", "")
+    text = text.replace(")", "")        
+    text = ''.join(i for i in text if not i.isdigit())    
+    text = text.split()
+    text = " ".join(str(x) for x in text) 
     
+    url = "https://www.bet365.com/#/AX/K^" + text       
+
+    key = Db.add_url_master(message, text, url, bet_type)
+    bet_check(configs, key, text, url, bet_type)
+
+
+
+###########################################################
+# Browser Bot - Verifica o tipo de bet
+###########################################################
+
+
+def bet_check(configs, key, text, url, bet_type):
+
+    log('Inicializando bet tipo ' + str(bet_type))
+
+    if bet_type == 1:        
+        bot_escanteio_asiatico(configs, key, text, url)
+    else:
+        log('Estratégia cartão vermelho em desenvolvimento', colour='red')
+
+
+###########################################################
+# Browser Bot - Escanteios asiáticos
+###########################################################
+
 def bot_escanteio_asiatico(configs, key, text, url):
-   
+      
    show_configs(configs)
 
    log('Iniciando escanteio asiático ' + text, key=key)
    start_browser(url)
    time.sleep(configs.get("delay_start"))
-   
+
    try:
        x, y = pyautogui.locateCenterOnScreen(file_logo)
        print(x, y)

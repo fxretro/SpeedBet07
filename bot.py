@@ -1,21 +1,12 @@
-from logging import exception
 from telethon.sync import TelegramClient, events
-from telethon.tl.types import MessageEntityTextUrl
-from pyfiglet import  figlet_format
-from PIL import ImageColor
 from uteis.widget import *
+from uteis.helper import *
 
 import configparser
-import datetime
-import six
 import asyncio
 import uteis.database as Db
-
-try:
-    from termcolor import colored
-except ImportError:
-    colored = None
-    
+import threading
+import argparse
 
 ###########################################################
 # Variáveis 
@@ -24,52 +15,15 @@ except ImportError:
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-color = ImageColor.getcolor('#FF8800', "RGB")
 uid = config['default']['uid']
-file_logo = config['default']['file_logo']
+timerr = config['default']['timerr']
+timer_check = config['default']['timer_check']
 
 
-###########################################################
-# Auxiliares 
-###########################################################
+parser = argparse.ArgumentParser("simple_example")
+parser.add_argument("mode", help="Use telegram and save info in database.", type=str)
 
-def get_configs():
-
-    try:
-        configs = Db.get_configurations(uid)[0]
-        return configs
-
-    except exception as e:
-        log("Sua aplicação ainda não foi configurada!")
-        exit(1)
-    
-
-def show_configs(config):
-
-    log('App Id: '+ str(config.get("api_id")))
-    log('App Hash: ' + str(config.get("api_hash")))
-    log('Delay: '+ str(config.get("delay")))
-    log('Delay Start: ' + str(config.get("delay_start")))
-    log('Delay End: ' + str(config.get("delay_end")))
-    log('Bet Value: ' + str(config.get("bet")))
-    log('Move down bet: ' + str(config.get("move_down_bet")))
-    log('Move right bet: ' + str(config.get("move_right_bet")))
-    
-
-
-def log(text, colour = 'green', font='slant', figlet=False, key='0'):
-
-    if key != '0':
-        Db.update_url_master(key, text)
-    
-    if colored:
-        if not figlet:
-            six.print_(colored('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + '] - ' + text, colour))
-        else:
-            six.print_(colored(figlet_format(
-                '['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text, font=font), colour))
-    else:
-        six.print_('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text)
+args = parser.parse_args()
 
 
 ###########################################################
@@ -161,66 +115,58 @@ def bet_check(configs, text, url, bet_type, message):
 
 
 ###########################################################
-# Browser Bot - Escanteios asiáticos
+# sync exec
 ###########################################################
 
-def bot_escanteio_asiatico(configs, key, text, url):
-      
-   show_configs(configs)
 
-   log('Iniciando escanteio asiático ' + text, key=key)
-   start_browser(url)
-   time.sleep(configs.get("delay_start"))
+def refresh_bets():
 
-   try:
-       x, y = pyautogui.locateCenterOnScreen(file_logo)
-       pyautogui.click(x, y)
+    log('Inicializando verificação')
 
-   except:
-       print('Não conseguimos clicar no verde', colour='red')
+    bets = Db.get_urls()            
+    my_matches = Db.get_urls_match()      
+    today = datetime.datetime.now() 
+
+    try:        
+
+        for bet in bets:
+
+            datetime_match = bet.get("datetime")
+            match = bet.get("link")            
+            bet_type = bet.get("bet_type")
+            
+            now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')            
+            now = now + datetime.timedelta(seconds=int(timer_check))            
+                    
+            if now > today:
+
+                if not match in my_matches:     
+
+                    my_matches.append(match)                 
+                    check_status(match, match, bet_type)
+                    Db.add_match(datetime_match, match, bet_type)
+                
+        log('Verificação finalizada. Aguardando...')
+
+    except exception as e:
+        log('Não foi possível verificar. Aguardando...', colour='red')
+        pass
 
 
-   log('Clicando em ' + text, key=key)   
-   search_text("Futebol")   
-   click_selected_text(color, " v ")
-   
-   log('Procurando Odds Asiaticas', key=key)
-   time.sleep(configs.get("delay"))
-   click_selected_text(color, 'Odds Asiaticas')
-   
 
-   log('Procurando Escanteios Asia', key=key)
-   time.sleep(configs.get("delay"))
-   click_selected_text(color, 'Gols +')
-   click_selected_text(color, 'Escanteios Asiaticos')
+def setInterval(func,time):
 
-   log('Movendo mouse', key=key)
-   time.sleep(configs.get("delay"))
-   x, y = get_position_mouse()
-   yy = y + configs.get("move_down_bet")
-   xx = x + configs.get("move_right_bet")
-   scroll_down_mouse(xx, yy)
-   time.sleep(configs.get("delay")) 
-   
-   log('Clicando na aposta', key=key)
-   time.sleep(configs.get("delay")) 
-   click_mouse(xx, yy)
-   
+    e = threading.Event()
+    while not e.wait(time):
+        func()
 
-   log('Informando valor da aposta R$' + str(configs.get("bet")), key=key) 
-   click_selected_text(color, 'Valor de Aposta')
-   write_text(str(configs.get("bet")))    
-   
-   x, y = get_position_mouse()
-   click_mouse(x, y)
-   click_mouse(x + configs.get("move_right_bet") + 100, y)
-   
-   Db.update_url_master(key, "Finalizado")
 
-   time.sleep(configs.get("delay_end"))
-   close_browser_tab()
+def main_sync():
 
-   log('Finalizado com sucesso', key=key)
+    log('Inicializando sistema modo database')           
+    setInterval(refresh_bets, int(timerr))
+
+
 
 
 
@@ -231,10 +177,19 @@ def bot_escanteio_asiatico(configs, key, text, url):
 
 async def main():
 
-    log('Inicializando sistema')    
+    log('Inicializando sistema modo telegram')    
     await telegram_bot()
 
 
-asyncio.run(main())
+###########################################################
+# Start script
+###########################################################
+
+
+if args.mode == 'telegram':
+    asyncio.run(main())
+
+else:
+    main_sync()    
 
     

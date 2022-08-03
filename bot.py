@@ -6,7 +6,7 @@ import configparser
 import asyncio
 import uteis.database as Db
 import threading
-import argparse
+
 
 ###########################################################
 # Variáveis 
@@ -19,13 +19,6 @@ uid = config['default']['uid']
 timerr = config['default']['timerr']
 timer_check = config['default']['timer_check']
 
-
-parser = argparse.ArgumentParser("simple_example")
-parser.add_argument("mode", help="Use telegram and save info in database.", type=str)
-
-args = parser.parse_args()
-
-
 ###########################################################
 # Telegram 
 ###########################################################
@@ -33,7 +26,7 @@ args = parser.parse_args()
 
 async def telegram_bot():
    
-   config = get_configs()
+   config = get_configs(uid)
 
    async with TelegramClient('name', config.get("api_id"), config.get("api_hash")) as client:   
 
@@ -69,7 +62,7 @@ async def telegram_bot():
 
 def check_status(msg, bet_type):
 
-    configs = get_configs()
+    configs = get_configs(uid)
 
     if configs.get('stopped') == 0:
         parse_msg(configs, msg, bet_type)
@@ -108,7 +101,7 @@ def bet_check(configs, text, url, bet_type, message):
     log('Inicializando bet tipo ' + str(bet_type))
 
     if bet_type == 1:      
-        key = Db.add_url_master(message, text, url, bet_type)  
+        key = Db.add_url_master(message, text, url, bet_type, uid)  
         bot_escanteio_asiatico(configs, key, text, url)
     else:
         log('Estratégia cartão vermelho em desenvolvimento', colour='red')
@@ -144,7 +137,7 @@ def refresh_bets():
 
                     my_matches.append(match)                 
                     check_status(match, match, bet_type)
-                    Db.add_match(datetime_match, match, bet_type)
+                    Db.add_match(datetime_match, match, bet_type, uid)
                 
         log('Verificação finalizada. Aguardando...')
 
@@ -163,8 +156,9 @@ def setInterval(func,time):
 
 def main_sync():
 
-    log('Inicializando sistema modo database')           
+    log('Inicializando sistema modo database')               
     setInterval(refresh_bets, int(timerr))
+    
 
 
 
@@ -186,10 +180,9 @@ async def main():
 ###########################################################
 
 
-if args.mode == 'telegram':
-    asyncio.run(main())
 
-else:
-    main_sync()    
+asyncio.run(main())
+#main_sync()    
+    
 
     

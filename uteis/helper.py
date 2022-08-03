@@ -1,8 +1,6 @@
 import six
 import uteis.database as Db
 import datetime
-import configparser
-
 
 from logging import exception
 from uteis.widget import *
@@ -17,16 +15,14 @@ except ImportError:
 
 color = ImageColor.getcolor('#FF8800', "RGB")
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-uid = config['default']['uid']
-
 
 ###########################################################
 # Auxiliares 
 ###########################################################
 
-def get_configs():
+def get_configs(uid):
+
+    log('Verificando configurações do usuário ' + uid)
 
     try:
         configs = Db.get_configurations(uid)[0]

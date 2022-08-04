@@ -1,6 +1,7 @@
 import six
 import uteis.database as Db
 import datetime
+from playwright.sync_api import sync_playwright
 
 from logging import exception
 from uteis.widget import *
@@ -45,11 +46,14 @@ def show_configs(config):
     log('Move right bet: ' + str(config.get("move_right_bet")))
     
 
-
-def log(text, colour = 'green', font='slant', figlet=False, key='0'):
+def log(text, colour = 'green', font='slant', figlet=False, key='0', type=0):
 
     if key != '0':
-        Db.update_url_master(key, text)
+
+        if type == 0:
+            Db.update_url_master(key, text)
+        else:
+            Db.update_url_master_tsv(key, text)
     
     if colored:
         if not figlet:
@@ -61,5 +65,36 @@ def log(text, colour = 'green', font='slant', figlet=False, key='0'):
         six.print_('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text)
 
 
-def substring_after(s, delim):
-    return s.partition(delim)[2]
+
+###########################################################
+# Auxiliares 
+###########################################################
+
+
+
+def scraping_live_now(url):
+
+    
+    with sync_playwright() as p:
+        
+        browser = p.firefox.launch(headless=False)
+        
+        page = browser.new_page()
+        page.goto(url)                     
+
+        return nameCapetition(page)
+                
+
+def nameCapetition(page):
+
+    listCurTime   = page.locator('div.ovm-FixtureDetailsTwoWay_Timer').all_text_contents()
+    listTeam = page.locator('.ovm-FixtureDetailsTwoWay_Team > div:nth-child(1)').all_text_contents()
+    listScoreOne = page.locator('div.ovm-StandardScoresSoccer_TeamOne').all_text_contents()
+    listScoreTwo = page.locator('div.ovm-StandardScoresSoccer_TeamTwo').all_text_contents()
+
+    listOddsOne = page.locator('div.ovm-MarketGroup > div > div > div:nth-child(1)').all_text_contents()
+    listOddsTwo = page.locator('div.ovm-MarketGroup > div > div > div:nth-child(2)').all_text_contents()
+    
+    return listTeam, listCurTime, listScoreOne, listScoreTwo, listOddsOne, listOddsTwo
+    
+

@@ -5,7 +5,7 @@ import pyrebase
 config_firebase = {
   "apiKey": "AIzaSyB81K_ipu20aWEI_LQtVWnOXJmM6UaIVtw",
   "authDomain": "ghostbot-27831.firebaseapp.com",
-  "databaseURL": "https://ghostbot-27831-default-rtdb.firebaseio.com",
+  "databaseURL": "https://ghostbet.firebaseio.com/",
   "projectId": "ghostbot-27831",
   "storageBucket": "ghostbot-27831.appspot.com",
   "messagingSenderId": "868283060392",
@@ -32,7 +32,7 @@ db = firebase.database()
 
 
 ###########################################################
-# Monitoring Master
+# Monitoring Master - Mega Bolt
 ###########################################################
 
 
@@ -66,9 +66,24 @@ def get_urls():
     return urlProduct
       
 
+def get_urls_key(key):
+
+    all_users = db.child("betAviso").get()
+    urlProduct = []
+        
+    for user in all_users.each():
+
+         if user.key() == key:
+
+          product = user.val()                   
+          urlProduct.append(product)         
+
+    return urlProduct
+
 ###########################################################
-# Monitoring Bets
+# Monitoring Bets - Mega Bolt
 ###########################################################
+
 
 def add_match(match, url, bet_type, uid):
   
@@ -97,6 +112,91 @@ def get_urls_match():
 
 
 
+
+###########################################################
+# Monitoring Master - Tiro Seco Virtual
+###########################################################
+
+
+def add_url_master_tsv(msg, match, url, bet_type, uid):
+  key = db.generate_key()
+  db.child("betAvisoTsv/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid, 'bet_type': bet_type})
+  return key
+
+
+def add_url_client_tsv(msg, url, uid):
+  key = db.generate_key()
+  db.child("betAvisoTsv/"+key).update({'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid})
+  return key
+
+
+
+def update_url_master_tsv(key, status):  
+  db.child("betAvisoTsv/"+key).update({'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': status})
+
+
+def get_urls_tsv():
+
+    all_users = db.child("betAvisoTsv").get()
+    urlProduct = []
+        
+    for user in all_users.each():
+
+         product = user.val()           
+         urlProduct.append(product)         
+
+    return urlProduct
+
+
+def get_urls_tsv_key(key):
+
+    all_users = db.child("betAvisoTsv").get()
+    urlProduct = []
+        
+    for user in all_users.each():
+
+         if user.key() == key:
+          
+          product = user.val()                   
+          urlProduct.append(product)         
+
+    return urlProduct
+
+
+
+###########################################################
+# Monitoring Bets - Tiro Seco Virtual
+###########################################################
+
+
+def add_match_tsv(match, url, bet_type, uid):
+  
+  key = db.generate_key()
+  db.child("betClientMatchTsv/"+key).update({'match': match,  'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'uid': uid, 'bet_type': bet_type})
+  return key
+
+
+def get_urls_match_tsv():
+
+  urlProduct = []  
+
+  try:
+
+    all_users = db.child("betClientMatchTsv").get()      
+        
+    for user in all_users.each():
+
+         product = user.val()           
+         urlProduct.append(product)         
+
+    return urlProduct
+  
+  except:
+    return urlProduct
+
+
+
+
 ###########################################################
 # Scapper
 ###########################################################
@@ -105,6 +205,9 @@ def add_scrapping(data):
   key = db.generate_key()
   db.child("betScrapping/"+key).update(data)
   return key
+
+
+
 
 ###########################################################
 # Proxies

@@ -30,29 +30,41 @@ async def telegram_bot():
 
    async with TelegramClient('name', config.get("api_id"), config.get("api_hash")) as client:   
 
-      def my_event_handler(event):
+      def my_event_handler(event, bet_type):
             msg = event.message           
-            check_status(msg.message, 1)
+            check_status(msg.message, bet_type)
 
-      def my_event_handler_red_card(event):
-            msg = event.message           
-            check_status(msg.message, 2)
-                                                           
+      
+
+    ###########################################################
+    # Robo MEGABOLT Escanteioover
+    ###########################################################
 
       @client.on(events.NewMessage(pattern='(?i).*MEGABOLT PRIMEIRO'))
       async def handler(event):
-         my_event_handler(event)          
+         my_event_handler(event, 1)          
 
       @client.on(events.NewMessage(pattern='(?i).*Alerta Estratégia: ESCANTEIOS'))
       async def handler(event):
-         my_event_handler(event)   
+         my_event_handler(event, 1)   
 
       @client.on(events.NewMessage(pattern='(?i).*SAIU CARTÃO VERMELHO'))
       async def handler(event):
-         my_event_handler_red_card(event)              
+         my_event_handler(event, 2)            
+
+
+    ###########################################################
+    # Robo KabumTips TIROSECOVIRTUAL
+    ###########################################################
+
+      @client.on(events.NewMessage(pattern='(?i).*FUTEBOL VIRTUAL'))
+      async def handler(event):
+         my_event_handler(event, 11)         
 
 
       await client.run_until_disconnected()
+
+
 
 
 ###########################################################
@@ -73,6 +85,32 @@ def check_status(msg, bet_type):
 
 def parse_msg(configs, msg, bet_type):   
 
+    if bet_type == 1:
+        log('Recebido Bet tipo escanteio asiático no MegaBolt')
+        parse_robot_megabolt(configs, msg, bet_type)
+
+    elif bet_type == 2:
+        log('Recebido Bet tipo Cartão vermelho no MegaBolt')
+        parse_robot_megabolt(configs, msg, bet_type)
+
+    elif bet_type == 11:
+        log('Recebido Bet tipo futebol virtual Kabum Tiro Seco')
+        parse_robot_kabum_tirosecovirtual(configs, msg, bet_type)
+
+    else:
+        log('Esse robo ainda não foi configurado')
+
+
+
+
+
+###########################################################
+# Parse MegaBolt
+###########################################################
+    
+    
+def parse_robot_megabolt(configs, msg, bet_type):
+
     message = msg
     msg = message.split("\n")        
     match = msg[1]    
@@ -87,24 +125,58 @@ def parse_msg(configs, msg, bet_type):
     
     url = "https://www.bet365.com/#/AX/K^" + text       
     
-    bet_check(configs, text, url, bet_type, message)
+    parse_robot_megabolt_continue(configs, text, url, bet_type, message)
 
 
 
-###########################################################
-# Browser Bot - Verifica o tipo de bet
-###########################################################
+def parse_robot_megabolt_continue(configs, text, url, bet_type, message):
 
-
-def bet_check(configs, text, url, bet_type, message):
-
-    log('Inicializando bet tipo ' + str(bet_type))
+    log('Inicializando MegaBolt. Tipo: ' + str(bet_type))
 
     if bet_type == 1:      
         key = Db.add_url_master(message, text, url, bet_type, uid)  
-        bot_escanteio_asiatico(configs, key, text, url)
+        bot_escanteio_asiatico(configs, url, key)
+
     else:
         log('Estratégia cartão vermelho em desenvolvimento', colour='red')
+
+
+    
+
+
+
+###########################################################
+# Parse Tiro Seco Virtual
+###########################################################
+
+
+
+def parse_robot_kabum_tirosecovirtual(configs, msg, bet_type):
+
+    message = msg
+    msg = message.split("\n")            
+
+    championship = msg[2]
+
+    match1 = msg[6]
+    match2 = msg[7]
+    match3 = msg[8]
+    match4 = msg[9]
+
+    url = msg[len(msg)-1]
+    matches = [championship, match1, match2, match3, match4]
+
+    parse_robot_tirosecovirtual_continue(configs, matches, url, bet_type, message)
+
+
+
+def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
+
+    log('Inicializando Bet TiroSecoVirtual - Esporte virtual')
+
+    key = Db.add_url_master_tsv(message, text, url, bet_type, uid)  
+    bot_futebol_virtual_ambos(configs, text, url, key)
+        
 
 
 ###########################################################
@@ -126,6 +198,7 @@ def refresh_bets():
 
             datetime_match = bet.get("datetime")
             match = bet.get("link")            
+            msg = bet.get("msg")    
             bet_type = bet.get("bet_type")
             
             now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')            
@@ -136,7 +209,7 @@ def refresh_bets():
                 if not match in my_matches:     
 
                     my_matches.append(match)                 
-                    check_status(match, match, bet_type)
+                    check_status(msg, bet_type)
                     Db.add_match(datetime_match, match, bet_type, uid)
                 
         log('Verificação finalizada. Aguardando...')

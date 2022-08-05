@@ -74,8 +74,23 @@ def bot_escanteio_asiatico(configs, url, key):
    start_browser(url)
    time.sleep(configs.get("delay_start"))
 
+   try:
 
-   info = Db.get_urls_tsv_key(key)[0]
+       x, y = pyautogui.locateCenterOnScreen(configs.get("file_no_results"))
+
+       pyautogui.click(x, y)
+
+       log('Parece que não encontramos o jogo solicitado...', colour='red')
+       close_browser_tab()   
+
+   except:
+       log('Parece que encontramos resultados...')
+       bot_escanteio_asiatico_continue(configs, url, key)
+
+   
+def bot_escanteio_asiatico_continue(configs, url, key):
+
+   info = Db.get_urls_key(key)[0]
    status = info.get("status")   
    bet = info.get("bet")   
    
@@ -127,7 +142,6 @@ def bot_escanteio_asiatico(configs, url, key):
     time.sleep(configs.get("delay_end"))
     close_browser_tab()   
     log("Finalizado", key=key)
-   
 
 ###########################################################
 # Browser Bot - Futebol virtual
@@ -138,6 +152,22 @@ def bot_futebol_virtual_ambos(configs, text, url, key):
          
    start_browser(url)
    time.sleep(configs.get("delay_start"))
+
+   try:
+
+       x, y = pyautogui.locateCenterOnScreen(configs.get("file_no_results"))
+
+       pyautogui.click(x, y)
+
+       log('Parece que não encontramos o jogo solicitado...', colour='red')
+       close_browser_tab()   
+
+   except:
+       log('Parece que encontramos resultados...')
+       bot_futebol_virtual_ambos_continue(configs, text, key)
+
+
+def bot_futebol_virtual_ambos_continue(configs, text, key):
 
    try:
        x, y = pyautogui.locateCenterOnScreen(configs.get("file_logo"))
@@ -192,13 +222,13 @@ def bot_futebol_virtual_ambos(configs, text, url, key):
         click_mouse(x, y)
         click_mouse(x + configs.get("move_right_bet") + 100, y)      
 
-        time.sleep(configs.get("delay_end"))        
-        log("Finalizado", key=key, type=1)
-
-
+        
         time.sleep(configs.get("delay")) 
 
 
+
+    time.sleep(configs.get("delay_end"))        
+    log("Finalizado", key=key, type=1)
     close_browser_tab()   
 
            

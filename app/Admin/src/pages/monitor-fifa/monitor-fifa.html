@@ -1,7 +1,7 @@
 
 <ion-header>
   <ion-navbar text-center no-border-bottom>
-    <ion-title>Odds asiáticas</ion-title>     
+    <ion-title>Futebol virtual</ion-title>     
 
     <ion-buttons end>        
                      
@@ -26,52 +26,23 @@
 
       <ion-card class="trip card" text-wrap *ngFor="let service of snkrs" no-lines>
 
-
-        <ion-item>
-
+        <ion-item>     
+          
+             
           <ion-avatar item-start>
             <img src="./assets/imgs/default-user.png" *ngIf="! service.thumbnail">
             <img src="{{service.thumbnail}}" *ngIf="service.thumbnail">
           </ion-avatar>
-  
+
           
           <h2>{{dataText.name}}: {{service.title}}</h2>
           <p><b>URL:  </b><a href={{service.link}}>Clique para abrir</a></p>              
           <p *ngIf="service.status"><b>Status:  </b>{{service.status}}</p>
           <p *ngIf="service.datetimeStr"><b>Atualizado em:  </b>{{service.datetimeStr}}</p>          
           <p *ngIf="service.match"><b>Palavra-chave:  </b>{{service.match}}</p>
-          <p *ngIf="service.msgShow"><b>Mensagem:  </b>{{service.msg}}</p>           
-          
-          <ion-row>        
-              
-            <ion-col>
-              <button ion-button icon-start clear small (click)="recovery(service)"  color="danger"> 
-                  <ion-icon name="clipboard"></ion-icon>
-                <div>Mudar bet</div>
-              </button>
-            </ion-col> 
-  
-            <ion-col *ngIf="! service.expand">
-                <button ion-button icon-start clear small (click)="expand(service)">
-                    <ion-icon name="arrow-down"></ion-icon>
-                   Mostrar informações
-                </button>
-            </ion-col>      
-  
-            <ion-col *ngIf="service.expand">
-              <button ion-button icon-start clear small (click)="expand(service)">
-                  <ion-icon name="arrow-down"></ion-icon>
-                 Esconder informações
-              </button>
-          </ion-col>   
-  
-          </ion-row>
+          <p *ngIf="service.msg"><b>Mensagem:  </b>{{service.msg}}</p>                          
 
-        </ion-item>
-            
-        
-
-        
+      </ion-item>   
           
                           
     </ion-card>    

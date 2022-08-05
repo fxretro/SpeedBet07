@@ -84,6 +84,10 @@ export class HomePage {
     this.navCtrl.push('MonitorPage')
   }
 
+  goPageMonitorFifaOnline(){    
+    this.navCtrl.push('MonitorFifaPage')
+  }
+
  
   
 

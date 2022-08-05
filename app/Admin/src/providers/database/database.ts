@@ -86,12 +86,11 @@ export class DatabaseProvider {
             .snapshotChanges()            
   }
 
-  /** APOSTAS */
+  /** Odds asiáticas */
 
   getMonitors(){
 
-    let uid = this.authProvider.currentUserUid()    
-    let path = "/betAviso/" + uid + "/"
+    let path = "/betAviso/"
 
     return this.db.list(path, 
         ref => ref.orderByKey())
@@ -102,6 +101,27 @@ export class DatabaseProvider {
 
     let uid = this.authProvider.currentUserUid()    
     let path = "/betAviso/" + uid + "/"
+
+    return this.db.list(path).remove(key_)
+  } 
+
+
+  /** futebol online */
+
+  getMonitorsFifa(){
+
+    let uid = this.authProvider.currentUserUid()    
+    let path = "/betAvisoTsv/" + uid + "/"
+
+    return this.db.list(path, 
+        ref => ref.orderByKey())
+        .snapshotChanges()             
+  }
+
+  removeMonitorsFifa(key_: string){
+
+    let uid = this.authProvider.currentUserUid()    
+    let path = "/betAvisoTsv/" + uid + "/"
 
     return this.db.list(path).remove(key_)
   } 
@@ -119,12 +139,7 @@ export class DatabaseProvider {
   updateSettings(key_: string, stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet){  
     
     let uid = this.authProvider.currentUserUid()    
-    let path = "/configs/" 
-
-    console.log('uid: ', uid)
-
-
-    
+    let path = "/configs/"         
     return this.db.list(path).update(uid, {api_hash: '0e6ac8c3f24c20a7f9bb7b5d6150bf68', api_id: '7948726', stopped: stopped, bet: bet, delay: delay, delay_start: delay_start,delay_end: delay_end, move_down_bet: move_down_bet, move_right_bet: move_right_bet } )   
 
   }   
@@ -132,11 +147,8 @@ export class DatabaseProvider {
   getAllSettings(){    
     
     
-    let path = "/configs/"
-    let uid = this.authProvider.currentUserUid()    
+    let path = "/configs/"    
 
-    console.log(path)
-        
     return this.db.list(path, 
         ref => ref.orderByKey())
         .snapshotChanges()            
@@ -145,9 +157,7 @@ export class DatabaseProvider {
 
   changeStatusRobot(stopped){
 
-    let uid = this.authProvider.currentUserUid()  
-    
-    
+    let uid = this.authProvider.currentUserUid()          
     let path = "/configs/"
     return this.db.list(path).update(uid, {stopped: stopped } )   
   }

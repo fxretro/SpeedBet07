@@ -8,12 +8,13 @@ import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 
 
+
 @IonicPage()
 @Component({
-  selector: 'page-monitor',
-  templateUrl: 'monitor.html',
+  selector: 'page-monitor-fifa',
+  templateUrl: 'monitor-fifa.html',
 })
-export class MonitorPage {
+export class MonitorFifaPage {
 
   services: Observable<any>;  
   snkrs: any = []
@@ -91,7 +92,7 @@ export class MonitorPage {
 
   get(){
         
-    this.services = this.db.getMonitors()
+    this.services = this.db.getMonitorsFifa()
 
     this.services.subscribe(data => {
       this.getCallback(data)
@@ -101,17 +102,11 @@ export class MonitorPage {
   getCallback(data){
     
     data.forEach(element => {
-
-
       console.log(element.payload.val())
 
+
       let info = element.payload.val()
-      info.msgShow = false
-
-      if(info.uid === this.dataInfo.userInfo.uid)
-        info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
-
-
+      info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
 
       this.snkrs.push(info)
     });
@@ -150,7 +145,7 @@ export class MonitorPage {
   removeContinue(data){
 
 
-    this.db.removeMonitors(data.key)    
+    this.db.removeMonitorsFifa(data.key)    
     .then( () => {
       this.uiUtils.showAlert(this.dataText.success, this.dataText.removeSuccess)
     })
@@ -168,11 +163,6 @@ export class MonitorPage {
 
       this.uiUtils.showAlert(this.dataText.success, this.dataText.removeSuccess)
     })
-
-  }
-
-  expand(work){
-    work.msgShow = !work.msgShow
 
   }
 

@@ -27,6 +27,7 @@ export class MyApp {
     platform.ready().then(() => {
       
       this.startInterface()    
+      
     });
   }
 

@@ -142,7 +142,9 @@ def parse_robot_megabolt_continue(configs, text, url, bet_type, message):
 
     if bet_type == 1:      
         key = Db.add_url_master(message, text, url, bet_type, uid, configs.get("bet"))  
-        bot_escanteio_asiatico(configs, url, key)
+
+        if configs.get('only_save') == 0:
+            bot_escanteio_asiatico(configs, url, key)
 
     else:
         log('Estratégia cartão vermelho em desenvolvimento', colour='red')
@@ -189,7 +191,9 @@ def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
     log('Inicializando Bet TiroSecoVirtual - Esporte virtual')
 
     key = Db.add_url_master_tsv(message, text, url, bet_type, uid, configs.get("bet"))  
-    bot_futebol_virtual_ambos(configs, text, url, key)
+    
+    if configs.get('only_save') == 0:
+        bot_futebol_virtual_ambos(configs, text, url, key)        
         
 
 
@@ -205,26 +209,32 @@ def refresh_bets():
     bets = Db.get_urls()            
     my_matches = Db.get_urls_match()      
     today = datetime.datetime.now() 
+    
 
     try:        
 
         for bet in bets:
 
-            datetime_match = bet.get("datetime")
-            match = bet.get("link")            
-            msg = bet.get("msg")    
-            bet_type = bet.get("bet_type")
-            
-            now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')            
-            now = now + datetime.timedelta(seconds=int(timer_check))            
-                    
-            if now > today:
+            uid_match = bet.get("uid")            
 
-                if not match in my_matches:     
+            if uid_match is not uid:
 
-                    my_matches.append(match)                 
-                    check_status(msg, bet_type)
-                    Db.add_match(datetime_match, match, bet_type, uid)
+                datetime_match = bet.get("datetime")
+
+                match = bet.get("link")            
+                msg = bet.get("msg")    
+                bet_type = bet.get("bet_type")
+                
+                now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')            
+                now = now + datetime.timedelta(seconds=int(timer_check))            
+                        
+                if now > today:
+
+                    if not match in my_matches:     
+
+                        my_matches.append(match)                 
+                        check_status(msg, bet_type)
+                        Db.add_match(datetime_match, match, bet_type, uid)
                 
         log('Verificação finalizada. Aguardando...')
 

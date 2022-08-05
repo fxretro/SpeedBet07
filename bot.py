@@ -87,18 +87,18 @@ def parse_msg(configs, msg, bet_type):
 
     if bet_type == 1:
         log('Recebido Bet tipo escanteio asiático no MegaBolt')
-        parse_robot_megabolt(configs, msg, bet_type)
+        parse_robot_check(configs, msg, bet_type)
 
     elif bet_type == 2:
         log('Recebido Bet tipo Cartão vermelho no MegaBolt')
-        parse_robot_megabolt(configs, msg, bet_type)
+        parse_robot_check(configs, msg, bet_type)
 
     elif bet_type == 11:
         log('Recebido Bet tipo futebol virtual Kabum Tiro Seco')
-        parse_robot_kabum_tirosecovirtual(configs, msg, bet_type)
+        parse_robot_tiroseco_check(configs, msg, bet_type)
 
     else:
-        log('Esse robo ainda não foi configurado')
+        log('Esse robo ainda não foi configurado', colour='red')
 
 
 
@@ -107,8 +107,15 @@ def parse_msg(configs, msg, bet_type):
 ###########################################################
 # Parse MegaBolt
 ###########################################################
+
+def parse_robot_check(configs, msg, bet_type):
     
+     if configs.get('robo_megabolt') == 1:
+        parse_robot_megabolt(configs, msg, bet_type)
+     else:
+        log('Robo em Megabolt em modo stop efetuado pelo administrador', colour='red')
     
+            
 def parse_robot_megabolt(configs, msg, bet_type):
 
     message = msg
@@ -134,7 +141,7 @@ def parse_robot_megabolt_continue(configs, text, url, bet_type, message):
     log('Inicializando MegaBolt. Tipo: ' + str(bet_type))
 
     if bet_type == 1:      
-        key = Db.add_url_master(message, text, url, bet_type, uid)  
+        key = Db.add_url_master(message, text, url, bet_type, uid, configs.get("bet"))  
         bot_escanteio_asiatico(configs, url, key)
 
     else:
@@ -149,6 +156,13 @@ def parse_robot_megabolt_continue(configs, text, url, bet_type, message):
 # Parse Tiro Seco Virtual
 ###########################################################
 
+
+def parse_robot_tiroseco_check(configs, msg, bet_type):
+    
+     if configs.get('robo_tirosecovirtual') == 1:
+        parse_robot_kabum_tirosecovirtual(configs, msg, bet_type)
+     else:
+        log('Robo em Kabum Tiro Seco em modo stop efetuado pelo administrador', colour='red')
 
 
 def parse_robot_kabum_tirosecovirtual(configs, msg, bet_type):
@@ -174,7 +188,7 @@ def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
 
     log('Inicializando Bet TiroSecoVirtual - Esporte virtual')
 
-    key = Db.add_url_master_tsv(message, text, url, bet_type, uid)  
+    key = Db.add_url_master_tsv(message, text, url, bet_type, uid, configs.get("bet"))  
     bot_futebol_virtual_ambos(configs, text, url, key)
         
 

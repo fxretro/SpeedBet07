@@ -36,9 +36,9 @@ db = firebase.database()
 ###########################################################
 
 
-def add_url_master(msg, match, url, bet_type, uid):
+def add_url_master(msg, match, url, bet_type, uid, bet):
   key = db.generate_key()
-  db.child("betAviso/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid, 'bet_type': bet_type})
+  db.child("betAviso/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid, 'bet_type': bet_type, 'bet': bet})
   return key
 
 
@@ -118,9 +118,9 @@ def get_urls_match():
 ###########################################################
 
 
-def add_url_master_tsv(msg, match, url, bet_type, uid):
+def add_url_master_tsv(msg, match, url, bet_type, uid, bet):
   key = db.generate_key()
-  db.child("betAvisoTsv/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid, 'bet_type': bet_type})
+  db.child("betAvisoTsv/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid, 'bet_type': bet_type, 'bet': bet})
   return key
 
 

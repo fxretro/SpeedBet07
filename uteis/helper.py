@@ -71,9 +71,7 @@ def log(text, colour = 'green', font='slant', figlet=False, key='0', type=0):
 ###########################################################
 
 
-
 def scraping_live_now(url):
-
     
     with sync_playwright() as p:
         

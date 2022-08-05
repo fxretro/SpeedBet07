@@ -73,13 +73,18 @@ def bot_escanteio_asiatico(configs, url, key):
          
    start_browser(url)
    time.sleep(configs.get("delay_start"))
+
+
+   info = Db.get_urls_tsv_key(key)[0]
+   status = info.get("status")   
+   bet = info.get("bet")   
    
    try:
        x, y = pyautogui.locateCenterOnScreen(configs.get("file_logo"))
        pyautogui.click(x, y)
 
    except:
-       print('Não conseguimos clicar no verde')
+       log('Não conseguimos clicar no verde', colour='red')
 
    
    log("Iniciando investimento", key=key)
@@ -101,24 +106,27 @@ def bot_escanteio_asiatico(configs, url, key):
    xx = x + configs.get("move_right_bet")
    scroll_down_mouse(xx, yy)
    time.sleep(configs.get("delay")) 
-      
-   time.sleep(configs.get("delay")) 
+
    click_mouse(xx, yy)
       
-   click_selected_text(color, 'Valor de Aposta')
-   write_text(str(configs.get("bet")))  
-   log("Adicionando valor do investimento", key=key)  
-
-   status = Db.get_urls_key(key)
-   print(status)
    
-   x, y = get_position_mouse()
-   click_mouse(x, y)
-   click_mouse(x + configs.get("move_right_bet") + 100, y)      
+   if status == 'Anulado':
+        log("Investimento anulado pelo cliente! ",colour="red", key=key, type=0)
+        close_browser_tab()   
+        
+   else:
 
-   time.sleep(configs.get("delay_end"))
-   close_browser_tab()   
-   log("Finalizado", key=key)
+    click_selected_text(color, 'Valor de Aposta')
+    write_text(str(bet))  
+    log("Adicionando valor do investimento", key=key)     
+   
+    x, y = get_position_mouse()
+    click_mouse(x, y)
+    click_mouse(x + configs.get("move_right_bet") + 100, y)      
+
+    time.sleep(configs.get("delay_end"))
+    close_browser_tab()   
+    log("Finalizado", key=key)
    
 
 ###########################################################
@@ -136,41 +144,66 @@ def bot_futebol_virtual_ambos(configs, text, url, key):
        pyautogui.click(x, y)
 
    except:
-       print('Não conseguimos clicar no verde')
+       log('Não conseguimos clicar no verde', colour='red')
 
 
    log("Iniciando investimento", key=key, type=1)
    search_text("Futebol")      
    click_selected_text(color, text[0], 1)            
-   time.sleep(1)
+   time.sleep(configs.get("delay")) 
 
-   log("Clicando em " + text[1], key=key, type=1)
-   click_selected_text(color, "20:01", 1)     
-   search_text("Para o Time Marcar - Sim/Nao")   
+   matches = [text[1], text[2], text[3], text[4]]   
+
+   for match in matches:
+
+    log("Clicando em " + match, key=key, type=1)
+
+    click_selected_text(color, match, 1)     
+    time.sleep(configs.get("delay")) 
+
+    search_text("Para o Time Marcar - Sim/Nao")       
+    click_selected_text(color, "Sim", 2)     
+
+    x, y = get_position_mouse()
+    yy = y+100       
+
+    scroll_down_mouse(x, yy)      
+    click_mouse(x, yy)
+    log("Realizando investimento em " + match, key=key, type=1)        
+
+    info = Db.get_urls_tsv_key(key)[0]
+    status = info.get("status")   
+    bet = info.get("status")   
+    
+
+    if status == 'Anulado':
+
+            log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1)
+            close_browser_tab()   
+            return
+            
+    else:
+        
+        click_selected_text(color, 'Valor de Aposta')
+        write_text(str(bet))  
+        log("Adicionando valor do investimento", key=key, type=1)  
+        
+        x, y = get_position_mouse()
+        click_mouse(x, y)
+        click_mouse(x + configs.get("move_right_bet") + 100, y)      
+
+        time.sleep(configs.get("delay_end"))        
+        log("Finalizado", key=key, type=1)
+
+
+        time.sleep(configs.get("delay")) 
+
+
+    close_browser_tab()   
+
+           
+
    
-   click_selected_text(color, "Sim",2)     
-
-   x, y = get_position_mouse()
-   yy = y+100       
-
-   scroll_down_mouse(x, yy)      
-   click_mouse(x, yy)
-   log("Realizando investimento em " + text[1], key=key, type=1)
-
-   status = Db.get_urls_tsv_key(key)
-   print('Status: ', status.get("status"))
-
-   click_selected_text(color, 'Valor de Aposta')
-   write_text(str(configs.get("bet")))  
-   log("Adicionando valor do investimento", key=key, type=1)  
-   
-   x, y = get_position_mouse()
-   click_mouse(x, y)
-   click_mouse(x + configs.get("move_right_bet") + 100, y)      
-
-   time.sleep(configs.get("delay_end"))
-   close_browser_tab()   
-   log("Finalizado", key=key, type=1)
 
    
 

@@ -104,16 +104,31 @@ export class MonitorPage {
     
     data.forEach(element => {      
 
-      let info = element.payload.val()
-      info.msgShow = false
+      let info = element.payload.val()            
 
-      if(info.uid === this.dataInfo.userInfo.uid)
+      if(info.uid === this.dataInfo.userInfo.uid){
+
+        info.msgShow = false
+        info.key = element.payload.key
         info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
-
-
-
-      this.snkrs.push(info)
+        this.snkrs.push(info)
+      }
+              
     });
+
+    this.snkrs.sort(function(a,b){      
+
+      let d = moment(a.datetime, "DD/MM/YYYY hh:mm:ss").isBefore(moment(b.datetime, "DD/MM/YYYY hh:mm:ss"));
+      return d
+    });
+
+
+    this.snkrs = this.snkrs.reverse()
+
+    console.log('Nova array')
+    console.log(this.snkrs)
+
+    
   }
 
   add(){
@@ -156,15 +171,11 @@ export class MonitorPage {
   }
 
   changeStatusRobot(){
-
-    console.log('Mudando status ', this.stopped)
-    this.stopped == 0 ? this.stopped = 1 : this.stopped = 0
-    console.log('Status modificado', this.stopped)
+    
+    this.stopped == 0 ? this.stopped = 1 : this.stopped = 0  
 
     this.db.changeStatusRobot(this.stopped)    
     .then( () => {
-
-
       this.uiUtils.showAlert(this.dataText.success, this.dataText.removeSuccess)
     })
 
@@ -216,7 +227,30 @@ export class MonitorPage {
 
     console.log(service)
 
-    this.uiUtils.showAlertSuccess("Em desenvolvimento")
+    let alert = this.uiUtils.showConfirm(this.dataText.warning, this.dataText.areYouSure)
+    alert.then((result) => {
+
+      if(result){
+        this.anularContinue(service)                 
+      }    
+    })   
+
+  }
+
+  anularContinue(data){
+
+    console.log('Anulando ', data.key)
+
+
+    this.db.updateMonitors(data.key, 'Anulado')    
+    .then( () => {
+
+      this.uiUtils.showAlert(this.dataText.success, "Anulado com sucesso")
+
+
+    })
+
+   
   }
 
 

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, ActionSheetController } from 'ionic-angular';
 import { UiUtilsProvider } from '../../providers/ui-utils/ui-utils'
 import { DataInfoProvider } from '../../providers/data-info/data-info'
 import { DataTextProvider } from '../../providers/data-text/data-text'
 import { DatabaseProvider } from '../../providers/database/database';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
+import { AlertController } from 'ionic-angular';
 
 
 
@@ -28,6 +29,8 @@ export class MonitorFifaPage {
     public platform: Platform,
     public dataInfo: DataInfoProvider,
     public dataText: DataTextProvider,
+    public actionSheetCtrl: ActionSheetController,
+    public alertCtrl: AlertController, 
     public db: DatabaseProvider,
     public navParams: NavParams) {
   }
@@ -86,14 +89,12 @@ export class MonitorFifaPage {
       
     });
 
-
-
   }
+
 
   get(){
         
     this.services = this.db.getMonitorsFifa()
-    
 
     this.services.subscribe(data => {
       this.getCallback(data)
@@ -104,18 +105,32 @@ export class MonitorFifaPage {
     
     data.forEach(element => {      
 
-      let info = element.payload.val()
-      info.msgShow = false
+      let info = element.payload.val()            
 
-      if(info.uid === this.dataInfo.userInfo.uid)
+      if(info.uid === this.dataInfo.userInfo.uid){
+
+        info.msgShow = false
+        info.key = element.payload.key
         info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
-
-
-
-      this.snkrs.push(info)
+        this.snkrs.push(info)
+      }
+              
     });
-  }
 
+    this.snkrs.sort(function(a,b){      
+
+      let d = moment(a.datetime, "DD/MM/YYYY hh:mm:ss").isBefore(moment(b.datetime, "DD/MM/YYYY hh:mm:ss"));
+      return d
+    });
+
+
+    this.snkrs = this.snkrs.reverse()
+
+    console.log('Nova array')
+    console.log(this.snkrs)
+
+    
+  }
 
   add(){
     this.navCtrl.push('MonitorUrlAddPage')
@@ -150,25 +165,93 @@ export class MonitorFifaPage {
   removeContinue(data){
 
 
-    this.db.removeMonitorsFifa(data.key)    
+    this.db.removeMonitors(data.key)    
     .then( () => {
       this.uiUtils.showAlert(this.dataText.success, this.dataText.removeSuccess)
     })
   }
 
   changeStatusRobot(){
-
-    console.log('Mudando status ', this.stopped)
-    this.stopped == 0 ? this.stopped = 1 : this.stopped = 0
-    console.log('Status modificado', this.stopped)
+    
+    this.stopped == 0 ? this.stopped = 1 : this.stopped = 0  
 
     this.db.changeStatusRobot(this.stopped)    
     .then( () => {
-
-
       this.uiUtils.showAlert(this.dataText.success, this.dataText.removeSuccess)
     })
 
+  }
+
+  expand(work){
+    work.msgShow = !work.msgShow
+
+  }
+
+
+  changeBet(work){
+
+    console.log(work)
+
+    let alert = this.alertCtrl.create({
+      title: "Novo valor do investimento",
+      inputs: [
+        {
+          name: 'question',
+          placeholder: "Novo valor do investimento"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancelar",
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancelado')
+          }
+        },
+        {
+          text: "Modificar",
+          handler: data => {
+
+            console.log('Novo valor ', data.question)
+            this.uiUtils.showAlertSuccess("Em desenvolvimento")
+
+
+          }
+        }
+      ]
+    });
+    alert.present();
+      
+  }
+
+  anular(service){
+
+    console.log(service)
+
+    let alert = this.uiUtils.showConfirm(this.dataText.warning, this.dataText.areYouSure)
+    alert.then((result) => {
+
+      if(result){
+        this.anularContinue(service)                 
+      }    
+    })   
+
+  }
+
+  anularContinue(data){
+    
+
+    console.log('Anulando ', data.key)
+
+    this.db.updateMonitorsFifa(data.key, 'Anulado')    
+    .then( () => {
+
+      this.uiUtils.showAlert(this.dataText.success, "Anulado com sucesso")
+
+
+    })
+
+   
   }
 
 

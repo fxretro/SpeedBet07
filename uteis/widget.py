@@ -137,7 +137,7 @@ def bot_escanteio_asiatico_continue(configs, url, key):
    
     x, y = get_position_mouse()
     click_mouse(x, y)
-    click_mouse(x + configs.get("move_right_bet") + 150, y)      
+    click_mouse(x + configs.get("move_right_bet"), y)      
 
     time.sleep(configs.get("delay_end"))
     close_browser_tab()   
@@ -196,7 +196,7 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
     click_selected_text(color, "Sim", 2)     
 
     x, y = get_position_mouse()
-    yy = y+100       
+    yy = y + configs.get("move_down_bet")    
 
     scroll_down_mouse(x, yy)      
     click_mouse(x, yy)
@@ -209,9 +209,7 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
 
     if status == 'Anulado':
 
-            log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1)
-            close_browser_tab()   
-            return
+            log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1)                        
             
     else:
         
@@ -221,15 +219,16 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
         
         x, y = get_position_mouse()
         click_mouse(x, y)
-        click_mouse(x + configs.get("move_right_bet") + 100, y)      
+        click_mouse(x + configs.get("move_right_bet"), y)      
 
         
         time.sleep(configs.get("delay")) 
 
 
-    time.sleep(configs.get("delay_end"))        
-    log("Finalizado", key=key, type=1)
-    close_browser_tab()   
+
+   time.sleep(configs.get("delay_end"))        
+   log("Finalizado", key=key, type=1)
+   close_browser_tab()   
 
            
 

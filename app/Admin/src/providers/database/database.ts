@@ -103,6 +103,13 @@ export class DatabaseProvider {
     return this.db.list(path).remove(key_)
   } 
 
+  updateMonitors(key_: string, status){  
+        
+    let path = "/betAviso/"         
+    return this.db.list(path).update(key_, {status: status } )   
+
+  }   
+
 
   /** futebol online */
 
@@ -122,6 +129,13 @@ export class DatabaseProvider {
 
     return this.db.list(path).remove(key_)
   } 
+
+  updateMonitorsFifa(key_: string, status){  
+        
+    let path = "/betAvisoTsv/"         
+    return this.db.list(path).update(key_, {status: status } )   
+
+  }   
 
 
   /** CONFIGURAÇÕES */

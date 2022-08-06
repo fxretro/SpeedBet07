@@ -26,41 +26,43 @@
 
       <ion-card class="trip card" text-wrap *ngFor="let service of snkrs" no-lines>
 
-
         <ion-item>
 
           <ion-avatar item-start>
-            <img src="./assets/imgs/default-user.png" *ngIf="! service.thumbnail">
+
+            <img src="https://cdn.discordapp.com/avatars/822263995524055070/db0befcb10561deb6d68f9f3529d0623.webp?size=128" *ngIf="! service.thumbnail">
             <img src="{{service.thumbnail}}" *ngIf="service.thumbnail">
           </ion-avatar>
-  
           
-          <h2>{{dataText.name}}: {{service.title}}</h2>
-          <p><b>URL:  </b><a href={{service.link}}>Clique para abrir</a></p>              
-          <p *ngIf="service.status"><b>Status:  </b>{{service.status}}</p>
+            <h2>{{dataText.name}}: {{service.title}}</h2>
+            <p><b>URL:  </b><a href={{service.link}}>Clique para abrir</a></p>              
+            <p *ngIf="service.status"><b>Status:  </b>{{service.status}}</p>
 
-          <p *ngIf="service.bet"><b>Investimento:  </b>R${{service.bet}}</p>
+            <p *ngIf="service.bet"><b>Investimento:  </b>R${{service.bet}}</p>
 
-          <p *ngIf="service.datetimeStr"><b>Atualizado em:  </b>{{service.datetimeStr}}</p>          
-          <p *ngIf="service.match"><b>Palavra-chave:  </b>{{service.match}}</p>
-          <p *ngIf="service.msgShow"><b>Mensagem:  </b>{{service.msg}}</p>           
-          
-          <ion-row>        
+            <p *ngIf="service.datetimeStr"><b>Atualizado em:  </b>{{service.datetimeStr}}</p>          
+            <p *ngIf="service.match"><b>Palavra-chave:  </b>{{service.match}}</p>
+            <p *ngIf="service.msgShow"><b>Mensagem:  </b>{{service.msg}}</p>    
+
+          <ion-row>  
+
               
-            <ion-col>
+            <ion-col>              
               <button ion-button icon-start clear small (click)="changeBet(service)" color="danger" [disabled]="service.status === 'Clicando em Escanteios Asiaticos' 
                 || service.status === 'Anulado' || service.status === 'Adicionando valor do investimento' || service.status === 'Finalizado'"> 
                   <ion-icon name="clipboard"></ion-icon>
                 <div>Mudar bet</div>
               </button>
             </ion-col> 
+            
 
             <ion-col>
-              <button ion-button icon-start clear small (click)="anular(service)">
+              <button ion-button icon-start clear small (click)="anular(service)"  [disabled]="service.status === 'Clicando em Escanteios Asiaticos' 
+              || service.status === 'Anulado' || service.status === 'Adicionando valor do investimento' || service.status === 'Finalizado'">
                   <ion-icon name="arrow-down"></ion-icon>
                  Anular
               </button>
-          </ion-col>  
+            </ion-col>  
   
             <ion-col *ngIf="! service.expand">
                 <button ion-button icon-start clear small (click)="expand(service)">

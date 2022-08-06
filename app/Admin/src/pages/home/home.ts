@@ -30,6 +30,7 @@ export class HomePage {
     public navParams: NavParams) {
 
   }
+  
 
   ionViewDidLoad() {  
     
@@ -43,6 +44,8 @@ export class HomePage {
   }
 
   subscribeStuff(){
+
+
     this.events.subscribe(this.dataInfo.eventFcmToken, data => {        
               
       this.dataInfo.setToken(data)

@@ -93,6 +93,7 @@ export class MonitorFifaPage {
   get(){
         
     this.services = this.db.getMonitorsFifa()
+    
 
     this.services.subscribe(data => {
       this.getCallback(data)
@@ -101,16 +102,20 @@ export class MonitorFifaPage {
 
   getCallback(data){
     
-    data.forEach(element => {
-      console.log(element.payload.val())
-
+    data.forEach(element => {      
 
       let info = element.payload.val()
-      info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
+      info.msgShow = false
+
+      if(info.uid === this.dataInfo.userInfo.uid)
+        info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
+
+
 
       this.snkrs.push(info)
     });
   }
+
 
   add(){
     this.navCtrl.push('MonitorUrlAddPage')

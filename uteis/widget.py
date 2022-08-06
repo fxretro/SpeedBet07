@@ -137,7 +137,7 @@ def bot_escanteio_asiatico_continue(configs, url, key):
    
     x, y = get_position_mouse()
     click_mouse(x, y)
-    click_mouse(x + configs.get("move_right_bet") + 100, y)      
+    click_mouse(x + configs.get("move_right_bet") + 150, y)      
 
     time.sleep(configs.get("delay_end"))
     close_browser_tab()   
@@ -165,6 +165,7 @@ def bot_futebol_virtual_ambos(configs, text, url, key):
    except:
        log('Parece que encontramos resultados...')
        bot_futebol_virtual_ambos_continue(configs, text, key)
+
 
 
 def bot_futebol_virtual_ambos_continue(configs, text, key):
@@ -203,7 +204,7 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
 
     info = Db.get_urls_tsv_key(key)[0]
     status = info.get("status")   
-    bet = info.get("status")   
+    bet = info.get("bet")   
     
 
     if status == 'Anulado':
@@ -224,7 +225,6 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
 
         
         time.sleep(configs.get("delay")) 
-
 
 
     time.sleep(configs.get("delay_end"))        

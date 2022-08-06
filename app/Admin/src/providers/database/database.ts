@@ -98,10 +98,8 @@ export class DatabaseProvider {
   }
 
   removeMonitors(key_: string){
-
-    let uid = this.authProvider.currentUserUid()    
-    let path = "/betAviso/" + uid + "/"
-
+  
+    let path = "/betAviso/" 
     return this.db.list(path).remove(key_)
   } 
 
@@ -109,9 +107,8 @@ export class DatabaseProvider {
   /** futebol online */
 
   getMonitorsFifa(){
-
-    let uid = this.authProvider.currentUserUid()    
-    let path = "/betAvisoTsv/" + uid + "/"
+    
+    let path = "/betAvisoTsv/" 
 
     return this.db.list(path, 
         ref => ref.orderByKey())
@@ -121,7 +118,7 @@ export class DatabaseProvider {
   removeMonitorsFifa(key_: string){
 
     let uid = this.authProvider.currentUserUid()    
-    let path = "/betAvisoTsv/" + uid + "/"
+    let path = "/betAvisoTsv/" 
 
     return this.db.list(path).remove(key_)
   } 

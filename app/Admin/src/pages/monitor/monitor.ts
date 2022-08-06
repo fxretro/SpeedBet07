@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, ActionSheetController } from 'ionic-angular';
 import { UiUtilsProvider } from '../../providers/ui-utils/ui-utils'
 import { DataInfoProvider } from '../../providers/data-info/data-info'
 import { DataTextProvider } from '../../providers/data-text/data-text'
 import { DatabaseProvider } from '../../providers/database/database';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
-
+import { AlertController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -27,6 +27,8 @@ export class MonitorPage {
     public platform: Platform,
     public dataInfo: DataInfoProvider,
     public dataText: DataTextProvider,
+    public actionSheetCtrl: ActionSheetController,
+    public alertCtrl: AlertController, 
     public db: DatabaseProvider,
     public navParams: NavParams) {
   }
@@ -100,10 +102,7 @@ export class MonitorPage {
 
   getCallback(data){
     
-    data.forEach(element => {
-
-
-      console.log(element.payload.val())
+    data.forEach(element => {      
 
       let info = element.payload.val()
       info.msgShow = false
@@ -174,6 +173,50 @@ export class MonitorPage {
   expand(work){
     work.msgShow = !work.msgShow
 
+  }
+
+
+  changeBet(work){
+
+    console.log(work)
+
+    let alert = this.alertCtrl.create({
+      title: "Novo valor do investimento",
+      inputs: [
+        {
+          name: 'question',
+          placeholder: "Novo valor do investimento"
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancelar",
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancelado')
+          }
+        },
+        {
+          text: "Modificar",
+          handler: data => {
+
+            console.log('Novo valor ', data.question)
+            this.uiUtils.showAlertSuccess("Em desenvolvimento")
+
+
+          }
+        }
+      ]
+    });
+    alert.present();
+      
+  }
+
+  anular(service){
+
+    console.log(service)
+
+    this.uiUtils.showAlertSuccess("Em desenvolvimento")
   }
 
 

@@ -10,6 +10,13 @@
     }
 
 
+    .bg-theme {	  
+      background: $theme-color !important;
+  }
+
+  .bg-red {	  
+    background: red !important;
+}
     
     .mrg-lt-10 {
         margin-left: 10px;

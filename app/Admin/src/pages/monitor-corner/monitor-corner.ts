@@ -7,14 +7,14 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 import { AlertController } from 'ionic-angular';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
+
 
 @IonicPage()
 @Component({
-  selector: 'page-monitor',
-  templateUrl: 'monitor.html',
+  selector: 'page-monitor-corner',
+  templateUrl: 'monitor-corner.html',
 })
-export class MonitorPage {
+export class MonitorCornerPage {
 
   services: Observable<any>;  
   snkrs: any = []
@@ -30,7 +30,6 @@ export class MonitorPage {
     public dataText: DataTextProvider,
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController, 
-    private iab: InAppBrowser,
     public db: DatabaseProvider,
     public navParams: NavParams) {
   }
@@ -100,9 +99,7 @@ export class MonitorPage {
 
   get(){
         
-    this.services = this.db.getOportunities()
-
-
+    this.services = this.db.getMonitors()
 
     this.services.subscribe(data => {
       this.getCallback(data)
@@ -258,17 +255,6 @@ export class MonitorPage {
    
   }
 
-  open(service){
-
-    let url = service.link
-    
-    let options = 'location=no';
-
-    if(this.dataInfo.isWeb)
-      this.iab.create(url, '_blank', options);    
-    else 
-      this.iab.create(encodeURI(url), '_system', options);
-  }
 
 
 

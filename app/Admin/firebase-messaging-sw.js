@@ -3,9 +3,9 @@ importScripts('https://www.gstatic.com/firebasejs/7.16.0/firebase-messaging.js')
 
 firebase.initializeApp({    
   'messagingSenderId': "698426579872",
-  'projectId': "motok-a98db",
-  'appId': "1:698426579872:web:bdd2fbb209a3bca1",
-  'apiKey': "AIzaSyAC7n_qWJVeLhxIcr23kpjaeryp03HTXMM"
+  'projectId': "ghostbot-27831",
+  'appId': "1:868283060392:web:83fa6cccfbc966565eb29d",
+  'apiKey': "AIzaSyB81K_ipu20aWEI_LQtVWnOXJmM6UaIVtw"
 });
 
 const messaging = firebase.messaging();

@@ -1,23 +1,19 @@
 
-<ion-header>
+<ion-header  class="bg-theme text-white">
   <ion-navbar text-center no-border-bottom>
+    
     <ion-title>Odds asiáticas</ion-title>     
 
-    <ion-buttons end>        
-                     
-      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="!stopped">                  
-        <ion-icon name="md-stop"  item-start style="margin-right: 15px;"></ion-icon>        
-        PARAR
-      </button>
-
-      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="stopped">                  
-        <ion-icon name="md-play"  item-start style="margin-right: 15px;"></ion-icon>        
-        INICIAR
-      </button>
+    <ion-buttons end>       
+      
+      <button ion-button style="color: white" (click)="get()" class="mrg-bt-10">                          
+        ATUALIZAR
+      </button>                           
 
     </ion-buttons>
 
   </ion-navbar>     
+
 </ion-header>
 
 <ion-content class="trips detail-bg">
@@ -33,50 +29,21 @@
             <img src="https://cdn.discordapp.com/avatars/822263995524055070/db0befcb10561deb6d68f9f3529d0623.webp?size=128" *ngIf="! service.thumbnail">
             <img src="{{service.thumbnail}}" *ngIf="service.thumbnail">
           </ion-avatar>
+                      
           
-            <h2>{{dataText.name}}: {{service.title}}</h2>
-            <p><b>URL:  </b><a href={{service.link}}>Clique para abrir</a></p>              
-            <p *ngIf="service.status"><b>Status:  </b>{{service.status}}</p>
-
-            <p *ngIf="service.bet"><b>Investimento:  </b>R${{service.bet}}</p>
-
-            <p *ngIf="service.datetimeStr"><b>Atualizado em:  </b>{{service.datetimeStr}}</p>          
-            <p *ngIf="service.match"><b>Palavra-chave:  </b>{{service.match}}</p>
-            <p *ngIf="service.msgShow"><b>Mensagem:  </b>{{service.msg}}</p>    
+            <p *ngIf="service.datetimeStr"><b>Atualizado em:  </b>{{service.datetimeStr}}</p>                      
+            <p><b>Mensagem:  </b>{{service.msg}}</p>    
 
           <ion-row>  
-
               
-            <ion-col>              
-              <button ion-button icon-start clear small (click)="changeBet(service)" color="danger" [disabled]="service.status === 'Clicando em Escanteios Asiaticos' 
-                || service.status === 'Anulado' || service.status === 'Adicionando valor do investimento' || service.status === 'Finalizado'"> 
-                  <ion-icon name="clipboard"></ion-icon>
-                <div>Mudar bet</div>
-              </button>
-            </ion-col> 
-            
-
+        
             <ion-col>
-              <button ion-button icon-start clear small (click)="anular(service)"  [disabled]="service.status === 'Clicando em Escanteios Asiaticos' 
-              || service.status === 'Anulado' || service.status === 'Adicionando valor do investimento' || service.status === 'Finalizado'">
-                  <ion-icon name="arrow-down"></ion-icon>
-                 Anular
+              <button ion-button icon-start clear small (click)="open(service)">
+                  <ion-icon name="clipboard"></ion-icon>
+                 Abrir
               </button>
             </ion-col>  
-  
-            <ion-col *ngIf="! service.expand">
-                <button ion-button icon-start clear small (click)="expand(service)">
-                    <ion-icon name="arrow-down"></ion-icon>
-                   Mostrar informações
-                </button>
-            </ion-col>      
-  
-            <ion-col *ngIf="service.expand">
-              <button ion-button icon-start clear small (click)="expand(service)">
-                  <ion-icon name="arrow-down"></ion-icon>
-                 Esconder informações
-              </button>
-          </ion-col>   
+             
   
           </ion-row>
 

@@ -138,6 +138,19 @@ export class DatabaseProvider {
   }   
 
 
+
+  /** ooprtunidades */
+
+  getOportunities(){
+    
+    let path = "/betOportunities/" 
+
+    return this.db.list(path, 
+        ref => ref.orderByKey())
+        .snapshotChanges()             
+  }
+
+
   /** CONFIGURAÇÕES */
  
   addSettings(stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet ){

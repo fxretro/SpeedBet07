@@ -84,11 +84,17 @@ export class HomePage {
 
 
   goPageMonitorOnline(){    
-    this.navCtrl.push('MonitorPage')
+    
+    this.navCtrl.push('MonitorCornerPage')
   }
 
   goPageMonitorFifaOnline(){    
     this.navCtrl.push('MonitorFifaPage')
+  }
+
+
+  goPageOportunities(){
+    this.navCtrl.push('MonitorPage')
   }
 
  

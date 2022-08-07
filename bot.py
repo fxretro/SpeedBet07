@@ -42,6 +42,10 @@ async def telegram_bot():
 
       @client.on(events.NewMessage(pattern='(?i).*MEGABOLT PRIMEIRO'))
       async def handler(event):
+         my_event_handler(event, 1)  
+
+      @client.on(events.NewMessage(pattern='(?i).*MEGABOLT SEGUNDO'))
+      async def handler(event):
          my_event_handler(event, 1)          
 
       @client.on(events.NewMessage(pattern='(?i).*Alerta Estratégia: ESCANTEIOS'))
@@ -51,6 +55,14 @@ async def telegram_bot():
       @client.on(events.NewMessage(pattern='(?i).*SAIU CARTÃO VERMELHO'))
       async def handler(event):
          my_event_handler(event, 2)            
+      
+      @client.on(events.NewMessage(pattern='(?i).*GOL PRIMEIRO'))
+      async def handler(event):
+         my_event_handler(event, 2)
+
+      @client.on(events.NewMessage(pattern='(?i).*GOL SEGUNDO'))
+      async def handler(event):
+         my_event_handler(event, 2)
 
 
     ###########################################################
@@ -147,7 +159,8 @@ def parse_robot_megabolt_continue(configs, text, url, bet_type, message):
             bot_escanteio_asiatico(configs, url, key)
 
     else:
-        log('Estratégia cartão vermelho em desenvolvimento', colour='red')
+        key = Db.add_oportunity(message, text, url, uid)
+        log('Adicionada a oportunidade '+ key)
 
 
     

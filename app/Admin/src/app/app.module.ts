@@ -6,6 +6,7 @@ import { HomePage } from '../pages/home/home';
 import { LoginPageModule } from '../pages/login/login.module';
 import { MonitorPageModule } from '../pages/monitor/monitor.module';
 import { MonitorFifaPageModule } from '../pages/monitor-fifa/monitor-fifa.module';
+import { MonitorCornerPageModule } from '../pages/monitor-corner/monitor-corner.module';
 import { SignupPageModule } from '../pages/signup/signup.module';
 
 import { StorageProvider } from '../providers/storage/storage';
@@ -76,7 +77,8 @@ export function createTranslateLoader(http: HttpClient) {
     LoginPageModule,
     MonitorPageModule,
     MonitorFifaPageModule,
-    SignupPageModule
+    SignupPageModule,
+    MonitorCornerPageModule
   ],
 
   providers: [    

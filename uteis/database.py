@@ -196,6 +196,16 @@ def get_urls_match_tsv():
 
 
 
+###########################################################
+# Oportunities
+###########################################################
+
+
+def add_oportunity(msg, match, url, uid):
+  key = db.generate_key()
+  db.child("betOportunities/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'uid': uid})
+  return key
+
 
 ###########################################################
 # Scapper

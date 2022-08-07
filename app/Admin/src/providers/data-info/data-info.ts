@@ -99,6 +99,9 @@ export class DataInfoProvider {
 
   titleVerifyProfile: string = "Para verificar o perfil do profissional e permitir o mesmo receber propostas, clique no botão Verificar. Caso contrário, clique em Não verificar."
 
+
+  configs;
+
   constructor(public platform: Platform) {    
 
    if(this.platform.is('core') || this.platform.is('mobileweb')) {

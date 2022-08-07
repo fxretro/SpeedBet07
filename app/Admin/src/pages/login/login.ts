@@ -124,10 +124,14 @@ export class LoginPage {
     data.forEach(element => {      
 
       let uid = this.authProvider.currentUserUid()    
-      let key = element.payload.key
+      
 
-      if(uid === element){
+      if(uid === element.uid){
 
+          this.dataInfo.configs = element
+
+          
+          console.log(this.dataInfo.configs)
       }
     })
   

@@ -119,7 +119,7 @@ def bot_escanteio_asiatico_continue(configs, url, key):
    x, y = get_position_mouse()
    yy = y + configs.get("move_down_bet")
    xx = x + configs.get("move_right_bet")
-   scroll_down_mouse(xx, yy)
+   scroll_down_mouse(xx, yy+25)
    time.sleep(configs.get("delay")) 
 
    click_mouse(xx, yy)
@@ -131,6 +131,7 @@ def bot_escanteio_asiatico_continue(configs, url, key):
         
    else:
 
+    time.sleep(configs.get("delay")) 
     click_selected_text(color, 'Valor de Aposta')
     write_text(str(bet))  
     log("Adicionando valor do investimento", key=key)     
@@ -196,7 +197,7 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
     click_selected_text(color, "Sim", 2)     
 
     x, y = get_position_mouse()
-    yy = y + configs.get("move_down_bet")    
+    yy = y + configs.get("move_down_bet") + 50   
 
     scroll_down_mouse(x, yy)      
     click_mouse(x, yy)
@@ -220,9 +221,11 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
         x, y = get_position_mouse()
         click_mouse(x, y)
         click_mouse(x + configs.get("move_right_bet"), y)      
+        pyautogui.press('enter')
 
         
-        time.sleep(configs.get("delay")) 
+        time.sleep(configs.get("delay_fifa_end")) 
+        pyautogui.press('esc')
 
 
 

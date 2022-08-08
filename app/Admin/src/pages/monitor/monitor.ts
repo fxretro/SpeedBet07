@@ -102,8 +102,6 @@ export class MonitorPage {
         
     this.services = this.db.getOportunities()
 
-
-
     this.services.subscribe(data => {
       this.getCallback(data)
     })
@@ -113,15 +111,14 @@ export class MonitorPage {
     
     data.forEach(element => {      
 
-      let info = element.payload.val()            
+      let info = element.payload.val()    
 
-      if(info.uid === this.dataInfo.userInfo.uid){
 
-        info.msgShow = false
-        info.key = element.payload.key
-        info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
-        this.snkrs.push(info)
-      }
+      info.msgShow = false
+      info.key = element.payload.key
+      info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
+      this.snkrs.push(info)
+
               
     });
 

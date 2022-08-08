@@ -19,8 +19,9 @@
         <ion-item no-lines><ion-label stacked>Delay:</ion-label><ion-input type="number" [(ngModel)]="delay"></ion-input></ion-item>
         <ion-item no-lines><ion-label stacked>Delay Inicio:</ion-label><ion-input type="number" [(ngModel)]="delay_start"></ion-input></ion-item>
         <ion-item no-lines><ion-label stacked>Delay Fim:</ion-label><ion-input type="number" [(ngModel)]="delay_end"></ion-input></ion-item>
-        <ion-item no-lines><ion-label stacked>Mover mouse baixo:</ion-label><ion-input type="number" [(ngModel)]="move_down_bet"></ion-input></ion-item>
-        <ion-item no-lines><ion-label stacked>Mover mouse direita:</ion-label><ion-input type="number" [(ngModel)]="move_right_bet"></ion-input></ion-item>
+        
+        <ion-item no-lines *ngIf="false"><ion-label stacked>Mover mouse baixo:</ion-label><ion-input type="number" [(ngModel)]="move_down_bet"></ion-input></ion-item>
+        <ion-item no-lines *ngIf="false"><ion-label stacked>Mover mouse direita:</ion-label><ion-input type="number" [(ngModel)]="move_right_bet"></ion-input></ion-item>
         
         
         

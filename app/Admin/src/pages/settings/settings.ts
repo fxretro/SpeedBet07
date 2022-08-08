@@ -93,19 +93,11 @@ export class SettingsPage {
 
     let uid = this.authProvider.currentUserUid()    
 
-
-
     payload.forEach(element => {
-
-
 
       this.payload = element.payload.val()
 
-      console.log(element.payload.key)
-
-
       if(element.payload.key === uid){
-
 
 
         this.payload.key = element.payload.key
@@ -120,6 +112,14 @@ export class SettingsPage {
         
         this.selectPicture = this.payload.url
         this.base64Image = this.payload.url
+
+
+        
+        if(!this.move_down_bet)
+          this.move_down_bet = 80
+        
+        if(!this.move_right_bet)
+          this.move_right_bet = 365
     
         console.log('Configuração carregada com sucesso')
 

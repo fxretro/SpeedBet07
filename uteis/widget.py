@@ -77,7 +77,6 @@ def bot_escanteio_asiatico(configs, url, key):
    try:
 
        x, y = pyautogui.locateCenterOnScreen(configs.get("file_no_results"))
-
        pyautogui.click(x, y)
 
        log('Parece que não encontramos o jogo solicitado...', colour='red')
@@ -222,11 +221,15 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
         click_mouse(x, y)
         click_mouse(x + configs.get("move_right_bet"), y)      
         pyautogui.press('enter')
-
         
-        time.sleep(configs.get("delay_fifa_end")) 
-        pyautogui.press('esc')
+        log("Fechando bet e aguardando delay para o próximo jogo", key=key, type=1)  
+        time.sleep(configs.get("delay_end"))        
 
+        click_mouse(x, y - 200)
+        
+
+        time.sleep(configs.get("delay_fifa_end")) 
+        
 
 
    time.sleep(configs.get("delay_end"))        

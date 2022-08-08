@@ -22,8 +22,8 @@ exports.notifyBets = functions.database.ref('/betAviso/')
                           
       const payload = {
         notification: {
-            title: 'Aviso de bet',
-            body: 'Temos um novo aviso para você!',
+            title: "Notificação Bet",
+            body: "Uma bet asiática foi ",
             icon: notificationIcon,
             sound : notificationSound     
         },

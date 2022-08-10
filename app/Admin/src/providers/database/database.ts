@@ -153,18 +153,47 @@ export class DatabaseProvider {
 
   /** CONFIGURAÇÕES */
  
-  addSettings(stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet ){
+  addSettings(stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet, bet_fifa, robo_megabolt, robo_tirosecovirtual, meta_dia ){
     let uid = this.authProvider.currentUserUid()    
     let path = "/configs/" 
-    return this.db.list(path).update(uid, {api_hash: '0e6ac8c3f24c20a7f9bb7b5d6150bf68', api_id: '7948726', stopped: stopped, bet: bet, delay: delay, delay_start: delay_start,delay_end: delay_end, move_down_bet: move_down_bet, move_right_bet: move_right_bet } )   
+
+    return this.db.list(path).update(uid, {
+          api_hash: '0e6ac8c3f24c20a7f9bb7b5d6150bf68', 
+          api_id: '7948726', 
+          stopped: stopped, 
+          bet: bet, 
+          bet_fifa: bet_fifa,
+          delay: delay, 
+          delay_start: delay_start,
+          delay_end: delay_end, 
+          move_down_bet: move_down_bet, 
+          move_right_bet: move_right_bet,
+          robo_megabolt: robo_megabolt,
+          robo_tirosecovirtual: robo_tirosecovirtual,
+          meta_dia: meta_dia
+         } )   
   }
 
 
-  updateSettings(key_: string, stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet){  
+  updateSettings(key_: string, stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet, bet_fifa, robo_megabolt, robo_tirosecovirtual, meta_dia){  
     
     let uid = this.authProvider.currentUserUid()    
     let path = "/configs/"         
-    return this.db.list(path).update(uid, {api_hash: '0e6ac8c3f24c20a7f9bb7b5d6150bf68', api_id: '7948726', stopped: stopped, bet: bet, delay: delay, delay_start: delay_start,delay_end: delay_end, move_down_bet: move_down_bet, move_right_bet: move_right_bet } )   
+    return this.db.list(path).update(uid, {
+      api_hash: '0e6ac8c3f24c20a7f9bb7b5d6150bf68', 
+      api_id: '7948726', 
+      stopped: stopped, 
+      bet: bet, 
+      bet_fifa: bet_fifa,
+      delay: delay, 
+      delay_start: delay_start,
+      delay_end: delay_end, 
+      move_down_bet: move_down_bet, 
+      move_right_bet: move_right_bet,      
+      robo_megabolt: robo_megabolt,
+      robo_tirosecovirtual: robo_tirosecovirtual,
+      meta_dia: meta_dia
+     } )   
 
   }   
 

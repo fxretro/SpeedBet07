@@ -118,17 +118,10 @@ def get_urls_match():
 ###########################################################
 
 
-def add_url_master_tsv(msg, match, url, bet_type, uid, bet):
+def add_url_master_tsv(msg, match, url, bet_type, uid, bet, bet_fifa):
   key = db.generate_key()
-  db.child("betAvisoTsv/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid, 'bet_type': bet_type, 'bet': bet})
+  db.child("betAvisoTsv/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid, 'bet_type': bet_type, 'bet': bet, 'bet_fifa': bet_fifa })
   return key
-
-
-def add_url_client_tsv(msg, url, uid):
-  key = db.generate_key()
-  db.child("betAvisoTsv/"+key).update({'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid})
-  return key
-
 
 
 def update_url_master_tsv(key, status):  

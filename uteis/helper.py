@@ -1,7 +1,7 @@
 import six
+import threading
 import uteis.database as Db
-import datetime
-from playwright.sync_api import sync_playwright
+from datetime import datetime
 
 from logging import exception
 from uteis.widget import *
@@ -15,6 +15,7 @@ except ImportError:
     
 
 color = ImageColor.getcolor('#FF8800', "RGB")
+leagues = ["Euro Cup", "Campeonato do Mundo", "Premiership", "Superliga"]
 
 
 ###########################################################
@@ -57,42 +58,34 @@ def log(text, colour = 'green', font='slant', figlet=False, key='0', type=0):
     
     if colored:
         if not figlet:
-            six.print_(colored('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + '] - ' + text, colour))
+            six.print_(colored('['+ datetime.now().strftime("%d.%b %Y %H:%M:%S") + '] - ' + text, colour))
         else:
             six.print_(colored(figlet_format(
-                '['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text, font=font), colour))
+                '['+ datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text, font=font), colour))
     else:
-        six.print_('['+ datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text)
+        six.print_('['+ datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text)
 
 
 
-###########################################################
-# Auxiliares 
-###########################################################
+def get_msg_next_play(configs):
+
+    msg_delay = "Fechando bet e aguardando delay para o próximo jogo. Tempo programado " + str(configs.get("delay_fifa_end")) 
+    return msg_delay
 
 
-def scraping_live_now(url):
+def get_diff_league(league):
+
+    for lg in leagues:
+
+        if lg is not league:
+            return lg
+
+    return "Euro Cup"
+
+
     
-    with sync_playwright() as p:
-        
-        browser = p.firefox.launch(headless=False)
-        
-        page = browser.new_page()
-        page.goto(url)                     
+def setInterval(func,time):
 
-        return nameCapetition(page)
-                
-
-def nameCapetition(page):
-
-    listCurTime   = page.locator('div.ovm-FixtureDetailsTwoWay_Timer').all_text_contents()
-    listTeam = page.locator('.ovm-FixtureDetailsTwoWay_Team > div:nth-child(1)').all_text_contents()
-    listScoreOne = page.locator('div.ovm-StandardScoresSoccer_TeamOne').all_text_contents()
-    listScoreTwo = page.locator('div.ovm-StandardScoresSoccer_TeamTwo').all_text_contents()
-
-    listOddsOne = page.locator('div.ovm-MarketGroup > div > div > div:nth-child(1)').all_text_contents()
-    listOddsTwo = page.locator('div.ovm-MarketGroup > div > div > div:nth-child(2)').all_text_contents()
-    
-    return listTeam, listCurTime, listScoreOne, listScoreTwo, listOddsOne, listOddsTwo
-    
-
+    e = threading.Event()
+    while not e.wait(time):
+        func()

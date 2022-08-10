@@ -5,7 +5,7 @@ from uteis.helper import *
 import configparser
 import asyncio
 import uteis.database as Db
-import threading
+
 
 
 ###########################################################
@@ -203,15 +203,16 @@ def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
 
     log('Inicializando Bet TiroSecoVirtual - Esporte virtual')
 
-    key = Db.add_url_master_tsv(message, text, url, bet_type, uid, configs.get("bet"))  
+    key = Db.add_url_master_tsv(message, text, url, bet_type, uid, configs.get("bet"), configs.get("bet_fifa"))  
     
     if configs.get('only_save') == 0:
         bot_futebol_virtual_ambos(configs, text, url, key)        
-        
+
+
 
 
 ###########################################################
-# sync exec
+# Modo cliente - Executa direto do banco de dados
 ###########################################################
 
 
@@ -251,25 +252,37 @@ def refresh_bets():
                 
         log('Verificação finalizada. Aguardando...')
 
+
     except exception as e:
         log('Não foi possível verificar. Aguardando...', colour='red')
         pass
 
 
 
-def setInterval(func,time):
 
-    e = threading.Event()
-    while not e.wait(time):
-        func()
+
+
+
+def crazy_bet():
+
+    print('lets do it ')
+
+    configs = get_configs(uid)        
+    bot_futebol_virtual_mais_menos(configs, "Euro Cup", "https://www.bet365.com/#/AVR/B146/R^1/", '0')
+    
+
+
+###########################################################
+# Modo cliente - Executa direto do banco de dados
+###########################################################
+
 
 
 def main_sync():
 
     log('Inicializando sistema modo database')               
     setInterval(refresh_bets, int(timerr))
-    
-
+    #setInterval(crazy_bet, int(timerr))
 
 
 

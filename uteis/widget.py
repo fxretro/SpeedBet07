@@ -4,7 +4,7 @@ import subprocess
 import time
 import uteis.database as Db
 from PIL import ImageColor
-from uteis.helper import *
+import uteis.helper as Helper
 
 
 
@@ -64,7 +64,6 @@ def close_browser_tab():
 
 
 
-
 ###########################################################
 # Browser Bot - Escanteios asiáticos
 ###########################################################
@@ -79,11 +78,11 @@ def bot_escanteio_asiatico(configs, url, key):
        x, y = pyautogui.locateCenterOnScreen(configs.get("file_no_results"))
        pyautogui.click(x, y)
 
-       log('Parece que não encontramos o jogo solicitado...', colour='red')
+       Helper.log('Parece que não encontramos o jogo solicitado...', colour='red')
        close_browser_tab()   
 
    except:
-       log('Parece que encontramos resultados...')
+       Helper.log('Parece que encontramos resultados...')
        bot_escanteio_asiatico_continue(configs, url, key)
 
    
@@ -98,21 +97,21 @@ def bot_escanteio_asiatico_continue(configs, url, key):
        pyautogui.click(x, y)
 
    except:
-       log('Não conseguimos clicar no verde', colour='red')
+       Helper.log('Não conseguimos clicar no verde', colour='red')
 
    
-   log("Iniciando investimento", key=key)
+   Helper.log("Iniciando investimento", key=key)
    search_text("Futebol")   
    click_selected_text(color, " v ")
       
    time.sleep(configs.get("delay"))
-   log("Clicando em Odds Asiaticas", key=key)
+   Helper.log("Clicando em Odds Asiaticas", key=key)
    click_selected_text(color, 'Odds Asiaticas')
       
    time.sleep(configs.get("delay"))
-   click_selected_text(color, 'Gols +')
+   click_selected_text(color, 'Gols +/-')
    click_selected_text(color, 'Escanteios Asiaticos')
-   log("Clicando em Escanteios Asiaticos", key=key)
+   Helper.log("Clicando em Escanteios Asiaticos", key=key)
 
    time.sleep(configs.get("delay"))
    x, y = get_position_mouse()
@@ -125,7 +124,7 @@ def bot_escanteio_asiatico_continue(configs, url, key):
       
    
    if status == 'Anulado':
-        log("Investimento anulado pelo cliente! ",colour="red", key=key, type=0)
+        Helper.log("Investimento anulado pelo cliente! ",colour="red", key=key, type=0)
         close_browser_tab()   
         
    else:
@@ -133,7 +132,7 @@ def bot_escanteio_asiatico_continue(configs, url, key):
     time.sleep(configs.get("delay")) 
     click_selected_text(color, 'Valor de Aposta')
     write_text(str(bet))  
-    log("Adicionando valor do investimento", key=key)     
+    Helper.log("Adicionando valor do investimento", key=key)     
    
     x, y = get_position_mouse()
     click_mouse(x, y)
@@ -141,7 +140,9 @@ def bot_escanteio_asiatico_continue(configs, url, key):
 
     time.sleep(configs.get("delay_end"))
     close_browser_tab()   
-    log("Finalizado", key=key)
+    Helper.log("Finalizado", key=key)
+
+
 
 ###########################################################
 # Browser Bot - Futebol virtual
@@ -159,11 +160,11 @@ def bot_futebol_virtual_ambos(configs, text, url, key):
 
        pyautogui.click(x, y)
 
-       log('Parece que não encontramos o jogo solicitado...', colour='red')
+       Helper.log('Parece que não encontramos o jogo solicitado...', colour='red')
        close_browser_tab()   
 
    except:
-       log('Parece que encontramos resultados...')
+       Helper.log('Parece que encontramos resultados...')
        bot_futebol_virtual_ambos_continue(configs, text, key)
 
 
@@ -175,10 +176,10 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
        pyautogui.click(x, y)
 
    except:
-       log('Não conseguimos clicar no verde', colour='red')
+       Helper.log('Não conseguimos clicar no verde', colour='red')
 
 
-   log("Iniciando investimento", key=key, type=1)
+   Helper.log("Iniciando investimento", key=key, type=1)
    search_text("Futebol")      
    click_selected_text(color, text[0], 1)            
    time.sleep(configs.get("delay")) 
@@ -186,8 +187,17 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
    matches = [text[1], text[2], text[3], text[4]]   
 
    for match in matches:
+    bot_futebol_virtual_ambos_finish(configs, key, match, text[0])
 
-    log("Clicando em " + match, key=key, type=1)
+
+   time.sleep(configs.get("delay_end"))        
+   Helper.log("Finalizado", key=key, type=1)
+   close_browser_tab()   
+   
+    
+def bot_futebol_virtual_ambos_finish(configs, key, match, league):
+
+    Helper.log("Clicando em " + match, key=key, type=1)
 
     click_selected_text(color, match, 1)     
     time.sleep(configs.get("delay")) 
@@ -200,46 +210,111 @@ def bot_futebol_virtual_ambos_continue(configs, text, key):
 
     scroll_down_mouse(x, yy)      
     click_mouse(x, yy)
-    log("Realizando investimento em " + match, key=key, type=1)        
+    Helper.log("Realizando investimento em " + match, key=key, type=1)        
 
     info = Db.get_urls_tsv_key(key)[0]
     status = info.get("status")   
-    bet = info.get("bet")   
-    
-
+        
     if status == 'Anulado':
-
-            log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1)                        
-            
+        Helper.log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1)                                    
     else:
-        
-        click_selected_text(color, 'Valor de Aposta')
-        write_text(str(bet))  
-        log("Adicionando valor do investimento", key=key, type=1)  
-        
-        x, y = get_position_mouse()
-        click_mouse(x, y)
-        click_mouse(x + configs.get("move_right_bet"), y)      
-        pyautogui.press('enter')
-        
-        log("Fechando bet e aguardando delay para o próximo jogo", key=key, type=1)  
-        time.sleep(configs.get("delay_end"))        
-
-        click_mouse(x, y - 200)
-        
-
-        time.sleep(configs.get("delay_fifa_end")) 
+        bot_futebol_virtual_ambos_salva(configs, info, key, league)
         
 
 
-   time.sleep(configs.get("delay_end"))        
-   log("Finalizado", key=key, type=1)
-   close_browser_tab()   
+def bot_futebol_virtual_ambos_salva(configs, info, key, league):
+
+    bet = info.get("bet_fifa")   
+    click_selected_text(color, 'Valor de Aposta')
+    write_text(str(bet))  
+    Helper.log("Adicionando valor do investimento", key=key, type=1)  
+    
+    save_evidences()
+    
+    x, y = get_position_mouse()
+    click_mouse(x, y)
+    click_mouse(x + configs.get("move_right_bet"), y)      
+    pyautogui.press('enter')
+            
+    Helper.log(Helper.get_msg_next_play(configs), key=key, type=1)       
+                                                
+    time.sleep(configs.get("delay"))                                
+    click_selected_text(color, 'Terminar', 1)       
+    time.sleep(configs.get("delay"))    
+
+    click_selected_text(color, Helper.get_diff_league(league), 1)     
+    time.sleep(configs.get("delay"))    
+    click_selected_text(color, league, 1)     
+
+                                                                    
+    time.sleep(configs.get("delay_fifa_end"))         
 
            
+def save_evidences():
 
-   
+   Helper.log('Realizando printscreen da bet')
+   #pyautogui.screenshot('bets/bet_'+key+'.png')
 
+
+
+
+
+
+###########################################################
+# Browser Bot - Gols Mais/Menos
+###########################################################
+
+
+def bot_futebol_virtual_mais_menos(configs, league, url, key):
+         
+    start_browser(url)
+    time.sleep(configs.get("delay_start"))
+
+    Helper.log("Iniciando investimento", key=key, type=1)
+    search_text("Futebol")      
+    click_selected_text(color, league, 1)            
+    time.sleep(configs.get("delay")) 
+
+    Helper.log("Clicando em " + league, key=key, type=1)
+
+    click_selected_text(color, league, 1)     
+    time.sleep(configs.get("delay")) 
+    
+    click_selected_text(color, "Gols Mais/Menos")     
+    click_selected_text(color, "Mais de")     
+    
+    x, y = get_position_mouse()
+    click_mouse(x + 50, y)      
+    
+    Helper.log("Realizando investimento em " + league, key=key, type=1)        
+
+    bot_futebol_virtual_mais_menos_salva(configs, league)
+       
+    
+
+
+def bot_futebol_virtual_mais_menos_salva(configs, league):
+
+    bet = configs.get("bet_fifa")   
+    click_selected_text(color, 'Valor de Aposta')
+    write_text(str(bet))  
+    Helper.log("Adicionando valor do investimento", key='0', type=1)  
+    
+    save_evidences()
+    
+    x, y = get_position_mouse()
+
+    click_mouse(x, y)
+    click_mouse(x + configs.get("move_right_bet"), y)      
+    pyautogui.press('enter')
+            
+    Helper.log(Helper.get_msg_next_play(configs), key='0', type=1)       
+                                                
+    time.sleep(configs.get("delay"))                                
+    click_selected_text(color, 'Terminar', 1)   
+    
+    Helper.log("Finalizado", key='0', type=1)
+    close_browser_tab()       
    
 
 

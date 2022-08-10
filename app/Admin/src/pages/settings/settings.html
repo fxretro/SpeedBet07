@@ -14,11 +14,15 @@
 
     <ion-card class="trip card" text-wrap no-lines>    
       
-        <ion-item no-lines><ion-label stacked>Parar apostas:</ion-label><ion-input type="number" [(ngModel)]="stopped"></ion-input></ion-item>
-        <ion-item no-lines><ion-label stacked>Valor aposta:</ion-label><ion-input type="number" [(ngModel)]="bet"></ion-input></ion-item>                      
+        <ion-item no-lines><ion-label stacked>Parar investimentos:</ion-label><ion-input type="number" [(ngModel)]="stopped"></ion-input></ion-item>
+        <ion-item no-lines><ion-label stacked>Valor investimentos:</ion-label><ion-input type="number" [(ngModel)]="bet"></ion-input></ion-item>                      
+        <ion-item no-lines><ion-label stacked>Valor investimentos fifa:</ion-label><ion-input type="number" [(ngModel)]="bet_fifa"></ion-input></ion-item>                      
         <ion-item no-lines><ion-label stacked>Delay:</ion-label><ion-input type="number" [(ngModel)]="delay"></ion-input></ion-item>
         <ion-item no-lines><ion-label stacked>Delay Inicio:</ion-label><ion-input type="number" [(ngModel)]="delay_start"></ion-input></ion-item>
         <ion-item no-lines><ion-label stacked>Delay Fim:</ion-label><ion-input type="number" [(ngModel)]="delay_end"></ion-input></ion-item>
+        <ion-item no-lines><ion-label stacked>Robô escanteios:</ion-label><ion-input type="number" [(ngModel)]="robo_megabolt"></ion-input></ion-item>
+        <ion-item no-lines><ion-label stacked>Robô fifa:</ion-label><ion-input type="number" [(ngModel)]="robo_tirosecovirtual"></ion-input></ion-item>
+        <ion-item no-lines><ion-label stacked>Meta dia:</ion-label><ion-input type="number" [(ngModel)]="meta_dia"></ion-input></ion-item>
         
         <ion-item no-lines *ngIf="false"><ion-label stacked>Mover mouse baixo:</ion-label><ion-input type="number" [(ngModel)]="move_down_bet"></ion-input></ion-item>
         <ion-item no-lines *ngIf="false"><ion-label stacked>Mover mouse direita:</ion-label><ion-input type="number" [(ngModel)]="move_right_bet"></ion-input></ion-item>

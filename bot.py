@@ -258,33 +258,15 @@ def refresh_bets():
         pass
 
 
-
-
-
-
-
-def crazy_bet():
-
-    print('lets do it ')
-
-    configs = get_configs(uid)        
-    bot_futebol_virtual_mais_menos(configs, "Euro Cup", "https://www.bet365.com/#/AVR/B146/R^1/", '0')
-    
-
-
 ###########################################################
 # Modo cliente - Executa direto do banco de dados
 ###########################################################
-
 
 
 def main_sync():
 
     log('Inicializando sistema modo database')               
     setInterval(refresh_bets, int(timerr))
-    #setInterval(crazy_bet, int(timerr))
-
-
 
 
 ###########################################################

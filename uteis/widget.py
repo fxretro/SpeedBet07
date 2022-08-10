@@ -261,7 +261,7 @@ def save_evidences():
 
 
 ###########################################################
-# Browser Bot - Gols Mais/Menos
+# Browser Bot - Gols Mais/Menos - Em desenvolvimento
 ###########################################################
 
 

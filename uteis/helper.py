@@ -89,3 +89,33 @@ def setInterval(func,time):
     e = threading.Event()
     while not e.wait(time):
         func()
+
+
+
+###########################################################
+# Screen checks
+###########################################################
+
+
+def check_search_results(system_config):
+
+   try:
+       pyautogui.locateCenterOnScreen(system_config.get("file_no_results"))
+       log('Parece que não encontramos o jogo solicitado...', colour='red')
+       return False
+
+   except:
+       log('Parece que encontramos resultados...')
+       return True
+
+
+
+def click_logo(system_config):
+
+   try:
+       pyautogui.locateCenterOnScreen(system_config.get("file_logo"))
+       log('Clicando na logo para pegar o foco')
+       return True
+   except:
+       log('Não conseguimos clicar no verde', colour='red')
+       return False

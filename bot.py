@@ -5,7 +5,7 @@ from uteis.helper import *
 import configparser
 import asyncio
 import uteis.database as Db
-
+import random
 
 
 ###########################################################
@@ -18,6 +18,7 @@ config.read('config.ini')
 uid = config['default']['uid']
 timerr = config['default']['timerr']
 timer_check = config['default']['timer_check']
+
 
 ###########################################################
 # Telegram 
@@ -120,6 +121,7 @@ def parse_msg(configs, msg, bet_type):
 # Parse MegaBolt
 ###########################################################
 
+
 def parse_robot_check(configs, msg, bet_type):
     
      if configs.get('robo_megabolt') == 1:
@@ -156,7 +158,7 @@ def parse_robot_megabolt_continue(configs, text, url, bet_type, message):
         key = Db.add_url_master(message, text, url, bet_type, uid, configs.get("bet"))  
 
         if configs.get('only_save') == 0:
-            bot_escanteio_asiatico(configs, url, key)
+            bot_escanteio_asiatico(config, configs, url, key)
 
     else:
         key = Db.add_oportunity(message, text, url, uid)
@@ -177,7 +179,7 @@ def parse_robot_tiroseco_check(configs, msg, bet_type):
      if configs.get('robo_tirosecovirtual') == 1:
         parse_robot_kabum_tirosecovirtual(configs, msg, bet_type)
      else:
-        log('Robo em Kabum Tiro Seco em modo stop efetuado pelo administrador', colour='red')
+        log('Robo Kabum Tiro Seco em modo stop efetuado pelo administrador', colour='red')
 
 
 def parse_robot_kabum_tirosecovirtual(configs, msg, bet_type):
@@ -206,9 +208,32 @@ def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
     key = Db.add_url_master_tsv(message, text, url, bet_type, uid, configs.get("bet"), configs.get("bet_fifa"))  
     
     if configs.get('only_save') == 0:
-        bot_futebol_virtual_ambos(configs, text, url, key)        
+        bot_futebol_virtual_ambos(config, configs, text, url, key)        
 
 
+###########################################################
+# odd Menor que 1.40 no Gols Mais/Menos 1.5
+###########################################################
+
+
+def parse_robot_gols_check():
+
+     configs = get_configs(uid)
+    
+     if configs.get('robo_gols') == 1:
+        parse_robot_gols(configs)
+     else:
+        log('Robo Gols em modo stop efetuado pelo administrador', colour='red')
+
+
+def parse_robot_gols(configs):            
+
+    championships = ["Euro cup", "Campeonato do Mundo", "Premiership", "Superliga"]
+    championship = random.choice(championships)
+    url = "https://www.bet365.com/#/AVR/B146/R^1/"
+    
+    log('Inicializando Bet Gol 1.5 - Esporte virtual')    
+    bot_futebol_virtual_gol(config, configs, championship, url)        
 
 
 ###########################################################
@@ -266,7 +291,11 @@ def refresh_bets():
 def main_sync():
 
     log('Inicializando sistema modo database')               
-    setInterval(refresh_bets, int(timerr))
+    # setInterval(refresh_bets, int(timerr))
+
+    configs = get_configs(uid)
+    setInterval(parse_robot_gols_check, int(configs.get("delay_fifa_end")))
+    
 
 
 ###########################################################
@@ -286,8 +315,8 @@ async def main():
 
 
 
-asyncio.run(main())
-#main_sync()    
+#asyncio.run(main())
+main_sync()    
     
 
     

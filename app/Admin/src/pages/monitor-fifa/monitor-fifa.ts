@@ -96,8 +96,10 @@ export class MonitorFifaPage {
         
     this.services = this.db.getMonitorsFifa()
 
-    this.services.subscribe(data => {
+    const sub = this.services.subscribe(data => {
+
       this.getCallback(data)
+      sub.unsubscribe()
     })
   }
 
@@ -106,6 +108,8 @@ export class MonitorFifaPage {
     data.forEach(element => {      
 
       let info = element.payload.val()            
+
+      console.log(this.dataInfo.userInfo.uid, info.uid)
 
       if(info.uid === this.dataInfo.userInfo.uid){
 

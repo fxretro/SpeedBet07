@@ -47,7 +47,7 @@ def click_selected_text(color, text, total_clicks = 2):
 
 def main():
     
-   subprocess.call([r'firefox', '-new-tab', "https://www.bet365.com/#/ME/X8020"])
+   subprocess.call([r'firefox', '-new-tab', "https://www.bet365.com/#/MB/"])
    time.sleep(10)
    
    try:
@@ -73,9 +73,7 @@ def main():
 
        time.sleep(3)
 
-       pyautogui.screenshot('my_screenshot.png', region=(0,0, 300, 400))       
-       
-
+       pyautogui.screenshot('my_screenshot.png', region=(0,0, 500, 800))              
        print('Parece que encontramos o jogo solicitado...')       
        
 

@@ -1,5 +1,4 @@
 
-from re import search
 import pyautogui
 import subprocess
 import time
@@ -12,6 +11,7 @@ color = ImageColor.getcolor('#FF8800', "RGB")
 ###########################################################
 # Visual tools
 ###########################################################
+
 
 def start_browser(url):
     subprocess.call([r'firefox', '-new-tab', url])
@@ -199,14 +199,18 @@ def bot_futebol_virtual_ambos_continue(system_config, configs, text, key):
 
    Helper.log("Iniciando investimento", key=key, type=1)
    search_text("Futebol")      
-   click_selected_text(color, text[0], 1)            
+
+   time.sleep(configs.get("delay")) 
+   
+   click_selected_text(color, text[0], 1)     
+
    time.sleep(configs.get("delay")) 
 
    matches = [text[1], text[2], text[3], text[4]]   
 
    for match in matches:
     bot_futebol_virtual_ambos_finish(configs, key, match, text[0])
-    time.sleep(configs.get("delay_fifa_end"))     
+    
 
 
    time.sleep(configs.get("delay_end"))        
@@ -218,7 +222,8 @@ def bot_futebol_virtual_ambos_finish(configs, key, match, league):
 
     Helper.log("Clicando em " + match, key=key, type=1)
 
-    click_selected_text(color, match, 1)     
+    click_selected_text(color, match, 1)         
+
     time.sleep(configs.get("delay")) 
 
     search_text("Para o Time Marcar - Sim/Nao")       
@@ -258,12 +263,14 @@ def bot_futebol_virtual_ambos_salva(configs, info, key, league):
     Helper.log(Helper.get_msg_next_play(configs), key=key, type=1)       
                                                 
     time.sleep(configs.get("delay"))                                
-    click_selected_text(color, 'Terminar', 1)       
+    click_selected_text(color, 'Terminar', 2)       
     time.sleep(configs.get("delay"))    
 
     click_selected_text(color, Helper.get_diff_league(league), 1)     
     time.sleep(configs.get("delay"))    
-    click_selected_text(color, league, 1)                                                                                 
+    click_selected_text(color, league, 1)      
+
+    time.sleep(configs.get("delay_fifa_end"))                                                                                
 
            
 def save_evidences():

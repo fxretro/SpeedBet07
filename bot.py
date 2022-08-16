@@ -314,9 +314,8 @@ async def main():
 ###########################################################
 
 
-
-#asyncio.run(main())
-main_sync()    
+asyncio.run(main())
+#main_sync()    
     
 
     

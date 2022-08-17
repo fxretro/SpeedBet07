@@ -157,6 +157,16 @@ export class DatabaseProvider {
     let uid = this.authProvider.currentUserUid()    
     let path = "/configs/" 
 
+    robo_megabolt == true ? robo_megabolt = 1 : robo_megabolt = 0
+    robo_tirosecovirtual == true ? robo_tirosecovirtual = 1 : robo_tirosecovirtual = 0
+    stopped == true ? stopped = 1 : stopped = 0
+    bet = Number(bet)
+    delay = Number(delay)
+    delay_start = Number(delay_start)
+    delay_end = Number(delay_end)
+    
+    
+
     return this.db.list(path).update(uid, {
           api_hash: '0e6ac8c3f24c20a7f9bb7b5d6150bf68', 
           api_id: '7948726', 
@@ -176,6 +186,14 @@ export class DatabaseProvider {
 
 
   updateSettings(key_: string, stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet, bet_fifa, robo_megabolt, robo_tirosecovirtual, meta_dia){  
+
+    robo_megabolt == true ? robo_megabolt = 1 : robo_megabolt = 0
+    robo_tirosecovirtual == true ? robo_tirosecovirtual = 1 : robo_tirosecovirtual = 0
+    stopped == true ? stopped = 1 : stopped = 0
+    bet = Number(bet)
+    delay = Number(delay)
+    delay_start = Number(delay_start)
+    delay_end = Number(delay_end)
     
     let uid = this.authProvider.currentUserUid()    
     let path = "/configs/"         

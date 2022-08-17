@@ -10,3 +10,4 @@ app/Admin/www/
 app/Admin/functions/node_modules/
 .gitignore
 app/Admin/src/assets/fonts/
+name.session-journal

@@ -213,10 +213,12 @@ def bot_futebol_virtual_ambos_continue(system_config, configs, text, key):
 
    time.sleep(configs.get("delay")) 
 
-   matches = [text[1], text[2], text[3], text[4]]   
+   matches = [text[1], text[2], text[3], text[4]]
+   total = 1   
 
    for match in matches:
-    bot_futebol_virtual_ambos_finish(configs, key, match, text[0])
+    bot_futebol_virtual_ambos_finish(configs, key, match, text[0], total)
+    total = total +1
     
 
 
@@ -225,7 +227,7 @@ def bot_futebol_virtual_ambos_continue(system_config, configs, text, key):
    close_browser_tab()   
    
     
-def bot_futebol_virtual_ambos_finish(configs, key, match, league):
+def bot_futebol_virtual_ambos_finish(configs, key, match, league, total):
 
     Helper.log("Clicando em " + match, key=key, type=1)
 
@@ -253,18 +255,20 @@ def bot_futebol_virtual_ambos_finish(configs, key, match, league):
         if status == 'Anulado':
             Helper.log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1)                                    
         else:
-            bot_futebol_virtual_ambos_salva(configs, info, key, league)
+            bot_futebol_virtual_ambos_salva(configs, info, key, league, total)
 
     else:
         Helper.log('Robo em modo stop efetuado pelo administrador', colour='red')
         
 
 
-def bot_futebol_virtual_ambos_salva(configs, info, key, league):
+def bot_futebol_virtual_ambos_salva(configs, info, key, league, total):
 
     bet = info.get("bet_fifa")   
     click_selected_text(color, 'Valor de Aposta')
-    write_text(str(bet))  
+
+    final_value = int(bet) * int(total)
+    write_text(str(final_value))  
     Helper.log("Adicionando valor do investimento", key=key, type=1)  
     
     save_evidences()

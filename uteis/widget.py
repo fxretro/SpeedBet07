@@ -151,7 +151,7 @@ def bot_escanteio_asiatico_continue(system_config, configs, key):
    click_mouse(xx, yy)
       
    
-   configs = Helper.get_configs(configs.get("uid"))
+   configs = Helper.get_configs(system_config.get("uid"))
     
    if configs.get('stopped') == 0:
 
@@ -217,7 +217,7 @@ def bot_futebol_virtual_ambos_continue(system_config, configs, text, key):
    total = 1   
 
    for match in matches:
-    bot_futebol_virtual_ambos_finish(configs, key, match, text[0], total)
+    bot_futebol_virtual_ambos_finish(system_config, configs, key, match, text[0], total)
     total = total +1
     
 
@@ -227,7 +227,7 @@ def bot_futebol_virtual_ambos_continue(system_config, configs, text, key):
    close_browser_tab()   
    
     
-def bot_futebol_virtual_ambos_finish(configs, key, match, league, total):
+def bot_futebol_virtual_ambos_finish(system_config, configs, key, match, league, total):
 
     Helper.log("Clicando em " + match, key=key, type=1)
 
@@ -248,7 +248,7 @@ def bot_futebol_virtual_ambos_finish(configs, key, match, league, total):
     info = Db.get_urls_tsv_key(key)[0]
     status = info.get("status")   
 
-    configs = Helper.get_configs(configs.get("uid"))
+    configs = Helper.get_configs(system_config.get("uid"))
     
     if configs.get('stopped') == 0:
         

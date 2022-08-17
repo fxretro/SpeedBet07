@@ -40,12 +40,13 @@
           
             <h2>{{service.match}}</h2>
 
+            <p *ngIf="service.datetime"><b>Atualizado em:  </b>{{service.datetime}}</p>          
             <p><b>URL:  </b><a href={{service.link}}>Clique para abrir</a></p>              
             <p *ngIf="service.status"><b>Status:  </b>{{service.status}}</p>
 
             <p *ngIf="service.bet"><b>Investimento:  </b>R${{service.bet}}</p>
 
-            <p *ngIf="service.datetimeStr"><b>Atualizado em:  </b>{{service.datetimeStr}}</p>          
+            
             <p *ngIf="service.match"><b>Palavra-chave:  </b>{{service.match}}</p>
             <p *ngIf="service.msgShow"><b>Mensagem:  </b>{{service.msg}}</p>    
 

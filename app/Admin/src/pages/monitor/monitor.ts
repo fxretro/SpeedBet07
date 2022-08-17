@@ -113,11 +113,17 @@ export class MonitorPage {
 
       let info = element.payload.val()    
 
+      if(moment(info.datetime, "DD/MM/YYYY hh:mm:ss").isSame(moment(), 'day')){
+        
 
-      info.msgShow = false
-      info.key = element.payload.key
-      info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
-      this.snkrs.push(info)
+        info.msgShow = true
+        info.key = element.payload.key
+        
+        this.snkrs.push(info)
+
+      }
+
+      
 
               
     });

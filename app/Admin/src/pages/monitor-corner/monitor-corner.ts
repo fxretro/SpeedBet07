@@ -114,7 +114,7 @@ export class MonitorCornerPage {
 
       if(info.uid === this.dataInfo.userInfo.uid){
 
-        info.msgShow = false
+        info.msgShow = true
         info.key = element.payload.key
         info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
         this.snkrs.push(info)

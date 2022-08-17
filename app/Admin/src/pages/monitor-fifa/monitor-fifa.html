@@ -6,20 +6,18 @@
 
     <ion-buttons end>    
       
-
+      
       <button ion-button style="color: white" (click)="get()" class="mrg-bt-10">                          
         ATUALIZAR
       </button>
-      
-                     
-      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="!stopped">                          
+                           
+      <!--<button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="!stopped">                          
         PARAR
       </button>
 
-
       <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="stopped">                          
         INICIAR
-      </button>
+      </button>-->
 
     </ion-buttons>
 
@@ -44,16 +42,13 @@
             <p *ngIf="service.datetimeStr"><b>Atualizado em:  </b>{{service.datetime}}</p>          
             <p><b>URL:  </b><a href={{service.link}}>Clique para abrir</a></p>              
             <p *ngIf="service.status"><b>Status:  </b>{{service.status}}</p>
-
-            <p *ngIf="service.bet"><b>Investimento:  </b>R${{service.bet}}</p>
-
-            
+            <!--<p *ngIf="service.bet"><b>Investimento:  </b>R${{service.bet}}</p>            -->
             <p *ngIf="service.match"><b>Palavra-chave:  </b>{{service.match}}</p>
             <p *ngIf="service.msgShow"><b>Mensagem:  </b>{{service.msg}}</p>    
 
           <ion-row>        
               
-            <ion-col>
+            <!--<ion-col>
               
               <button ion-button icon-start clear small (click)="changeBet(service)" color="danger" [disabled]="service.status === 'Clicando em Escanteios Asiaticos' 
                 || service.status === 'Anulado' || service.status === 'Adicionando valor do investimento' || service.status === 'Finalizado'"> 
@@ -68,7 +63,8 @@
                   <ion-icon name="arrow-down"></ion-icon>
                  Anular
               </button>
-            </ion-col>  
+            </ion-col>  -->
+
   
             <ion-col *ngIf="! service.expand">
                 <button ion-button icon-start clear small (click)="expand(service)">

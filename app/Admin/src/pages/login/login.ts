@@ -102,6 +102,8 @@ export class LoginPage {
     });
 
 
+
+
     
       
     this.getConfigurations() 
@@ -148,17 +150,24 @@ export class LoginPage {
 
     console.log(this.dataInfo.isHome)
 
-    
-    if(! this.dataInfo.isHome){
+    if(this.dataInfo.userInfo.status === "Perfil verificado"){
 
+      if(! this.dataInfo.isHome){
 
-      this.dataInfo.isHome= true
-      this.navCtrl.setRoot(HomePage);   
+        this.dataInfo.isHome= true
+        this.navCtrl.setRoot(HomePage);   
+  
+      }
+            
+      else 
+        this.uiUtils.showAlertError("Usuário não localizado ou senha incorreta")                       
 
     }
-          
+    
     else 
-      this.uiUtils.showAlertError("Usuário não localizado ou senha incorreta")                       
+        this.uiUtils.showAlertError("Acesso negado, sorry :)")                       
+    
+
 
   }  
 

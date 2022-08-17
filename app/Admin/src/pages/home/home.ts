@@ -83,8 +83,7 @@ export class HomePage {
   } 
 
 
-  goPageMonitorOnline(){    
-    
+  goPageMonitorOnline(){        
     this.navCtrl.push('MonitorCornerPage')
   }
 
@@ -95,6 +94,25 @@ export class HomePage {
 
   goPageOportunities(){
     this.navCtrl.push('MonitorPage')
+  }
+
+  goPageRegister(){
+    this.navCtrl.push('RegisterPage')
+  }
+
+  goPagePix(){
+    //this.navCtrl.push('RegisterPage')
+    //this.uiUtils.showAlertSuccess("Favor realizar o pix para o CPF ")
+    
+    let url = "https://nubank.com.br/pagar/1mp8ai/zyKDNSbr9O"
+    let options = 'location=no';
+
+    if(this.dataInfo.isWeb)
+      this.iab.create(url, '_blank', options);    
+    else 
+      this.iab.create(encodeURI(url), '_system', options);
+
+      
   }
 
  

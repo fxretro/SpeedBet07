@@ -8,6 +8,7 @@ import { MonitorPageModule } from '../pages/monitor/monitor.module';
 import { MonitorFifaPageModule } from '../pages/monitor-fifa/monitor-fifa.module';
 import { MonitorCornerPageModule } from '../pages/monitor-corner/monitor-corner.module';
 import { SignupPageModule } from '../pages/signup/signup.module';
+import { RegisterPageModule } from '../pages/register/register.module';
 
 import { StorageProvider } from '../providers/storage/storage';
 import { DatabaseProvider } from '../providers/database/database';
@@ -78,7 +79,8 @@ export function createTranslateLoader(http: HttpClient) {
     MonitorPageModule,
     MonitorFifaPageModule,
     SignupPageModule,
-    MonitorCornerPageModule
+    MonitorCornerPageModule,
+    RegisterPageModule
   ],
 
   providers: [    

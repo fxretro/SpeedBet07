@@ -73,6 +73,62 @@ export class DatabaseProvider {
           })
   }
 
+  updateUser(
+    uid_: string, 
+    razaoSocial_: string,
+    nome_: string,
+    sobrenome_: string,
+    endereco_: string, 
+    complemento_: string, 
+    numero_: string, 
+    cep_: string, 
+    district_: string, 
+    telefone_: string, 
+    foto_: string,      
+    tipo_: number, 
+    description_: string, 
+    bank_:string, 
+    agency_: string, 
+    account_: string, 
+    cpf_: string,
+    cnpj_: string,        
+    state_: string,
+    city_: string,      
+    pix: string){
+
+      let path = "/userProfile/" + this.dataInfo.defaultState
+    
+      return this.db.list(path)
+
+      .update(uid_, {
+        razaoSocial: razaoSocial_, 
+        name: nome_, 
+        lastName: sobrenome_, 
+        address: endereco_, 
+        uid: uid_,
+        complement: complemento_, 
+        numero: numero_,
+        postCode: cep_,
+        district: district_,
+        userType: tipo_, 
+        tel: telefone_, 
+        description: description_,
+        cpf: cpf_,
+        cnpj: cnpj_,
+        bank: bank_,
+        agency: agency_,
+        url: foto_,
+        account: account_,        
+        state: state_,
+        city: city_,                
+        pix: pix
+      })                
+  }
+
+  updateUserStatus(uid_, status_){
+    return this.db.list("/userProfile/" + this.dataInfo.defaultState).update(uid_, { status: status_ })
+  }
+
  
 
   getUser(){
@@ -183,6 +239,7 @@ export class DatabaseProvider {
           meta_dia: meta_dia
          } )   
   }
+
 
 
   updateSettings(key_: string, stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet, bet_fifa, robo_megabolt, robo_tirosecovirtual, meta_dia){  

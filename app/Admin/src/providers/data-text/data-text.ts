@@ -5,6 +5,45 @@ import { Storage } from '@ionic/storage';
 export class DataTextProvider {
 
   languageSelected: number = 0
+  titleName: string = "Nome"
+  titleLastName: string = "Sobrenome"
+  titleComplement: string = "Complemento"
+  titleTellUsAboutYou: string = "Nos conte um pouco sobre você e sua experiência profissional"
+  titleTellUsAboutYouClient: string = "Nos conte um pouco sobre você"
+  titleAddress: string = "Endereço"
+  titleTel: string = "Telefone"
+  titleCancel: string = "Cancelar"
+  titleCancelDailyOk: string = "Sua serviço foi cancelada com sucesso!"
+  titleCancelJobs: string = "Cancelamentos"
+  titleYourAgenda: string = 'Sua agenda'
+  titleScheduling: string = "Agendamento"
+  textClientType1: string = "Pessoa jurídica"
+  textClientType2: string = "Pessoa física"
+  textCompanyName: string = "Nome fantasia"
+  textSelectYourClientType2: string = 'Selecione o tipo de usuário'
+  textWhatIsYourName: string = 'Qual seu nome?'
+  textTellUsYourName: string = 'Informe o seu nome'
+  textWhatIsYourLastName: string = 'Qual seu sobrenome?'
+  textTellUsYourLastName: string = 'Informe o seu sobrenome'
+  textWhatIsYourPhoneNumber: string = 'Qual seu telefone?'
+  textTellUsYourPhoneNumber: string = 'Informe o seu número para contato'
+  textWhatIsYourPostCode: string = 'Qual seu CEP?'
+  textTellUsYourPostCode: string = 'Informe o seu CEP'
+  textWhatIsYourNumber: string = 'Qual o número?'
+  textTellUsYourNumber: string = 'Informe o número'
+  textWhatIsYourIdentification: string = 'Qual o seu CPF'
+  textTellUsYourIdentification: string = 'Informe o seu CPF'
+  textCheckingYourPostCode: string = "Verificando seu CEP"
+  textPostCodeError: string = "Não localizamos nenhum endereço no cep informado"
+  textUploadPhoto: string = "Anexe uma foto sua ou a logo da sua empresa"
+  textCheckInfoAndSave: string = "Favor conferir as informações e clicar em 'Salvar'"
+  textAccessDenied: string = "Acesso negado"
+  textProfileNotCheckedInfo: string = "Seu perfil está sendo analisado pela nossa equipe. Favor aguarde!"
+  
+  textInformYourCompanyName: string = 'Favor informe o nome fantasia da sua empresa'
+  textYourCompanyIdentification: string = 'Qual seu CNPJ?'
+  textYourCompanyIdentification2: string = 'Informe o CNPJ da sua empresa'
+  textCompanyIdName: string = 'CNPJ'      
   
   chatRooms: string = "Salas Chat"
   chatRoomName: string = "Informe o nome da sala"
@@ -343,6 +382,35 @@ export class DataTextProvider {
   recovery: string = "Recuperar"
   obs: string = "Observação"
   settings: string = "Configurações"
+  atention: string = "Atenção"
+  textSuccess1: string = "Atualizações realizadas com sucesso"  
+  textRegisterError20 = "Falha ao atualizar usuário. Favor entrar em contato com o nosso suporte"      
+  textRegisterError1: string = "Quantidade de caracteres deve ser maior que 3"
+  textRegisterError2: string = "Quantidade de caracteres deve ser menor que 40"
+  textRegisterError3: string = "Quantidade de caracteres deve ser menor que 100"
+  textRegisterError4: string = "Quantidade de caracteres deve ser maior que 1"
+  textRegisterError5: string = "Quantidade de caracteres deve ser menor que 12"
+  textRegisterError6: string = "Quantidade de caracteres deve ser igual a 8"
+  textRegisterError7: string = "Quantidade de caracteres deve ser menor que 5"
+  textRegisterError8: string = "Quantidade de caracteres deve ser menor que 300"
+  textRegisterError9: string = "Quantidade de caracteres deve ser maior ou igual a 2"
+  textRegisterError10: string = "Quantidade de caracteres deve ser menor que 20"
+  textRegisterError11: string = "Quantidade de caracteres deve ser igual a 11"
+  textRegisterError12: string = "Favor informar o nome"
+  textRegisterError13: string = "Favor informar o sobrenome"
+  textRegisterError14: string = "Favor informar o endereço"
+  textRegisterError15: string = "Favor informar o número"  
+  textRegisterError16: string = "Favor informar o CEP"
+  textRegisterError17: string = "Favor informar o bairro"
+  textRegisterError18: string = "Favor informar o telefone"
+  textRegisterError19: string = "Favor informar o CPF"
+  titleCompleteDescription: string = "Digite sua descrição aqui para ganhar pontos"
+  titleCompleteConfiguration: string = "Favor preencher todos os campos"
+  titleStatusNotVerified: string = "Perfil não verificado"
+  titleChangePic: string = "Modificar foto"
+  textCheckYourInformationAndSave: string = "Favor confirmar seus dados e clicar em SALVAR para continuar"
+  textSelectYourClientType: string = 'Você é pessoa física ou jurídica?'
+  uploading= "Enviando foto";
 
 
   constructor(public storage: Storage) {    

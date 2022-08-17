@@ -151,24 +151,31 @@ def bot_escanteio_asiatico_continue(system_config, configs, key):
    click_mouse(xx, yy)
       
    
-   if status == 'Anulado':
-        Helper.log("Investimento anulado pelo cliente! ",colour="red", key=key, type=0)
+   configs = Helper.get_configs(configs.get("uid"))
+    
+   if configs.get('stopped') == 0:
+
+    if status == 'Anulado':
+            Helper.log("Investimento anulado pelo cliente! ",colour="red", key=key, type=0)
+            close_browser_tab()   
+            
+    else:
+
+        time.sleep(configs.get("delay")) 
+        click_selected_text(color, 'Valor de Aposta')
+        write_text(str(bet))  
+        Helper.log("Adicionando valor do investimento", key=key)     
+    
+        x, y = get_position_mouse()
+        click_mouse(x, y)
+        click_mouse(x + configs.get("move_right_bet"), y)      
+
+        time.sleep(configs.get("delay_end"))
         close_browser_tab()   
-        
+        Helper.log("Finalizado", key=key)
+
    else:
-
-    time.sleep(configs.get("delay")) 
-    click_selected_text(color, 'Valor de Aposta')
-    write_text(str(bet))  
-    Helper.log("Adicionando valor do investimento", key=key)     
-   
-    x, y = get_position_mouse()
-    click_mouse(x, y)
-    click_mouse(x + configs.get("move_right_bet"), y)      
-
-    time.sleep(configs.get("delay_end"))
-    close_browser_tab()   
-    Helper.log("Finalizado", key=key)
+       Helper.log('Robo em modo stop efetuado pelo administrador', colour='red')
 
 
 
@@ -238,11 +245,18 @@ def bot_futebol_virtual_ambos_finish(configs, key, match, league):
 
     info = Db.get_urls_tsv_key(key)[0]
     status = info.get("status")   
+
+    configs = Helper.get_configs(configs.get("uid"))
+    
+    if configs.get('stopped') == 0:
         
-    if status == 'Anulado':
-        Helper.log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1)                                    
+        if status == 'Anulado':
+            Helper.log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1)                                    
+        else:
+            bot_futebol_virtual_ambos_salva(configs, info, key, league)
+
     else:
-        bot_futebol_virtual_ambos_salva(configs, info, key, league)
+        Helper.log('Robo em modo stop efetuado pelo administrador', colour='red')
         
 
 

@@ -10,13 +10,13 @@
         ATUALIZAR
       </button>
                      
-      <!--<button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="!stopped">                          
+      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="!stopped  && dataInfo.userInfo.isAdmin">                          
         PARAR
       </button>
 
-      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="stopped">                          
+      <button ion-button style="color: white" (click)="changeStatusRobot()" class="mrg-bt-10" *ngIf="stopped  && dataInfo.userInfo.isAdmin">                          
         INICIAR
-      </button>-->
+      </button>
 
     </ion-buttons>
 

@@ -45,11 +45,11 @@
         FIFA virtual
       </ion-item>            
 
-      <!--<ion-item  (click)="goPageSettings()">
+      <ion-item  (click)="goPageSettings()" *ngIf="dataInfo.userInfo.isAdmin">
+        <ion-icon name="ios-cash"  item-start style="margin-right: 15px; color: green;"></ion-icon>        
         Configurações
-      </ion-item>-->
-
-
+      </ion-item>
+      
                        
     </ion-list>
 

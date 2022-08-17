@@ -151,7 +151,7 @@ def bot_escanteio_asiatico_continue(system_config, configs, key):
    click_mouse(xx, yy)
       
    
-   configs = Helper.get_configs(system_config.get("uid"))
+   configs = Helper.get_configs(system_config['default']['uid'])
     
    if configs.get('stopped') == 0:
 
@@ -248,7 +248,7 @@ def bot_futebol_virtual_ambos_finish(system_config, configs, key, match, league,
     info = Db.get_urls_tsv_key(key)[0]
     status = info.get("status")   
 
-    configs = Helper.get_configs(system_config.get("uid"))
+    configs = Helper.get_configs(system_config['default']['uid'])
     
     if configs.get('stopped') == 0:
         

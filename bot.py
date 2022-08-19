@@ -64,6 +64,7 @@ async def telegram_bot():
       @client.on(events.NewMessage(pattern='(?i).*GOL SEGUNDO'))
       async def handler(event):
          my_event_handler(event, 2)
+    
 
 
     ###########################################################
@@ -73,6 +74,15 @@ async def telegram_bot():
       @client.on(events.NewMessage(pattern='(?i).*FUTEBOL VIRTUAL'))
       async def handler(event):
          my_event_handler(event, 11)         
+
+
+    ###########################################################
+    # Robo Bruno Jogador
+    ###########################################################
+    
+      @client.on(events.NewMessage(pattern='(?i).*Mais de '))
+      async def handler(event):
+         my_event_handler(event, 22)
 
 
       await client.run_until_disconnected()
@@ -108,7 +118,7 @@ def parse_msg(configs, msg, bet_type):
 
     elif bet_type == 11:
         log('Recebido Bet tipo futebol virtual Kabum Tiro Seco')
-        parse_robot_tiroseco_check(configs, msg, bet_type)
+        parse_robot_tiroseco_check(configs, msg, bet_type) 
 
     else:
         log('Esse robo ainda não foi configurado', colour='red')
@@ -211,29 +221,6 @@ def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
         bot_futebol_virtual_ambos(config, configs, text, url, key)        
 
 
-###########################################################
-# odd Menor que 1.40 no Gols Mais/Menos 1.5
-###########################################################
-
-
-def parse_robot_gols_check():
-
-     configs = get_configs(uid)
-    
-     if configs.get('robo_gols') == 1:
-        parse_robot_gols(configs)
-     else:
-        log('Robo Gols em modo stop efetuado pelo administrador', colour='red')
-
-
-def parse_robot_gols(configs):            
-
-    championships = ["Euro cup", "Campeonato do Mundo", "Premiership", "Superliga"]
-    championship = random.choice(championships)
-    url = "https://www.bet365.com/#/AVR/B146/R^1/"
-    
-    log('Inicializando Bet Gol 1.5 - Esporte virtual')    
-    bot_futebol_virtual_gol(config, configs, championship, url)        
 
 
 ###########################################################
@@ -292,9 +279,6 @@ def main_sync():
 
     log('Inicializando sistema modo database')               
     # setInterval(refresh_bets, int(timerr))
-
-    configs = get_configs(uid)
-    setInterval(parse_robot_gols_check, int(configs.get("delay_fifa_end")))
     
 
 

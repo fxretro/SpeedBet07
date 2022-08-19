@@ -190,6 +190,41 @@ def get_urls_match_tsv():
 
 
 ###########################################################
+# Monitoring Bets - Bruno jogador
+###########################################################
+
+
+def add_match_jogador(msg):
+  
+  key = db.generate_key()
+  db.child("betJogador/"+key).update({'msg': msg,  'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss')})
+  return key
+
+
+def get_urls_jogador():
+
+  urlProduct = []  
+
+  try:
+
+    all_users = db.child("betJogador").get()      
+        
+    for user in all_users.each():
+
+         product = user.val()           
+         urlProduct.append(product)         
+
+    return urlProduct
+  
+  except:
+    return urlProduct
+
+
+
+
+
+
+###########################################################
 # Oportunities
 ###########################################################
 

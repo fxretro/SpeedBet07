@@ -148,8 +148,6 @@ export class LoginPage {
 
   goPageHome(){     
 
-    console.log(this.dataInfo.isHome)
-
     if(this.dataInfo.userInfo.status === "Perfil verificado"){
 
       if(! this.dataInfo.isHome){
@@ -165,7 +163,7 @@ export class LoginPage {
     }
     
     else 
-        this.uiUtils.showAlertError("Acesso negado, sorry :)")                       
+        this.uiUtils.showAlertError("Acesso negado, favor entrar em contato com o suporte")                       
     
 
 

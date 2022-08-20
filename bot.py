@@ -5,7 +5,6 @@ from uteis.helper import *
 import configparser
 import asyncio
 import uteis.database as Db
-import random
 
 
 ###########################################################
@@ -119,6 +118,10 @@ def parse_msg(configs, msg, bet_type):
     elif bet_type == 11:
         log('Recebido Bet tipo futebol virtual Kabum Tiro Seco')
         parse_robot_tiroseco_check(configs, msg, bet_type) 
+    
+    elif bet_type == 22:
+        log('Recebido Bet Bruno Jogador')
+        parse_robot_tiroseco_check(configs, msg, bet_type) 
 
     else:
         log('Esse robo ainda não foi configurado', colour='red')
@@ -221,7 +224,20 @@ def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
         bot_futebol_virtual_ambos(config, configs, text, url, key)        
 
 
+###########################################################
+# Parse Bruno Jogador
+###########################################################
 
+
+def parse_robot_tiroseco_check(configs, msg, bet_type):
+    
+     if configs.get('robo_brunojogador') == 1:
+        Db.add_match_jogador(msg)
+     else:
+        log('Robo Kabum Tiro Seco em modo stop efetuado pelo administrador', colour='red')
+
+
+        
 
 ###########################################################
 # Modo cliente - Executa direto do banco de dados

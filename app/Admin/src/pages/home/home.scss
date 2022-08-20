@@ -4,6 +4,12 @@ page-home {
         background: $theme-color !important;
     }
 
+    ion-card {
+        position: relative;
+        text-align: center;
+        height: 350px;
+        width: 100%;
+      }        
 
     .header {
         &.bg-transparent {

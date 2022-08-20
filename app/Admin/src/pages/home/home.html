@@ -5,6 +5,11 @@
       
       <ion-buttons end>        
                      
+        <button ion-button style="color: white" (click)="goPagePix()" class="mrg-bt-10">                  
+          <ion-icon name="md-cash"  item-start style="margin-right: 15px;"></ion-icon>        
+          Assinatura
+        </button>
+
         <button ion-button style="color: white" (click)="logout()" class="mrg-bt-10">                  
           <ion-icon name="md-exit"  item-start style="margin-right: 15px;"></ion-icon>        
           Sair
@@ -20,37 +25,22 @@
 
     <ion-list padding no-lines>
 
-      <ion-item  (click)="goPageRegister()">
-        <ion-icon name="ios-cash"  item-start style="margin-right: 15px; color: green;"></ion-icon>        
-        Meu cadastro
-      </ion-item> 
+      <ion-card  (click)="goPageRegister()">
+        <img src="assets/imgs/cadastro.png"/>        
+      </ion-card>
 
-      <ion-item  (click)="goPagePix()">
-        <ion-icon name="ios-cash"  item-start style="margin-right: 15px; color: green;"></ion-icon>        
-        Assinatura
-      </ion-item>       
+      <ion-card  (click)="goPageOportunities()">
+        <img src="assets/imgs/oportunidades.png"/>        
+      </ion-card>
 
-      <ion-item (click)="goPageOportunities()">
-        <ion-icon name="ios-cash"  item-start style="margin-right: 15px; color: green;"></ion-icon>        
-        Oportunidades
-      </ion-item>
-      
-      <ion-item  (click)="goPageMonitorOnline()">
-        <ion-icon name="ios-cash"  item-start style="margin-right: 15px; color: green;"></ion-icon>        
-        Odds asiáticas
-      </ion-item>
+      <ion-card  (click)="goPageMonitorOnline()">
+        <img src="assets/imgs/asiaticos.png"/>        
+      </ion-card>      
 
-      <ion-item (click)="goPageMonitorFifaOnline()">
-        <ion-icon name="ios-cash"  item-start style="margin-right: 15px; color: green;"></ion-icon>        
-        FIFA virtual
-      </ion-item>            
-
-      <ion-item  (click)="goPageSettings()" *ngIf="dataInfo.userInfo.isAdmin">
-        <ion-icon name="ios-cash"  item-start style="margin-right: 15px; color: green;"></ion-icon>        
-        Configurações
-      </ion-item>
-      
-                       
+      <ion-card  (click)="goPageMonitorFifaOnline()">
+        <img src="assets/imgs/fifa.png"/>        
+      </ion-card>   
+                    
     </ion-list>
 
 

@@ -209,10 +209,12 @@ export class DatabaseProvider {
 
   /** CONFIGURAÇÕES */
  
-  addSettings(stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet, bet_fifa, robo_megabolt, robo_tirosecovirtual, meta_dia ){
+  addSettings(stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet, bet_fifa, robo_megabolt, robo_tirosecovirtual, meta_dia, only_save, robo_brunojogado ){
     let uid = this.authProvider.currentUserUid()    
     let path = "/configs/" 
 
+    robo_brunojogado == true ? robo_brunojogado = 1 : robo_brunojogado = 0
+    only_save == true ? only_save = 1 : only_save = 0
     robo_megabolt == true ? robo_megabolt = 1 : robo_megabolt = 0
     robo_tirosecovirtual == true ? robo_tirosecovirtual = 1 : robo_tirosecovirtual = 0
     stopped == true ? stopped = 1 : stopped = 0
@@ -236,14 +238,17 @@ export class DatabaseProvider {
           move_right_bet: move_right_bet,
           robo_megabolt: robo_megabolt,
           robo_tirosecovirtual: robo_tirosecovirtual,
-          meta_dia: meta_dia
+          meta_dia: meta_dia,
+          only_save: only_save
          } )   
   }
 
 
 
-  updateSettings(key_: string, stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet, bet_fifa, robo_megabolt, robo_tirosecovirtual, meta_dia){  
+  updateSettings(key_: string, stopped, bet,delay, delay_start, delay_end, move_down_bet, move_right_bet, bet_fifa, robo_megabolt, robo_tirosecovirtual, meta_dia, only_save, robo_brunojogado){  
+    
 
+    robo_brunojogado == true ? robo_brunojogado = 1 : robo_brunojogado = 0
     robo_megabolt == true ? robo_megabolt = 1 : robo_megabolt = 0
     robo_tirosecovirtual == true ? robo_tirosecovirtual = 1 : robo_tirosecovirtual = 0
     stopped == true ? stopped = 1 : stopped = 0
@@ -251,6 +256,7 @@ export class DatabaseProvider {
     delay = Number(delay)
     delay_start = Number(delay_start)
     delay_end = Number(delay_end)
+    only_save == true ? only_save = 1 : only_save = 0
     
     let uid = this.authProvider.currentUserUid()    
     let path = "/configs/"         
@@ -267,7 +273,8 @@ export class DatabaseProvider {
       move_right_bet: move_right_bet,      
       robo_megabolt: robo_megabolt,
       robo_tirosecovirtual: robo_tirosecovirtual,
-      meta_dia: meta_dia
+      meta_dia: meta_dia,
+      only_save: only_save
      } )   
 
   }   

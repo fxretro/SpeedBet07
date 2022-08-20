@@ -19,6 +19,7 @@ export class SettingsPage {
 
   key: string = ""
   stopped: number = 0
+  only_save: number = 0
   bet: number = 0
   bet_fifa: number = 0
   delay: number = 0
@@ -28,8 +29,7 @@ export class SettingsPage {
   move_right_bet: number = 0
   robo_megabolt: number = 0
   robo_tirosecovirtual: number = 0
-
-
+  robo_brunojogador: number = 0
   meta_dia=10
   base64Image: string = '';    
   selectedPhoto: any;
@@ -60,6 +60,7 @@ export class SettingsPage {
   startInterface(){
 
 
+    this.only_save = 0
     this.stopped = 0
     this.bet = 5
     this.bet_fifa = 5
@@ -71,6 +72,7 @@ export class SettingsPage {
     this.robo_megabolt=1
     this.robo_tirosecovirtual=1
     this.meta_dia = 10
+    this.robo_brunojogador = 0
 
     this.clear()  
     this.getConfig()
@@ -117,15 +119,15 @@ export class SettingsPage {
         this.delay_end = this.payload.delay_end
         this.move_down_bet = this.payload.move_down_bet
         this.move_right_bet = this.payload.move_right_bet
+        this.only_save = this.payload.only_save
+        this.robo_brunojogador = this.payload.robo_brunojogador
 
         this.robo_tirosecovirtual = this.payload.robo_tirosecovirtual
         this.robo_megabolt = this.payload.robo_megabolt
         
         this.selectPicture = this.payload.url
         this.base64Image = this.payload.url
-
         this.meta_dia = this.payload.meta_dia
-
 
         
         if(!this.move_down_bet)
@@ -191,7 +193,22 @@ export class SettingsPage {
   
   addContinue(url: string){
 
-    this.db.addSettings(this.stopped, this.bet, this.delay, this.delay_start, this.delay_end, this.move_down_bet, this.move_right_bet, this.bet_fifa, this.robo_tirosecovirtual, this.robo_megabolt, this.meta_dia )
+    this.db.addSettings(
+
+      this.stopped, 
+        this.bet, 
+        this.delay, 
+        this.delay_start, 
+        this.delay_end, 
+        this.move_down_bet, 
+        this.move_right_bet, 
+        this.bet_fifa, 
+        this.robo_tirosecovirtual, 
+        this.robo_megabolt, 
+        this.meta_dia,
+        this.only_save,
+        this.robo_brunojogador )
+
       .then( () => {
 
         this.getConfig()
@@ -204,7 +221,22 @@ export class SettingsPage {
     console.log(this.key)
     
 
-    this.db.updateSettings(this.key, this.stopped, this.bet, this.delay, this.delay_start, this.delay_end, this.move_down_bet, this.move_right_bet, this.bet_fifa, this.robo_tirosecovirtual, this.robo_megabolt, this.meta_dia)
+    this.db.updateSettings(
+      this.key, 
+      this.stopped, 
+      this.bet, 
+      this.delay, 
+      this.delay_start, 
+      this.delay_end, 
+      this.move_down_bet, 
+      this.move_right_bet, 
+      this.bet_fifa, 
+      this.robo_tirosecovirtual, 
+      this.robo_megabolt, 
+      this.meta_dia, 
+      this.only_save,
+      this.robo_brunojogador)
+
     .then( () => {
 
       this.getConfig()
@@ -330,6 +362,7 @@ export class SettingsPage {
     this.move_right_bet = data.payload.val().move_right_bet
     this.bet_fifa = data.payload.val().bet_fifa    
     this.meta_dia = data.payload.val().meta_dia
+    this.only_save = data.payload.val().only_save
 
     this.robo_megabolt = data.payload.val().robo_megabolt    
     this.robo_tirosecovirtual = data.payload.val().robo_tirosecovirtual    

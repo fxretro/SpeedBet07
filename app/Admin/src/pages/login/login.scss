@@ -1,5 +1,5 @@
 page-login {
-  
+
     .bg-light {
         background: $bg-color !important;
     }
@@ -75,8 +75,10 @@ page-login {
     display: block;
 
     &.logo {
+        
         margin: 0 auto;
-        width: 99px;
+        width: 200px;
+
         margin-bottom: 20px;
         margin-top: 29px;
     }

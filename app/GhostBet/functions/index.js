@@ -56,7 +56,7 @@ function getTokens(results, change){
 
 
 
-exports.notifyBets = functions.database.ref('/betAviso/')
+exports.notifyBetAviso = functions.database.ref('/betAviso/')
     .onWrite((change, context) => {            
       
 
@@ -110,7 +110,7 @@ exports.notifyBets = functions.database.ref('/betAviso/')
 
 
 
-exports.notifyBets = functions.database.ref('/betAvisoTsv/')
+exports.notifyBetAvisoTsv = functions.database.ref('/betAvisoTsv/')
     .onWrite((change, context) => {            
       
 
@@ -162,7 +162,7 @@ exports.notifyBets = functions.database.ref('/betAvisoTsv/')
 });
 
 
-exports.notifyBets = functions.database.ref('/betOportunities/')
+exports.notifyBetOportunities = functions.database.ref('/betOportunities/')
     .onWrite((change, context) => {            
       
 
@@ -213,7 +213,7 @@ exports.notifyBets = functions.database.ref('/betOportunities/')
 });
 
 
-exports.notifyBets = functions.database.ref('/notifications/')
+exports.notifyNotifications = functions.database.ref('/notifications/')
 
     .onWrite((change, context) => {            
       

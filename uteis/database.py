@@ -285,3 +285,11 @@ def get_configurations(uid):
           allArray.append(user.val())        
 
   return allArray
+
+###########################################################
+# Proxies
+###########################################################
+
+
+def add_notification(typee, msg):  
+  db.child("notifications").push({'type': typee, 'msg': msg,  'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})

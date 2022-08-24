@@ -1,4 +1,4 @@
-from telethon.sync import TelegramClient, events
+from telethon.sync import TelegramClient, events, types
 from uteis.widget import *
 from uteis.helper import *
 
@@ -31,7 +31,7 @@ async def telegram_bot():
    async with TelegramClient('name', config.get("api_id"), config.get("api_hash")) as client:   
 
       def my_event_handler(event, bet_type):
-            msg = event.message           
+            msg = event.message               
             check_status(msg.message, bet_type)
 
       
@@ -39,6 +39,11 @@ async def telegram_bot():
     ###########################################################
     # Robo MEGABOLT Escanteioover
     ###########################################################
+
+      @client.on(events.NewMessage())
+      async def handler(event):
+         if event.message.sticker:
+            notifications(event)                          
 
       @client.on(events.NewMessage(pattern='(?i).*MEGABOLT PRIMEIRO'))
       async def handler(event):
@@ -75,6 +80,7 @@ async def telegram_bot():
          my_event_handler(event, 11)         
 
 
+
     ###########################################################
     # Robo Bruno Jogador
     ###########################################################
@@ -86,6 +92,28 @@ async def telegram_bot():
 
       await client.run_until_disconnected()
 
+
+###########################################################
+# Browser Bot - Verifica tipo de bet
+###########################################################
+
+
+def notifications(event):
+
+    for attr in event.message.sticker.attributes:
+            if isinstance(attr, types.DocumentAttributeSticker):
+                id=attr.stickerset.id
+
+                #print('Recebido sticker ', id)                
+                
+                if str(id) == '3827034221168295937':                    
+                    Db.add_notification(1, "Atenção! Entrada no FIFA Virtual em alguns instantes")
+
+                if str(id) == '2426943245666746371':                    
+                    Db.add_notification(1, "Parabéns! Batemos  a meta no FIFA Virtual")
+
+                if str(id) == '5596820596936671235':                    
+                    Db.add_notification(1, "Encerramos no FIFA Virtual por hoje")
 
 
 
@@ -121,7 +149,7 @@ def parse_msg(configs, msg, bet_type):
     
     elif bet_type == 22:
         log('Recebido Bet Bruno Jogador')
-        parse_robot_tiroseco_check(configs, msg, bet_type) 
+        parse_robot_brunojogador_check(configs, msg, bet_type) 
 
     else:
         log('Esse robo ainda não foi configurado', colour='red')
@@ -141,6 +169,7 @@ def parse_robot_check(configs, msg, bet_type):
         parse_robot_megabolt(configs, msg, bet_type)
      else:
         log('Robo em Megabolt em modo stop efetuado pelo administrador', colour='red')
+    
     
             
 def parse_robot_megabolt(configs, msg, bet_type):
@@ -187,12 +216,13 @@ def parse_robot_megabolt_continue(configs, text, url, bet_type, message):
 ###########################################################
 
 
-def parse_robot_tiroseco_check(configs, msg, bet_type):
+def parse_robot_tiroseco_check(configs, msg, bet_type):     
     
      if configs.get('robo_tirosecovirtual') == 1:
         parse_robot_kabum_tirosecovirtual(configs, msg, bet_type)
      else:
         log('Robo Kabum Tiro Seco em modo stop efetuado pelo administrador', colour='red')
+
 
 
 def parse_robot_kabum_tirosecovirtual(configs, msg, bet_type):
@@ -229,12 +259,12 @@ def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
 ###########################################################
 
 
-def parse_robot_tiroseco_check(configs, msg, bet_type):
+def parse_robot_brunojogador_check(configs, msg, bet_type):
     
      if configs.get('robo_brunojogador') == 1:
         Db.add_match_jogador(msg)
      else:
-        log('Robo Kabum Tiro Seco em modo stop efetuado pelo administrador', colour='red')
+        log('Robo Bruno Jogador em modo stop efetuado pelo administrador', colour='red')
 
 
         
@@ -252,7 +282,6 @@ def refresh_bets():
     my_matches = Db.get_urls_match()      
     today = datetime.datetime.now() 
     
-
     try:        
 
         for bet in bets:
@@ -294,7 +323,7 @@ def refresh_bets():
 def main_sync():
 
     log('Inicializando sistema modo database')               
-    # setInterval(refresh_bets, int(timerr))
+    setInterval(refresh_bets, int(timerr))
     
 
 

@@ -112,13 +112,16 @@ export class MonitorCornerPage {
 
       let info = element.payload.val()            
 
-      if(info.uid === this.dataInfo.userInfo.uid){
-
+      if(moment(info.datetime, "DD/MM/YYYY hh:mm:ss").isSame(moment(), 'day')){
+        
+        
         info.msgShow = true
         info.key = element.payload.key
         info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
         this.snkrs.push(info)
       }
+
+      
               
     });
 

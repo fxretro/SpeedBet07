@@ -291,5 +291,5 @@ def get_configurations(uid):
 ###########################################################
 
 
-def add_notification(typee, msg):  
-  db.child("notifications").push({'type': typee, 'msg': msg,  'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})
+def add_notification(typee, title, msg):  
+  db.child("notifications").push({'type': typee, 'title': title, 'msg': msg,  'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})

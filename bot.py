@@ -107,13 +107,13 @@ def notifications(event):
                 #print('Recebido sticker ', id)                
                 
                 if str(id) == '3827034221168295937':                    
-                    Db.add_notification(1, "Atenção! Entrada no FIFA Virtual em alguns instantes")
+                    Db.add_notification(1, "Notificação importante", "Atenção! Entrada no FIFA Virtual em alguns instantes")
 
                 if str(id) == '2426943245666746371':                    
-                    Db.add_notification(1, "Parabéns! Batemos  a meta no FIFA Virtual")
+                    Db.add_notification(1, "Notificação importante", "Parabéns! Batemos  a meta no FIFA Virtual")
 
                 if str(id) == '5596820596936671235':                    
-                    Db.add_notification(1, "Encerramos no FIFA Virtual por hoje")
+                    Db.add_notification(1, "Boa noite!", "Encerramos no FIFA Virtual por hoje")
 
 
 

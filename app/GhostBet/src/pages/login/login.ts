@@ -148,7 +148,8 @@ export class LoginPage {
 
   goPageHome(){     
 
-    if(this.dataInfo.userInfo.status === "Perfil verificado"){
+    if(this.dataInfo.userInfo && 
+      this.dataInfo.userInfo.status === "Perfil verificado"){
 
       if(! this.dataInfo.isHome){
 

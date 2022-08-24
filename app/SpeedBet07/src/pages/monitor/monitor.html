@@ -1,0 +1,62 @@
+
+<ion-header  class="bg-theme text-white">
+  <ion-navbar text-center no-border-bottom>
+    
+    <ion-title>Ao Vivo</ion-title>     
+
+    
+    <ion-buttons end>                   
+      <button ion-button style="color: white" (click)="get()" class="mrg-bt-10">                          
+        ATUALIZAR
+      </button>                           
+
+    </ion-buttons>
+
+  </ion-navbar>     
+
+</ion-header>
+
+<ion-content class="trips detail-bg">
+
+  <ion-list padding>    
+
+      <ion-card class="trip card" text-wrap *ngFor="let service of snkrs" no-lines>
+
+        <ion-item>
+
+          <ion-avatar item-start>
+
+            <img src="https://cdn.discordapp.com/avatars/822263995524055070/db0befcb10561deb6d68f9f3529d0623.webp?size=128" *ngIf="! service.thumbnail">
+            <img src="{{service.thumbnail}}" *ngIf="service.thumbnail">
+          </ion-avatar>
+                      
+          
+            <p *ngIf="service.datetime"><b>Atualizado em:  </b>{{service.datetime}}</p>                      
+            <p><b>Mensagem:  </b>{{service.msg}}</p>    
+
+          <ion-row>  
+              
+        
+            <ion-col>
+              <button ion-button icon-start clear small (click)="open(service)">
+                  <ion-icon name="clipboard"></ion-icon>
+                 Abrir
+              </button>
+            </ion-col>  
+             
+  
+          </ion-row>
+
+        </ion-item>
+            
+        
+
+        
+          
+                          
+    </ion-card>    
+    
+
+  </ion-list>
+
+</ion-content>

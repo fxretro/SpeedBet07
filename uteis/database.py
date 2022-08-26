@@ -2,6 +2,28 @@
 import moment
 import pyrebase
 
+config_big_firebase = {
+  "apiKey": "AIzaSyB81K_ipu20aWEI_LQtVWnOXJmM6UaIVtw",
+  "authDomain": "ghostbot-27831.firebaseapp.com",
+  "databaseURL": "https://ghostbot-27831-default-rtdb.firebaseio.com/",
+  "projectId": "ghostbot-27831",
+  "storageBucket": "ghostbot-27831.appspot.com",
+  "messagingSenderId": "868283060392",
+  "appId": "1:868283060392:web:83fa6cccfbc966565eb29d",
+  "serviceAccount": {
+    "type": "service_account",
+    "project_id": "ghostbot-27831",
+    "private_key_id": "d4dcd3ce37a2503dcaa9ab649eb288973c7b6691",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDROEHS/DARu/fW\nFTscEx16Z6VEXn26D71fjvGMKRVTg7LFkSQ29TnPGG5GxQZCkRtEfDO1uw3YbrEv\njLhG6sFXLzSXi+mZy0SHKlErTCBl9aLPZDLJTg4eijLOdzXiLzqftZPgkPIDirpu\ndbx9xudAC7mO6B/QLmiMEka8Uq+0QSyWb7RI9FHaWFY1NLe/jFke4Qr+Wdmjhrqu\niEy+kkSDgZ8Hz8OeE0AxIX3Jn5wKRcQQ7/eP2CueK9LcZ0RU97OjEk7s+Dn8rQOZ\n9Od8CVSpD+z2rHF88zc+laler9dhNjTv6S3/0ys+wgoM+rpMC6zUNWHCjjJlYsmu\n/BzlNMsJAgMBAAECggEAMKIFGwgoHFc3OvpgbRw8Y/Gnxwa37wItoQLXPx9lp64b\nZjVg162VLICfUbAGzn5wejDszDeY9lB0u3rYcxOqsZt1fCy3tlo7qbe6engNp+W7\nXL4L2CNewNabDMdFLTiRRgKtRywqNYyP3ZFcqVgM9SREk+V9T6UaBEVTT/9gfGOm\nDXeVyxWS2ThQJsfpqxcWcBs/V7jCpnhFamHd6LUxGh6xkse1O0BG3SBAXNn9g6ok\na12NGKM3SflDQzjgagjSN89atvR/xCNQ11Pz9pN+yr6fcH6vp4+QTl/M8dUrFbpU\nbkw2mdQqRnjIG4yn/uJxCCQVOzkFISkDPhiaIkoEiQKBgQD6fbh3G4SS80zCNmu6\nvY+cl/4KMEP0m4pkRhJJ+vKa29GcIABFEZsz7jsD6SXffINSP9r3qZC1gFe7m78i\nbGQbMmxOjRI36K1JBo9mS1gPlNu9lqBBkVbwXETys8OLmbn3yccZq0aM/kd7VVx2\n9vxOA9OP8jfaitK9EYuS92FzWwKBgQDV0i0vfMOzw7x5FvLswfuioLzD7DspK22A\nRh/mSaNUTLYZiIHkEMMpgt+HERF5pNrPSq4Uu+SVuP37A0jKLHIvEKsRTvBqMC3B\nuUKylirPi0pdKl8y8OZ0SnfHWAqP9PfZp9po7GpnBYK/lEhD4LK+yqZb5DIsh1gm\nk35y9YT8awKBgQDsOhX1lajwIKy51zK/eDdwWVKFb0EW9HyN1hs3U4bpjfZeQzud\n512zmq5jIMPLwJPjxD6PI4VJ9dBHKDkXkJrTnzjO13Ff8nlBDgO8V7+jaiHU6LEX\nRKZ1pL6NGASIqZ/c05iFV6YAH2lwIW9C7efA9xDUhnwwCI13Ko2zOsLXUwKBgDHb\n6rFyFGhsshxCX68ZpMXNWXcONNVqzQPmVjXq4e0cXjIiBLfbuMaLP/hM4JhO+r7v\nmRw4nBrVolPP9j8+kfmrl1hX4fPA/Ep6GrVuEtmGj3aeFMjaJ8LiQn/3Za8f3lOg\nsmtZBY60WEK4HwnE8alPs+8ljRWZEdMc/ZVs7u+1AoGAVDTk6JdHC2XKhPBaaW6M\n/noaEnqMSkJwsBRu0kUsANS9TiWXZhvSNjMlD8qybqV6FkPwfV8Gwk75+S/T9PB0\n5WwZIpaxz3Fr83hJgziizEy5602nN4EcFLmI4Wx1O2hpMB+Eo7eEur/qF1bJbNtf\n4AVlNxcDPc3mro1sCrsyY60=\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-eul49@ghostbot-27831.iam.gserviceaccount.com",
+    "client_id": "116680575620543224246",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-eul49%40ghostbot-27831.iam.gserviceaccount.com"
+  }
+}
+
 config_firebase = {
   "apiKey": "AIzaSyB81K_ipu20aWEI_LQtVWnOXJmM6UaIVtw",
   "authDomain": "ghostbot-27831.firebaseapp.com",
@@ -22,12 +44,28 @@ config_firebase = {
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-eul49%40ghostbot-27831.iam.gserviceaccount.com"
   }
-
 }
 
 
 firebase = pyrebase.initialize_app(config_firebase)
+firebase_big = pyrebase.initialize_app(config_big_firebase)
+
 db = firebase.database()
+db_big = firebase_big.database()
+
+
+
+def get_tokens():
+
+  all = db.child("/userProfile/GhostBet/").get()
+  allArray = []
+
+  for user in all.each():        
+
+        if user.val().get("token"):
+          allArray.append(user.val().get("token"))        
+
+  return allArray
 
 
 
@@ -291,5 +329,7 @@ def get_configurations(uid):
 ###########################################################
 
 
-def add_notification(typee, title, msg):  
-  db.child("notifications").push({'type': typee, 'title': title, 'msg': msg,  'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})
+def add_notification(typee, title, msg, tokens):  
+
+  print('Salvando notificação ', title, msg)
+  db_big.child("notifications").push({'type': typee, 'title': title, 'msg': msg,  'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'tokens': tokens})

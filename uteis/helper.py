@@ -2,6 +2,7 @@ import six
 import threading
 import uteis.database as Db
 from datetime import datetime
+from datetime import timedelta
 
 from logging import exception
 from uteis.widget import *
@@ -21,6 +22,21 @@ leagues = ["Euro Cup", "Campeonato do Mundo", "Premiership", "Superliga"]
 ###########################################################
 # Auxiliares 
 ###########################################################
+
+
+def get_tokens():
+
+    log('Verificando tokens ')
+
+    try:
+        tokens = Db.get_tokens()
+        return tokens
+
+    except exception as e:
+        log("Não foi possível pegar os tokens")
+        print(e)
+        pass
+        
 
 def get_configs(uid):
 
@@ -93,29 +109,26 @@ def setInterval(func,time):
 
 
 ###########################################################
-# Screen checks
+# Parse text
 ###########################################################
 
+def parse_text_tiroseco(texts):
+    
+    time_str = texts[0]
+    date_format_str = '%H:%M'
+    given_time = datetime.strptime(time_str, date_format_str)    
+    given_time = datetime.strptime(time_str, date_format_str)    
+    
+    final_time1 = given_time + timedelta(minutes=3)        
+    final_time_str1 = final_time1.strftime('%H:%M')
 
-def check_search_results(system_config):
+    final_time2 = given_time + timedelta(minutes=6)        
+    final_time_str2 = final_time2.strftime('%H:%M')
 
-   try:
-       pyautogui.locateCenterOnScreen(system_config.get("file_no_results"))
-       log('Parece que não encontramos o jogo solicitado...', colour='red')
-       return False
+    final_time3 = given_time + timedelta(minutes=9)        
+    final_time_str3 = final_time3.strftime('%H:%M')
+    
+    timess = [time_str, final_time_str1, final_time_str2, final_time_str3]    
 
-   except:
-       log('Parece que encontramos resultados...')
-       return True
+    return timess
 
-
-
-def click_logo(system_config):
-
-   try:
-       pyautogui.locateCenterOnScreen(system_config.get("file_logo"))
-       log('Clicando na logo para pegar o foco')
-       return True
-   except:
-       log('Não conseguimos clicar no verde', colour='red')
-       return False

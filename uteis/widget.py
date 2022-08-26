@@ -214,9 +214,13 @@ def bot_futebol_virtual_ambos_continue(system_config, configs, text, key):
    time.sleep(configs.get("delay")) 
 
    matches = [text[1], text[2], text[3], text[4]]
+   matches_final = Helper.parse_text_tiroseco(matches)
+
    total = 1   
 
-   for match in matches:
+   for match in matches_final:
+    
+    Helper.check_focus(system_config)
     bot_futebol_virtual_ambos_finish(system_config, configs, key, match, text[0], total)
     total = total +1
     
@@ -253,12 +257,14 @@ def bot_futebol_virtual_ambos_finish(system_config, configs, key, match, league,
     if configs.get('stopped') == 0:
         
         if status == 'Anulado':
-            Helper.log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1)                                    
+            Helper.log("Investimento anulado pelo cliente! ",colour="red", key=key, type=1) 
+            time.sleep(configs.get("delay_fifa_end"))                                    
         else:
             bot_futebol_virtual_ambos_salva(configs, info, key, league, total)
 
     else:
         Helper.log('Robo em modo stop efetuado pelo administrador', colour='red')
+        time.sleep(configs.get("delay_fifa_end")) 
         
 
 

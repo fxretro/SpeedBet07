@@ -45,12 +45,20 @@ export class HomePage {
 
   subscribeStuff(){
 
-
     this.events.subscribe(this.dataInfo.eventFcmToken, data => {        
               
       this.dataInfo.setToken(data)
       this.db.saveToken(data)        
-  });       
+    });       
+  }
+
+
+  addServices(){
+
+    this.db.addServices("Casa")
+    this.db.addServices("Empate")
+    this.db.addServices("Fora")
+
   }
 
   logout(){
@@ -66,6 +74,9 @@ export class HomePage {
 
   startInterface(){
     this.events.publish(this.dataInfo.eventFcmStart, 1);
+
+//    this.addServices()
+
 
     if(this.dataInfo.isDev){
       this.dev()    
@@ -83,12 +94,12 @@ export class HomePage {
   } 
 
 
-  goPageMonitorOnline(){        
-    this.navCtrl.push('MonitorCornerPage')
+  goHistoryPage(){        
+    this.navCtrl.push('HistoryPage')
   }
 
   goPageMonitorFifaOnline(){    
-    this.navCtrl.push('MonitorFifaPage')
+    this.navCtrl.push('HistoryPage')
   }
 
 
@@ -98,6 +109,11 @@ export class HomePage {
 
   goPageRegister(){
     this.navCtrl.push('RegisterPage')
+  }
+
+  goPageClients(){
+
+    this.navCtrl.push('ClientsPage')
   }
 
   goPagePix(){

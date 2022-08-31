@@ -105,17 +105,9 @@ def check_focus(system_config):
 
 def bot_escanteio_asiatico(system_config, configs, url, key):
          
-   start_browser(url)
-   
+   start_browser(url)   
    time.sleep(configs.get("delay_start"))
-
-   if check_result_search(system_config):
-
-        Helper.log('Parece que não encontramos o jogo solicitado...', colour='red')
-        close_browser_tab()   
-
-   else:
-        bot_escanteio_asiatico_continue(system_config, configs, key)
+   bot_escanteio_asiatico_continue(system_config, configs, key)
 
    
 

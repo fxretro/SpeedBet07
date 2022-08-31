@@ -192,57 +192,12 @@ export class SettingsPage {
   }  
   
   addContinue(url: string){
-
-    this.db.addSettings(
-
-      this.stopped, 
-        this.bet, 
-        this.delay, 
-        this.delay_start, 
-        this.delay_end, 
-        this.move_down_bet, 
-        this.move_right_bet, 
-        this.bet_fifa, 
-        this.robo_tirosecovirtual, 
-        this.robo_megabolt, 
-        this.meta_dia,
-        this.only_save,
-        this.robo_brunojogador )
-
-      .then( () => {
-
-        this.getConfig()
-        this.uiUtils.showAlert(this.dataText.success, this.dataText.addedSuccess).present()
-        this.navCtrl.pop()
-      })
+   
   }
 
   save(){
     console.log(this.key)
     
-
-    this.db.updateSettings(
-      this.key, 
-      this.stopped, 
-      this.bet, 
-      this.delay, 
-      this.delay_start, 
-      this.delay_end, 
-      this.move_down_bet, 
-      this.move_right_bet, 
-      this.bet_fifa, 
-      this.robo_tirosecovirtual, 
-      this.robo_megabolt, 
-      this.meta_dia, 
-      this.only_save,
-      this.robo_brunojogador)
-
-    .then( () => {
-
-      this.getConfig()
-      this.uiUtils.showAlert(this.dataText.success, this.dataText.savedSuccess).present()
-      this.navCtrl.pop()
-    })  
   }
 
   goBack(){

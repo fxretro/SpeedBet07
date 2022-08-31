@@ -96,15 +96,8 @@ export class LoginPage {
 
     data.forEach(element => {               
       this.dataInfo.userInfo = element.payload.val()
-      this.dataInfo.userType = element.payload.val().userType
-      
-      
-    });
-
-
-
-
-    
+      this.dataInfo.userType = element.payload.val().userType            
+    });    
       
     this.getConfigurations() 
     

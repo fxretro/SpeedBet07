@@ -742,7 +742,8 @@ export class RegisterPage  implements OnInit {
 
     this.razaoSocial = payload.razaoSocial    
     this.description = payload.description
-    this.base64Image = payload.photo      
+    this.base64Image = payload.url
+    
     this.agency = payload.agency
     this.selectedBank = payload.bank
     this.account = payload.account

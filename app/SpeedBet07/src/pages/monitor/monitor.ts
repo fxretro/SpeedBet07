@@ -17,11 +17,10 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 export class MonitorPage {
 
   services: Observable<any>;  
-  snkrs: any = []
+  championships: any = []
+  championshipsGames: any = []
 
-  stopped = 0
-  bet = 5
-  delay = 1
+
   
   constructor(public navCtrl: NavController, 
     public uiUtils: UiUtilsProvider,    
@@ -45,62 +44,13 @@ export class MonitorPage {
   }
 
   startInterface(){
-
-    this.stopped = 0
-    this.bet = 5
-    this.delay = 1
-    
-
-    this.getConfig()
     this.get()
   }
 
-  getConfig(){
-    
-    this.db.getAllSettings()
-
-    .subscribe((payload) => {
-
-      if(payload)
-        this.configContinue(payload)    
-
-    })
-   
-  }
-
-
-  configContinue(payload){
-
-
-    this.stopped = 0
-    this.bet = 5
-    this.delay = 1
-   
-
-    payload.forEach(element => {
-
-      let payload = element.payload.val()
-      payload.key = element.payload.key
-      
-      this.stopped = payload.stopped
-
-
-      this.bet = payload.bet
-      this.delay = payload.delay
-  
-      console.log('Configuração carregada com sucesso')
-
-      console.log(this.stopped)
-      
-    });
-
-
-
-  }
 
   get(){
         
-    this.services = this.db.getOportunities()
+    this.services = this.db.getChampionships()
 
     this.services.subscribe(data => {
       this.getCallback(data)
@@ -108,85 +58,74 @@ export class MonitorPage {
   }
 
   getCallback(data){
+
+    let loading = this.uiUtils.showLoading(this.dataInfo.pleaseWait)    
+    loading.present() 
     
     data.forEach(element => {      
 
       let info = element.payload.val()    
-
-      if(moment(info.datetime, "DD/MM/YYYY hh:mm:ss").isSame(moment(), 'day')){
-        
-
-        info.msgShow = true
-        info.key = element.payload.key
-        
-        this.snkrs.push(info)
-
-      }
-
-      
-
-              
+      this.championships.push(info)        
     });
 
-    this.snkrs.sort(function(a,b){      
+    loading.dismiss()
 
-      let d = moment(a.datetime, "DD/MM/YYYY hh:mm:ss").isBefore(moment(b.datetime, "DD/MM/YYYY hh:mm:ss"));
-      return d
-    });
+    this.getMatches()
+
+  }
 
 
-    this.snkrs = this.snkrs.reverse()
+  getMatches(){
+
+
+    let loading = this.uiUtils.showLoading(this.dataInfo.pleaseWait)    
+    loading.present() 
+
+    this.db.getChampionshipsGames()
+    .subscribe(data => {
+
+
+      this.getMatchesCallback(data)
+      loading.dismiss()
+
+
+    })
+  }
+
+  getMatchesCallback(data){
     
-  }
+    data.forEach(element => {      
 
-  add(){
-    this.navCtrl.push('MonitorUrlAddPage')
-  }
+      let info = element.payload.val()       
+      this.championshipsGames.push(info)        
 
-  edit(service){    
-    let info = service.payload.val()
-    info.key = service.payload.key    
+    });
 
-    console.log(info)
-  } 
+    this.championships.forEach(element => {
+
+      let name = element.name
+      element.matches = []
+
+      this.championshipsGames.forEach(element1 => {        
+        
+
+        if(!element1.timer_now)
+          element1.timer_now = "00:00"        
+
+        if(element1.championship === name){
+          element.matches.push(element1)
+        }
+        
+      });
+      
+    });
+
   
+  }
+
+ 
   goBack(){
     this.navCtrl.pop()
-  }
-
-
-
-  remove(data){
-
-    let self  = this
-
-    let alert = this.uiUtils.showConfirm(this.dataText.warning, this.dataText.areYouSure)
-    alert.then((result) => {
-
-      if(result){
-        this.removeContinue(data)                 
-      }    
-    })   
-  }
-
-  removeContinue(data){
-
-
-    this.db.removeMonitors(data.key)    
-    .then( () => {
-      this.uiUtils.showAlert(this.dataText.success, this.dataText.removeSuccess)
-    })
-  }
-
-  changeStatusRobot(){
-    
-    this.stopped == 0 ? this.stopped = 1 : this.stopped = 0  
-
-    this.db.changeStatusRobot(this.stopped)    
-    .then( () => {
-      this.uiUtils.showAlert(this.dataText.success, this.dataText.removeSuccess)
-    })
-
   }
 
   expand(work){
@@ -195,72 +134,11 @@ export class MonitorPage {
   }
 
 
-  changeBet(work){
-
+  goPageBets(work){
     console.log(work)
-
-    let alert = this.alertCtrl.create({
-      title: "Novo valor do investimento",
-      inputs: [
-        {
-          name: 'question',
-          placeholder: "Novo valor do investimento"
-        }
-      ],
-      buttons: [
-        {
-          text: "Cancelar",
-          role: 'cancel',
-          handler: data => {
-            console.log('Cancelado')
-          }
-        },
-        {
-          text: "Modificar",
-          handler: data => {
-
-            console.log('Novo valor ', data.question)
-            this.uiUtils.showAlertSuccess("Em desenvolvimento")
-
-
-          }
-        }
-      ]
-    });
-    alert.present();
-      
+    this.navCtrl.push('BetsPage', {payload: work})
   }
-
-  anular(service){
-
-    console.log(service)
-
-    let alert = this.uiUtils.showConfirm(this.dataText.warning, this.dataText.areYouSure)
-    alert.then((result) => {
-
-      if(result){
-        this.anularContinue(service)                 
-      }    
-    })   
-
-  }
-
-  anularContinue(data){
-
-    console.log('Anulando ', data.key)
-
-
-    this.db.updateMonitors(data.key, 'Anulado')    
-    .then( () => {
-
-      this.uiUtils.showAlert(this.dataText.success, "Anulado com sucesso")
-
-
-    })
-
-   
-  }
-
+  
   open(service){
 
     let url = service.link

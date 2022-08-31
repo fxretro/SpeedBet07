@@ -426,6 +426,7 @@ export class DataTextProvider {
       if(data){
 
         this.languageSelected = <number>data
+        this.languageSelected = 2
 
         if(this.languageSelected === 1)
           this.translateEnglish()

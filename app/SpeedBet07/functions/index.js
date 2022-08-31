@@ -4,6 +4,56 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
+
+exports.apiAddUser = functions.https.onRequest((req, res) => {  
+
+  return new Promise( (resolve, reject) => {                   
+
+    admin
+      .auth()
+      .createUser({
+        email: data.email,          
+        password: data.password,
+        displayName: data.name          
+      })
+
+      .then((userRecord) => {
+
+        console.log('Usuário criado com sucesso: ', userRecord.uid);            
+        resolve(userRecord.uid)          
+
+      })
+      .catch((error) => {
+
+        console.log('Erro ao criar usuário: ', error);
+        reject(error)
+      });
+
+
+  })
+});
+
+exports.apiRemoveUser = functions.https.onRequest((req, res) => {  
+
+  return new Promise( (resolve, reject) => {
+
+    admin.auth().deleteUser(uid)
+
+    .then(function() {
+        console.log("Successfully deleted user " + uid);
+        resolve()
+    })
+    
+    .catch(function(error) {
+      console.log("Error deleting user:" + uid + ' .Erro: '  + error);
+      reject()
+  });
+
+  })
+});
+
+
+
 exports.notifyBets = functions.database.ref('/betAviso/')
     .onWrite((change, context) => {            
       

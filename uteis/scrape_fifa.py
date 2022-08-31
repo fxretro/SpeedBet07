@@ -1,7 +1,6 @@
 from logging import exception
 from bs4 import BeautifulSoup
-
-
+import database as Db
 
 
 def start():
@@ -9,82 +8,52 @@ def start():
     with open("/tmp/bet/bet.html") as fp:
         soup = BeautifulSoup(fp, "lxml")            
 
-        for all_bets in soup.find_all(class_='ovm-CompetitionList'):                    
+        for all_bets in soup.find_all(class_='ovm-Competition'):                    
             parse(all_bets)
 
 
 
-def parse(all_bets):            
+def parse(all_bets):                
 
-    for bet in all_bets:        
+    
 
-        #print(bet)        
+    for bet in all_bets:                         
 
-        esoccer = bet.find_all(class_="ovm-FavouritesContainer_Favourite")        
-        soccer =  bet.find_all(class_="ovm-Competition-open")                
+        #print(bet)
 
-        try:
-            #parse_competitions_esoccer(esoccer)            
-            
-            parse_competitions_soccer(soccer)
-        except:            
-            pass
-
-
-
-def parse_competitions_esoccer(competitions):    
-
-    for competition in competitions:        
-                
-        competition_name = competition.find(class_="ovm-CompetitionHeader_NameText").getText()                        
-        matches = competition.find_all(class_="ovm-FixtureList")                   
-
-        parse_matches(competition_name, matches)
-
-
-def parse_matches(competition_name, matches):
-
-    print('-------------')            
-    print('Competição Esoccer: ', competition_name)   
-    print('-------------')
-
-    for match in matches:        
-
-        match_players = match.find_all(class_="ovm-FixtureDetailsTwoWay_TeamsAndScoresInner")
-        match_additional = match.find_all(class_="ovm-FixtureDetailsTwoWay_AdditionalInfoWrapper")
-        match_score = match.find_all(class_="ovm-FixtureDetailsTwoWay_ScoresWrapper")
-
-        team_one = match_players[0].find_all(class_="ovm-FixtureDetailsTwoWay_TeamName")[0].getText()
-        team_two = match_players[0].find_all(class_="ovm-FixtureDetailsTwoWay_TeamName")[1].getText()
-
-        time_now = match_additional[0].find_all(class_="ovm-FixtureDetailsTwoWay_Timer")[0].getText()
-
-        score_one = match_score[0].find_all(class_="ovm-StandardScoresSoccer_StatsPointsWrapper")[0].find(class_="ovm-StandardScoresSoccer_TeamOne").getText()
-        score_two = match_score[0].find_all(class_="ovm-StandardScoresSoccer_StatsPointsWrapper")[0].find(class_="ovm-StandardScoresSoccer_TeamTwo").getText()        
-
-        print('Tempo:  ', time_now)
-        print('Time 1: ', team_one)
-        print('Time 2: ', team_two)
+        headerr_ = bet.find_all(class_="ovm-CompetitionHeader_NameText")
+        matches = bet.find_all(class_="ovm-Fixture_Container")
         
-        print('Resultado 1:', score_one)
-        print('Resultado 2:', score_two)
-
-
-
-
-def parse_competitions_soccer(competitions):    
-
-    print('-------------')  
-
-    for competition in competitions:        
                 
-        #print(competition)  
+        for championship in headerr_:            
+            Db.add_championship(championship.getText())
 
-        competition_name = competition.find(class_="ovm-CompetitionHeader_NameText").getText() 
-        print('competition_name: ', competition_name)
+        for match in matches:            
 
+            #print(match)            
+            
+            try:
+                timerr = match.find_all(class_="ovm-InPlayTimer")[0].getText()     
+                event_count = match.find_all(class_="ovm-FixtureEventCount")[0].getText()     
 
+                team_a = match.find_all(class_="ovm-FixtureDetailsTwoWay_TeamName")[0].getText()
+                team_b = match.find_all(class_="ovm-FixtureDetailsTwoWay_TeamName")[1].getText()
 
+                team_a_score = match.find_all(class_="ovm-StandardScoresSoccer_TeamOne")[0].getText()
+                team_b_score = match.find_all(class_="ovm-StandardScoresSoccer_TeamTwo")[0].getText()                
+
+                odds_a = match.find(class_="ovm-MarketGroup").find(class_="ovm-HorizontalMarket_Participants").find_all(class_="ovm-ParticipantOddsOnly_Odds")[0].getText()
+                odds_b = match.find(class_="ovm-MarketGroup").find(class_="ovm-HorizontalMarket_Participants").find_all(class_="ovm-ParticipantOddsOnly_Odds")[1].getText()
+                odds_c = match.find(class_="ovm-MarketGroup").find(class_="ovm-HorizontalMarket_Participants").find_all(class_="ovm-ParticipantOddsOnly_Odds")[2].getText()
+                                
+                print('Campeonato: ', championship.getText(), ' - Jogo: ', timerr, team_a, team_a_score, ' x ' ,team_b_score, team_b, 'Total de eventos: ', event_count, 'Odd casa: ', odds_a, 'Odd empate: ', odds_b, 'Odd visitante: ', odds_c)                                        
+                                                
+                                                
+                Db.add_championship_game(championship.getText(), timerr, team_a, team_b, team_a_score, team_b_score, odds_a, odds_b, odds_c, event_count)
+
+            except:
+                pass
+                
 
 
 start()

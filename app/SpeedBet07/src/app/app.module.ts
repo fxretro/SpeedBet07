@@ -5,10 +5,14 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPageModule } from '../pages/login/login.module';
 import { MonitorPageModule } from '../pages/monitor/monitor.module';
-import { MonitorFifaPageModule } from '../pages/monitor-fifa/monitor-fifa.module';
-import { MonitorCornerPageModule } from '../pages/monitor-corner/monitor-corner.module';
 import { SignupPageModule } from '../pages/signup/signup.module';
 import { RegisterPageModule } from '../pages/register/register.module';
+
+import { ClientsPageModule } from '../pages/clients/clients.module';
+import { ClientsAddPageModule } from '../pages/clients-add/clients-add.module';
+
+import { BetsPageModule } from '../pages/bets/bets.module';
+import { HistoryPageModule } from '../pages/history/history.module';
 
 import { StorageProvider } from '../providers/storage/storage';
 import { DatabaseProvider } from '../providers/database/database';
@@ -77,10 +81,12 @@ export function createTranslateLoader(http: HttpClient) {
   exports: [    
     LoginPageModule,
     MonitorPageModule,
-    MonitorFifaPageModule,
     SignupPageModule,
-    MonitorCornerPageModule,
-    RegisterPageModule
+    RegisterPageModule,
+    ClientsPageModule,
+    ClientsAddPageModule,
+    BetsPageModule,
+    HistoryPageModule
   ],
 
   providers: [    

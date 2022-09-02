@@ -1,0 +1,87 @@
+
+<ion-header>
+
+  <ion-navbar text-center no-border-bottom>
+    <ion-title>Apostas</ion-title>  
+
+    <!--<ion-buttons end>        
+      <button ion-button style="color: white" (click)="goPageReports()">
+        <ion-icon name="md-megaphone"  item-start style="margin-right: 15px;"></ion-icon>        
+          Relatórios
+      </button>      
+    </ion-buttons>-->
+
+  </ion-navbar>
+  
+
+</ion-header>
+
+
+<ion-content class="trips detail-bg">
+
+  <ion-list>  
+
+    <ion-card class="trip card" text-wrap no-lines  *ngIf="payload">
+
+      <ion-card-header color="primary"><ion-title>{{payload.team_a}} x {{payload.team_b}}</ion-title> </ion-card-header>         
+
+      <ion-item no-lines>                           
+      
+        <p><b>Data: {{payload.date_game}} {{payload.hour_game}} </b></p> 
+        <p><b>Odd Casa: </b> {{payload.odd_a}}</p>
+        <p><b>Odd Empate: </b> {{payload.odd_b}}</p>
+        <p><b>Odd Visitante: </b> {{payload.odd_c}}</p>       
+
+        </ion-item>
+
+      <ion-item no-lines>    
+        <ion-label stacked>Aposta</ion-label>  
+
+        <ion-select [(ngModel)]="selectedService" multiple="true">
+          <ion-option *ngFor="let service of servicesArray">{{service.name}}</ion-option>
+        </ion-select>                          
+
+      </ion-item>       
+      
+      <ion-item no-lines>    
+
+        <ion-label stacked>{{dataText.selectClients}}</ion-label>  
+        <ion-select [(ngModel)]="client" (ionChange)="clientChanged()">         
+          <ion-option *ngFor="let cl of usersClientsArray">{{cl.name}}</ion-option>
+        </ion-select>                          
+      </ion-item>      
+
+   
+      <ion-item>
+        <ion-label stacked>Valor da aposta</ion-label><ion-input type="number" [(ngModel)]="finalValue" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
+      </ion-item>  
+
+      <ion-item>
+        <ion-label stacked>Resultado positivo</ion-label><ion-input type="number" [(ngModel)]="finalValueReceived" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
+      </ion-item>  
+      
+                                                           
+    </ion-card>
+
+
+  </ion-list>    
+
+ 
+</ion-content>
+
+
+
+<ion-footer>  
+  
+  <ion-list>        
+        
+      <button ion-button block class="btn bg-theme mrg-bt-10 text-white" (click)="enviaQuickRun()">
+
+        <ion-icon name="md-send"  item-start style="margin-right: 15px;"></ion-icon>
+        Enviar R$ {{finalValue}}
+
+      </button>               
+
+    </ion-list>
+        
+</ion-footer>

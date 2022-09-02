@@ -66,44 +66,20 @@ export class HomePage {
 
   startInterface(){
     this.events.publish(this.dataInfo.eventFcmStart, 1);
-
-    if(this.dataInfo.isDev){
-      this.dev()    
-    }
   }
 
   
-  dev(){    
-    this.navCtrl.push('MonitorUrlPage')
-  }
-
-
-  goPageSettings(){
-    this.navCtrl.push('SettingsPage')
-  } 
-
-
-  goPageMonitorOnline(){        
-    this.navCtrl.push('MonitorCornerPage')
-  }
-
-  goPageMonitorFifaOnline(){    
-    this.navCtrl.push('MonitorFifaPage')
-  }
-
-
-  goPageOportunities(){
+  goPageMonitorFifaOnline(){        
     this.navCtrl.push('MonitorPage')
   }
+
 
   goPageRegister(){
     this.navCtrl.push('RegisterPage')
   }
 
   goPagePix(){
-    //this.navCtrl.push('RegisterPage')
-    //this.uiUtils.showAlertSuccess("Favor realizar o pix para o CPF ")
-    
+        
     let url = "https://nubank.com.br/pagar/1mp8ai/zyKDNSbr9O"
     let options = 'location=no';
 

@@ -34,43 +34,7 @@ async def telegram_bot():
             msg = event.message               
             check_status(msg.message, bet_type)
 
-      
-
-    ###########################################################
-    # Robo MEGABOLT Escanteioover
-    ###########################################################
-
-      @client.on(events.NewMessage())
-      async def handler(event):
-         if event.message.sticker:
-            notifications(event)                          
-
-      @client.on(events.NewMessage(pattern='(?i).*MEGABOLT PRIMEIRO'))
-      async def handler(event):
-         my_event_handler(event, 1)  
-
-      @client.on(events.NewMessage(pattern='(?i).*MEGABOLT SEGUNDO'))
-      async def handler(event):
-         my_event_handler(event, 1)          
-
-      @client.on(events.NewMessage(pattern='(?i).*Alerta Estratégia: ESCANTEIOS'))
-      async def handler(event):
-         my_event_handler(event, 1)   
-
-      @client.on(events.NewMessage(pattern='(?i).*SAIU CARTÃO VERMELHO'))
-      async def handler(event):
-         my_event_handler(event, 2)            
-      
-      @client.on(events.NewMessage(pattern='(?i).*GOL PRIMEIRO'))
-      async def handler(event):
-         my_event_handler(event, 2)
-
-      @client.on(events.NewMessage(pattern='(?i).*GOL SEGUNDO'))
-      async def handler(event):
-         my_event_handler(event, 2)
-    
-
-
+              
     ###########################################################
     # Robo KabumTips TIROSECOVIRTUAL
     ###########################################################
@@ -79,16 +43,7 @@ async def telegram_bot():
       async def handler(event):
          my_event_handler(event, 11)         
 
-
-
-    ###########################################################
-    # Robo Bruno Jogador
-    ###########################################################
-    
-      @client.on(events.NewMessage(pattern='(?i).*Mais de '))
-      async def handler(event):
-         my_event_handler(event, 22)
-
+   
 
       await client.run_until_disconnected()
 
@@ -130,93 +85,10 @@ def check_status(msg, bet_type):
     configs = get_configs(uid)
 
     if configs.get('stopped') == 0:
-        parse_msg(configs, msg, bet_type)
+        parse_robot_tiroseco_check(configs, msg, bet_type) 
     else:
         log('Robo em modo stop efetuado pelo administrador', colour='red')
 
-
-
-def parse_msg(configs, msg, bet_type):   
-
-    if bet_type == 1:
-        log('Recebido Bet tipo escanteio asiático no MegaBolt')
-        parse_robot_check(configs, msg, bet_type)
-
-    elif bet_type == 2:
-        log('Recebido Bet tipo Cartão vermelho no MegaBolt')
-        parse_robot_check(configs, msg, bet_type)
-
-    elif bet_type == 11:
-        log('Recebido Bet tipo futebol virtual Kabum Tiro Seco')
-        parse_robot_tiroseco_check(configs, msg, bet_type) 
-    
-    elif bet_type == 22:
-        log('Recebido Bet Bruno Jogador')
-        parse_robot_brunojogador_check(configs, msg, bet_type) 
-
-    else:
-        log('Esse robo ainda não foi configurado', colour='red')
-
-
-
-
-
-###########################################################
-# Parse MegaBolt
-###########################################################
-
-
-def parse_robot_check(configs, msg, bet_type):
-    
-     if configs.get('robo_megabolt') == 1:
-        parse_robot_megabolt(configs, msg, bet_type)
-     else:
-        log('Robo em Megabolt em modo stop efetuado pelo administrador', colour='red')
-    
-    
-            
-def parse_robot_megabolt(configs, msg, bet_type):
-
-    message = msg
-    msg = message.split("\n")        
-    match = msg[1]    
-    match = match[7:]
-
-    text = match.replace("º", "")    
-    text = text.replace("(", "")
-    text = text.replace(")", "")        
-    text = ''.join(i for i in text if not i.isdigit())    
-    text = text.split()    
-    text = " ".join(str(x) for x in text) 
-    
-    url = "https://www.bet365.com/#/AX/K^" + text       
-    
-    parse_robot_megabolt_continue(configs, text, url, bet_type, message)
-
-
-
-def parse_robot_megabolt_continue(configs, text, url, bet_type, message):
-
-    log('Inicializando MegaBolt. Tipo: ' + str(bet_type))
-
-    if bet_type == 1:      
-        key = Db.add_url_master(message, text, url, bet_type, uid, configs.get("bet"))  
-
-        if configs.get('only_save') == 0:
-            bot_escanteio_asiatico(config, configs, url, key)
-
-    else:
-        key = Db.add_oportunity(message, text, url, uid)
-        log('Adicionada a oportunidade '+ key)
-
-
-    
-
-
-
-###########################################################
-# Parse Tiro Seco Virtual
-###########################################################
 
 
 def parse_robot_tiroseco_check(configs, msg, bet_type):     
@@ -240,7 +112,7 @@ def parse_robot_kabum_tirosecovirtual(configs, msg, bet_type):
     match3 = msg[8]
     match4 = msg[9]
 
-    url = msg[len(msg)-1]
+    url = msg[13]
     matches = [championship, match1, match2, match3, match4]
 
     parse_robot_tirosecovirtual_continue(configs, matches, url, bet_type, message)
@@ -257,20 +129,6 @@ def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
         bot_futebol_virtual_ambos(config, configs, text, url, key)        
 
 
-###########################################################
-# Parse Bruno Jogador
-###########################################################
-
-
-def parse_robot_brunojogador_check(configs, msg, bet_type):
-    
-     if configs.get('robo_brunojogador') == 1:
-        Db.add_match_jogador(msg)
-     else:
-        log('Robo Bruno Jogador em modo stop efetuado pelo administrador', colour='red')
-
-
-        
 
 ###########################################################
 # Modo cliente - Executa direto do banco de dados

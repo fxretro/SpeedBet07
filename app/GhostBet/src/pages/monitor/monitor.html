@@ -2,14 +2,14 @@
 <ion-header  class="bg-theme text-white">
   <ion-navbar text-center no-border-bottom>
     
-    <ion-title>Oportunidades</ion-title>     
+    <ion-title>Fifa</ion-title>     
 
-    <ion-buttons end>       
-      
-      
+    <ion-buttons end>    
+            
       <button ion-button style="color: white" (click)="get()" class="mrg-bt-10">                          
         ATUALIZAR
-      </button>                           
+      </button>
+                          
 
     </ion-buttons>
 
@@ -26,25 +26,35 @@
         <ion-item>
 
           <ion-avatar item-start>
-
             <img src="assets/imgs/logo.png" *ngIf="! service.thumbnail">
             <img src="{{service.thumbnail}}" *ngIf="service.thumbnail">
           </ion-avatar>
-                      
           
-            <p *ngIf="service.datetime"><b>Atualizado em:  </b>{{service.datetime}}</p>                      
-            <p><b>Mensagem:  </b>{{service.msg}}</p>    
+            <h2>{{service.match}}</h2>
 
-          <ion-row>  
-              
-        
-            <ion-col>
-              <button ion-button icon-start clear small (click)="open(service)">
-                  <ion-icon name="clipboard"></ion-icon>
-                 Abrir
+            <p *ngIf="service.datetimeStr"><b>Atualizado em:  </b>{{service.datetime}}</p>          
+            <p><b>URL:  </b><a href={{service.link}}>Clique para abrir</a></p>              
+            <p *ngIf="service.status"><b>Status:  </b>{{service.status}}</p>
+
+            <p *ngIf="service.bet && dataInfo.userInfo && dataInfo.userInfo.isAdmin"><b>Investimento:  </b>R${{service.bet}}</p>
+            <p *ngIf="service.match"><b>Palavra-chave:  </b>{{service.match}}</p>
+            <p *ngIf="service.msgShow"><b>Mensagem:  </b>{{service.msg}}</p>    
+
+          <ion-row>               
+  
+            <ion-col *ngIf="! service.expand">
+                <button ion-button icon-start clear small (click)="expand(service)">
+                    <ion-icon name="arrow-down"></ion-icon>
+                   Mostrar informações
+                </button>
+            </ion-col>      
+  
+            <ion-col *ngIf="service.expand">
+              <button ion-button icon-start clear small (click)="expand(service)">
+                  <ion-icon name="arrow-down"></ion-icon>
+                 Esconder informações
               </button>
-            </ion-col>  
-             
+          </ion-col>   
   
           </ion-row>
 

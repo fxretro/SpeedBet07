@@ -112,89 +112,6 @@ def get_tokens():
 
 
 
-###########################################################
-# Monitoring Master - Mega Bolt
-###########################################################
-
-
-def add_url_master(msg, match, url, bet_type, uid, bet):
-  key = db.generate_key()
-  db.child("betAviso/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid, 'bet_type': bet_type, 'bet': bet})
-  return key
-
-
-def add_url_client(msg, url, uid):
-  key = db.generate_key()
-  db.child("betAviso/"+key).update({'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': 'Criado', 'uid': uid})
-  return key
-
-
-
-def update_url_master(key, status):  
-  db.child("betAviso/"+key).update({'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'status': status})
-
-
-def get_urls():
-
-    all_users = db.child("betAviso").get()
-    urlProduct = []
-        
-    for user in all_users.each():
-
-         product = user.val()           
-         urlProduct.append(product)         
-
-    return urlProduct
-      
-
-def get_urls_key(key):
-
-    all_users = db.child("betAviso").get()
-    urlProduct = []
-        
-    for user in all_users.each():
-
-         if user.key() == key:
-
-          product = user.val()                   
-          urlProduct.append(product)         
-
-    return urlProduct
-
-
-
-###########################################################
-# Monitoring Bets - Mega Bolt
-###########################################################
-
-
-def add_match(match, url, bet_type, uid):
-  
-  key = db.generate_key()
-  db.child("betClientMatch/"+key).update({'match': match,  'link': url, 'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss'), 'uid': uid, 'bet_type': bet_type})
-  return key
-
-
-def get_urls_match():
-
-  urlProduct = []  
-
-  try:
-
-    all_users = db.child("betClientMatch").get()      
-        
-    for user in all_users.each():
-
-         product = user.val()           
-         urlProduct.append(product)         
-
-    return urlProduct
-  
-  except:
-    return urlProduct
-
-
-
 
 ###########################################################
 # Monitoring Master - Tiro Seco Virtual
@@ -273,76 +190,6 @@ def get_urls_match_tsv():
 
 
 ###########################################################
-# Monitoring Bets - Bruno jogador
-###########################################################
-
-
-
-def add_match_jogador(msg):
-  
-  key = db.generate_key()
-  db.child("betJogador/"+key).update({'msg': msg,  'datetime': moment.now().format('DD/MM/YYYY hh:mm:ss')})
-  return key
-
-
-def get_urls_jogador():
-
-  urlProduct = []  
-
-  try:
-
-    all_users = db.child("betJogador").get()      
-        
-    for user in all_users.each():
-
-         product = user.val()           
-         urlProduct.append(product)         
-
-    return urlProduct
-  
-  except:
-    return urlProduct
-
-
-
-
-
-
-###########################################################
-# Oportunities
-###########################################################
-
-
-def add_oportunity(msg, match, url, uid):
-  key = db.generate_key()
-  db.child("betOportunities/"+key).update({'match': match, 'msg': msg, 'link': url, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'uid': uid})
-  return key
-
-
-
-###########################################################
-# Proxies
-###########################################################
-
-
-def add_proxy(url, port):  
-  db.child("proxies").push({'url': url, 'port': port})
-
-
-def get_proxies():
-
-  proxies = []
-
-  all_proxies = db.child("proxies").get()  
-
-  for px in all_proxies.each():
-    proxy = px.val()     
-    proxies.append(proxy['url']+":"+proxy['port'])    
-
-  return proxies
-
-
-###########################################################
 # Configurations
 ###########################################################
 
@@ -372,39 +219,52 @@ def add_notification(typee, title, msg, tokens):
 
 
 ###########################################################
-# Scrape bet365
+# Scrape 
 ###########################################################
 
+def add_championship_game_today(
+          championship, 
+          date_game, 
+          hour_game, 
+          team_a, 
+          team_b,           
+          odd_a,
+          odd_b,
+          odd_c):  
 
-def add_championship(name):  
+  print('Salvando jogo de campeonato ', championship, date_game, hour_game, team_a, team_b, odd_a, odd_b, odd_c)
 
-  print('Salvando campeonato ', name)
-  db_speed.child("championships").push({'name': name, 'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})
+  db_speed.child("championship_matches_today").push({
+      'championship': championship, 
+      'date_game': date_game, 
+      'hour_game': hour_game, 
+      'team_a': team_a, 
+      'team_b': team_b,       
+      'odd_a': odd_a, 
+      'odd_b': odd_b, 
+      'odd_c': odd_c,       
+      'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})
 
 
 def add_championship_game(
           championship, 
-          timer_now, 
+          date_game, 
+          hour_game, 
           team_a, 
-          team_b, 
-          team_a_score, 
-          team_b_score,
+          team_b,           
           odd_a,
           odd_b,
-          odd_c,
-          event_count):  
+          odd_c):  
 
-  print('Salvando jogo de campeonato ', championship, timer_now, team_a, team_b, team_a_score, team_b_score, odd_a, odd_b, odd_c, event_count)
+  print('Salvando jogo de campeonato ', championship, date_game, hour_game, team_a, team_b, odd_a, odd_b, odd_c)
 
   db_speed.child("championship_matches").push({
       'championship': championship, 
-      'timer_now': timer_now, 
+      'date_game': date_game, 
+      'hour_game': hour_game, 
       'team_a': team_a, 
-      'team_b': team_b, 
-      'team_a_score': team_a_score, 
-      'team_b_score': team_b_score, 
+      'team_b': team_b,       
       'odd_a': odd_a, 
       'odd_b': odd_b, 
-      'odd_c': odd_c, 
-      'event_count': event_count, 
+      'odd_c': odd_c,       
       'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})

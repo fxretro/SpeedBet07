@@ -19,10 +19,12 @@ export class MonitorPage {
   services: Observable<any>;  
   championships: any = []
   championshipsGames: any = []
-
+  matchesArray: any = []
 
   
-  constructor(public navCtrl: NavController, 
+  constructor(
+
+    public navCtrl: NavController, 
     public uiUtils: UiUtilsProvider,    
     public platform: Platform,
     public dataInfo: DataInfoProvider,
@@ -44,13 +46,32 @@ export class MonitorPage {
   }
 
   startInterface(){
-    this.get()
+
+
+    let type = this.navParams.get('payload')
+
+    console.log('Tipo de jogo : ', type)
+
+    if(type === 1)
+      this.get()
+    else 
+      this.getToday()    
+    
   }
 
 
   get(){
         
-    this.services = this.db.getChampionships()
+    this.services = this.db.getChampionshipsGames()
+
+    this.services.subscribe(data => {
+      this.getCallback(data)
+    })
+  }
+
+  getToday(){
+        
+    this.services = this.db.getChampionshipsGames()
 
     this.services.subscribe(data => {
       this.getCallback(data)
@@ -59,70 +80,31 @@ export class MonitorPage {
 
   getCallback(data){
 
+    this.matchesArray = []
+    this.championships = []
+    this.championshipsGames = []
+
+
     let loading = this.uiUtils.showLoading(this.dataInfo.pleaseWait)    
     loading.present() 
     
     data.forEach(element => {      
 
-      let info = element.payload.val()    
+      let info = element.payload.val()          
       this.championships.push(info)        
+
+      
+      this.matchesArray.push({name: info.team_a})
+      this.matchesArray.push({name: info.team_b})
+
     });
 
     loading.dismiss()
 
-    this.getMatches()
-
   }
 
-
-  getMatches(){
-
-
-    let loading = this.uiUtils.showLoading(this.dataInfo.pleaseWait)    
-    loading.present() 
-
-    this.db.getChampionshipsGames()
-    .subscribe(data => {
-
-
-      this.getMatchesCallback(data)
-      loading.dismiss()
-
-
-    })
-  }
-
-  getMatchesCallback(data){
-    
-    data.forEach(element => {      
-
-      let info = element.payload.val()       
-      this.championshipsGames.push(info)        
-
-    });
-
-    this.championships.forEach(element => {
-
-      let name = element.name
-      element.matches = []
-
-      this.championshipsGames.forEach(element1 => {        
-        
-
-        if(!element1.timer_now)
-          element1.timer_now = "00:00"        
-
-        if(element1.championship === name){
-          element.matches.push(element1)
-        }
-        
-      });
-      
-    });
 
   
-  }
-
  
   goBack(){
     this.navCtrl.pop()
@@ -149,6 +131,41 @@ export class MonitorPage {
       this.iab.create(url, '_blank', options);    
     else 
       this.iab.create(encodeURI(url), '_system', options);
+  }
+
+
+  matchChanged(event){
+
+    console.log('Procurando jogo  ',event.value.name)
+    
+    let tmp = []
+
+    this.championships.forEach(element => {
+
+      if(! tmp.includes(element)){
+
+        if(element.team_a && element.team_a === event.value.name){              
+          element.push(element)
+
+          tmp.push(element)
+
+        }                          
+
+        else if(element.team_b && element.team_b === event.value.name){
+          element.push(element)
+          tmp.push(element)
+        }
+
+      }
+      
+    });
+
+
+    this.championships = tmp
+
+    console.log(this.championships)
+
+    
   }
 
 

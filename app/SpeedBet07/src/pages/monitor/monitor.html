@@ -18,38 +18,49 @@
 
 <ion-content class="trips detail-bg">
 
+  <ion-item  no-lines>
+    <ion-label stacked>{{dataText.search}}</ion-label>
+    
+    <ionic-selectable
+    
+      item-content 
+      [(ngModel)]="client"
+      [items]="matchesArray"
+      itemValueField="name"
+      itemTextField="name"
+      [canSearch]="true"
+      
+      (onChange)="matchChanged($event)">
+    </ionic-selectable>
+  </ion-item>
+
   <ion-list padding>    
 
-      <ion-card class="trip card" text-wrap *ngFor="let service of championships" no-lines>
+      <ion-card class="trip card" text-wrap *ngFor="let match of championships" no-lines>
 
         <ion-item>         
           
-            <ion-list-header color="primary">{{service.name}}</ion-list-header>  
+            <ion-list-header color="primary">{{match.championship}}</ion-list-header>  
             
-            <ion-item *ngFor="let match of service.matches">
 
-          
-              <p><b>Tempo agora: {{match.timer_now}} </b></p> 
-              <p><b>Jogo:</b> {{match.team_a}} <b>{{match.team_a_score}}</b> x <b>{{match.team_b_score}}</b> {{match.team_b}}</p>   
+            <p><b>Data: {{match.date_game}} {{match.hour_game}} </b></p> 
+            <p><b>Jogo:</b> {{match.team_a}} x {{match.team_b}}</p>                 
+            <p><b>Odd Casa: </b> {{match.odd_a}}</p>
+            <p><b>Odd Empate: </b> {{match.odd_b}}</p>
+            <p><b>Odd Visitante: </b> {{match.odd_c}}</p>
+            
+            <ion-row>                
+      
+              <ion-col>
+                <button ion-button icon-start clear small (click)="goPageBets(match)">
+                    <ion-icon name="clipboard"></ion-icon>
+                   Fazer aposta
+                </button>
+              </ion-col>  
+             
+                     
+            </ion-row>
 
-              <p><b>Total de eventos:</b> {{match.event_count}}</p>
-              <p><b>Odd Casa: </b> {{match.odd_a}}</p>
-              <p><b>Odd Empate: </b> {{match.odd_b}}</p>
-              <p><b>Odd Visitante: </b> {{match.odd_c}}</p>
-              
-              <ion-row>                
-        
-                <ion-col>
-                  <button ion-button icon-start clear small (click)="goPageBets(match)">
-                      <ion-icon name="clipboard"></ion-icon>
-                     Fazer aposta
-                  </button>
-                </ion-col>  
-               
-                       
-              </ion-row>
-
-            </ion-item>
                  
         </ion-item>
                                                                 

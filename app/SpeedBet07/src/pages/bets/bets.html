@@ -19,7 +19,7 @@
 
 <ion-content class="trips detail-bg">
 
-  <ion-list>  
+  <ion-list  no-lines no-padding>  
 
     <ion-card class="trip card" text-wrap no-lines  *ngIf="payload">
 
@@ -43,7 +43,7 @@
 
       </ion-item>       
       
-      <ion-item no-lines>    
+      <ion-item no-lines *ngIf="dataInfo.userInfo.userType !== 3">    
 
         <ion-label stacked>{{dataText.selectClients}}</ion-label>  
         <ion-select [(ngModel)]="client" (ionChange)="clientChanged()">         
@@ -75,11 +75,8 @@
   
   <ion-list>        
         
-      <button ion-button block class="btn bg-theme mrg-bt-10 text-white" (click)="enviaQuickRun()">
-
-        <ion-icon name="md-send"  item-start style="margin-right: 15px;"></ion-icon>
-        Enviar R$ {{finalValue}}
-
+      <button ion-button block class="btn bg-theme mrg-bt-10 text-white" (click)="enviaQuickRun()" [disabled]="finalValue <= 0">
+        <ion-icon name="md-send"  item-start style="margin-right: 15px;"></ion-icon>Enviar R$ {{finalValue}}
       </button>               
 
     </ion-list>

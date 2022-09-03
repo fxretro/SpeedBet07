@@ -103,7 +103,7 @@ export class SignupPage {
   }
 
   
-  signupUser(){           
+  signupUser(userType){           
 
     let alert = this.uiUtils.showConfirm("Atenção", "Ao cadastrar você aceita os termos de uso e privacidade.") 
 
@@ -112,7 +112,7 @@ export class SignupPage {
       if(result){              
 
         this.storage.set('ion_did_tutorial', false).then(res => {
-          this.signupContinue()
+          this.signupContinue(userType)
         });   
 
       }
@@ -121,7 +121,7 @@ export class SignupPage {
     }) 
   }
 
-  signupContinue(){
+  signupContinue(userType){
     
     let loading = this.uiUtils.showLoading(this.dataText.pleaseWait)    
     loading.present()     
@@ -131,7 +131,7 @@ export class SignupPage {
     .then( ()  => {
 
       loading.dismiss().then( () => {          
-          this.signupUserFinish()
+          this.signupUserFinish(userType)
         });          
 
     }, (error) => {
@@ -155,14 +155,16 @@ export class SignupPage {
   }
   
   
-  signupUserFinish(){    
+  signupUserFinish(userType){  
+    
+    
     let loading = this.uiUtils.showLoading("Criando perfil")    
     loading.present() 
 
 
     let self = this
 
-    this.db.addUserStart(this.email, 1, this.fullname, this.dataInfo.defaultState).then( () => {   
+    this.db.addUserStart(this.email, userType, this.fullname, this.dataInfo.defaultState).then( () => {   
       
       if(loading)
           loading.dismiss()

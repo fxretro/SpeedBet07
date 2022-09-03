@@ -34,38 +34,50 @@
     </ionic-selectable>
   </ion-item>
 
-  <ion-list padding>    
+  <ion-list no-padding>    
 
-      <ion-card class="trip card" text-wrap *ngFor="let match of championships" no-lines>
-
-        <ion-item>         
+      <ion-item text-wrap *ngFor="let match of championships" no-lines no-padding>
           
-            <ion-list-header color="primary">{{match.championship}}</ion-list-header>  
+            <ion-list-header color="primary">{{match.championship}} </ion-list-header>   
             
+            <ion-col col-2>
 
-            <p><b>Data: {{match.date_game}} {{match.hour_game}} </b></p> 
-            <p><b>Jogo:</b> {{match.team_a}} x {{match.team_b}}</p>                 
-            <p><b>Odd Casa: </b> {{match.odd_a}}</p>
-            <p><b>Odd Empate: </b> {{match.odd_b}}</p>
-            <p><b>Odd Visitante: </b> {{match.odd_c}}</p>
+              {{match.date_game}}
+              {{match.hour_game}}
             
+            </ion-col>
+
+            <ion-col>{{match.team_a}} x {{match.team_b}}</ion-col>
+                                      
             <ion-row>                
       
               <ion-col>
-                <button ion-button icon-start clear small (click)="goPageBets(match)">
-                    <ion-icon name="clipboard"></ion-icon>
-                   Fazer aposta
+                <button ion-button icon-start clear small (click)="goPageBets(match, 1)" color="secondary">
+                    <ion-icon name="md-home"></ion-icon>
+                    {{match.odd_a}}
                 </button>
               </ion-col>  
-             
-                     
+
+              <ion-col>
+                <button ion-button icon-start clear small (click)="goPageBets(match, 2)" color="primary">
+                    <ion-icon name="md-home"></ion-icon>
+                    {{match.odd_b}}
+                </button>
+              </ion-col>  
+
+              <ion-col>
+
+                <button ion-button icon-start clear small (click)="goPageBets(match, 3)" color="danger">
+                    <ion-icon name="md-home"></ion-icon>
+                    {{match.odd_c}}
+                </button>
+              </ion-col>  
+              
             </ion-row>
 
                  
         </ion-item>
-                                                                
-    </ion-card>    
-    
+                                                                    
 
   </ion-list>
 

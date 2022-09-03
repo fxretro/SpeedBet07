@@ -73,7 +73,10 @@
     
      
     <button ion-button block full text-uppercase color="light" [disabled]="!tel || !fullname || !dataInfo.appUserType || !email || !password || password != password1"      
-      class="mgt-15 text-white pink-vs-red pull-right uppercase fw-600 spacing-1 fs-12" (click)="signupUser()">Adicionar</button>        
+      class="mgt-15 text-white pink-vs-red pull-right uppercase fw-600 spacing-1 fs-12" (click)="signupUser(3)">ADICIONAR CLIENTE</button>        
+
+      <button ion-button block full text-uppercase color="light" [disabled]="!tel || !fullname || !dataInfo.appUserType || !email || !password || password != password1"      
+      class="mgt-15 text-white pink-vs-red pull-right uppercase fw-600 spacing-1 fs-12" (click)="signupUser(2)">ADICIONAR CAMBISTA</button>      
 
     
   </ion-list>      

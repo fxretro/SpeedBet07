@@ -10,7 +10,7 @@
     
     <ion-list no-lines>
 
-      <ion-row>
+      <ion-row  *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3">
         <ion-col>
           <ion-item [class.no-border]="platform.is('core')" no-lines>
             <ion-label stacked>{{dataText.startDate}}</ion-label>
@@ -31,7 +31,7 @@
 
         <ion-col>
                   
-          <ion-item  no-lines>
+          <ion-item  no-lines *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3">
             
             <ion-label>{{dataText.clients}}</ion-label>
             <ionic-selectable
@@ -48,6 +48,13 @@
     
         </ion-col>       
 
+      </ion-row>
+
+      <ion-row>
+        <ion-item>
+          <ion-label stacked>Código de identificação</ion-label>
+          <ion-input type="text" [(ngModel)]="code" [attr.maxlength]="18" (keyup.enter)="codeChanged()" (ionBlur)="codeChanged()"></ion-input>
+        </ion-item>          
       </ion-row>
     
 
@@ -70,7 +77,7 @@
       </ion-card>
     </ion-list>
 
-    <ion-list *ngIf="worksArray.length > 0"> 
+    <ion-list *ngIf="worksArray.length > 0"  no-lines no-padding> 
 
       <ion-list-header class="bg-theme text-white" *ngIf="worksArray && worksArray.length > 0">{{dataText.resumeServices}}</ion-list-header>
 
@@ -90,20 +97,15 @@
       <ion-card class="trip card" text-wrap *ngFor="let work of worksArray" no-lines>
 
         <ion-item>
-          
-            <ion-avatar item-start>
-              <img src="./assets/imgs/logo.png" *ngIf="! work.url">
-              <img src="{{work.url}}" *ngIf="work.url">
-            </ion-avatar>
-
-            <!--<p><b>{{dataText.key}}:</b> {{work.key}} </p>            -->
-
-            <p><b>{{dataText.clients}}:</b> {{work.cliente}} </p>
+                   
+            <p *ngIf="work.id"><b>Identificador:</b> {{work.id}} </p>
+            <p *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3"><b>{{dataText.clients}}:</b> {{work.cliente}} </p>
             <p *ngIf="work.datetimeStr"><b>{{dataText.datetime}}:</b> {{work.datetimeStr}} </p>
 
             <p><b>Aposta:</b> {{work.service}} </p>
-            <p><b>Valor aposta:</b> R$ {{work.finalValue}} </p>
-            <p><b>Valor receber:</b> R$ {{work.finalValue}} </p>
+            <p><b>Status:</b> {{work.status}} </p>
+            <p><b>Valor aposta:</b> R${{work.finalValue}} </p>
+            <p><b>Valor receber:</b> R${{work.finalValueReceived}} </p>
 
             <ion-card-content style="margin-top: 10px;" *ngIf="work.expand">                    
 
@@ -133,6 +135,22 @@
                     {{dataText.less}}
                 </button>
               </ion-col>
+
+              <ion-col *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && work.status === 'Aguardando confirmação'">
+                <button ion-button icon-start clear small (click)="changeStatus(work)" color="secondary">                                                                            
+                    <ion-icon name="clipboard"></ion-icon>                        
+                    Confirmado
+                </button>
+              </ion-col>
+
+              <ion-col  *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && work.status === 'Confirmado'">
+                <button ion-button icon-start clear small (click)="changeStatus(work)" color="danger">                                                                            
+                    <ion-icon name="clipboard"></ion-icon>                        
+                    Aguardando confirmação
+                </button>
+              </ion-col>
+
+              
 
             </ion-row>
             

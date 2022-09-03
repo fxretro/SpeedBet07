@@ -48,8 +48,8 @@ export class HistoryPage {
   isReportOpen: Boolean = false
   textHeader: string = "Relatórios"
   
-  tablePrice: any  
   status: string = "" 
+  code: string = "" 
 
   constructor(public navCtrl: NavController, 
     public uiUtils: UiUtilsProvider,    
@@ -84,8 +84,6 @@ export class HistoryPage {
     if(statustmp)
       this.status = statustmp    
     
-    this.tablePrice = this.dataInfo.tablePrice   
-
     this.selectedDateEnd = moment().format() 
     this.selectedDate = moment().startOf('month').format() 
     
@@ -93,6 +91,10 @@ export class HistoryPage {
     this.getClients()
   
   }
+
+
+
+  
 
   getClients(){
     
@@ -112,29 +114,28 @@ export class HistoryPage {
       let info = element.payload.val()
       info.key = element.payload.key
       
-      if(info.status !== 'Desativado')
-      this.clientsWorkersArray.push(info)                                                     
+      if(info.status !== 'Desativado'){
+
+        if(this.dataInfo.userInfo.userType === 1){
+          this.clientsWorkersArray.push(info)                                                     
+        }
+
+        else if(this.dataInfo.userInfo.uid === info.cambista){
+          this.clientsWorkersArray.push(info)                                                     
+        }
+
+
+      }
+      
               
     });
 
   }
 
- 
-  workersChanged(event){    
-
-    console.log('modificado')
-    console.log(event)
-
-
-    //this.get()
-  }
-
   clientChange(event){    
 
     console.log('modificado: ')
-    console.log(event.value.uid)
-
-    // this.get()
+    console.log(event.value.uid)    
   }
 
   clear(){    
@@ -150,7 +151,10 @@ export class HistoryPage {
   }
 
   clearMoney(){
+
+
     this.totalMoney = 0
+    this.totalComission = 0
   }
 
   showReport(){
@@ -182,7 +186,7 @@ export class HistoryPage {
     this.clearMoney()
 
     this.totalJobs = 0
-    
+    this.totalFinal = 0
     this.worksArray= []    
     this.reportsArray = []    
   
@@ -231,28 +235,51 @@ export class HistoryPage {
     
   worksCallback(data){   
     
-    this.worksArray = []
+    
 
     data.forEach(element => {
 
       let info = element.payload.val()
       info.key = element.payload.key     
       info.expand = false
-      info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")
-      
-      console.log(info)
-      
-      this.worksArray.push(info)
+      info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")           
 
-      this.totalComission += Number(info.finalValue)
-      this.totalJobs++
 
-      this.totalComissionStr = this.totalComission.toFixed(2)
+      if(this.dataInfo.userInfo.userType !== 3){
+
+
+        if(this.dataInfo.userInfo.uid === info.uid ||
+          this.dataInfo.userInfo.userType ||          
+          info.uid === info.cambista){
+
+
+          this.addArray(info)
+
+        }
+
+
+        
+      }
+        
+                  
 
     });    
 
 
     this.organizaFila()
+
+  }
+
+
+  addArray(info){
+
+    console.log(info)
+
+    this.worksArray.push(info)
+    this.totalComission += Number(info.finalValue)
+    this.totalJobs++
+
+    this.totalComissionStr = this.totalComission.toFixed(2)
 
   }
 
@@ -388,6 +415,82 @@ export class HistoryPage {
 
   get(){
     this.getHistory()
+  }
+
+  codeChanged(){
+
+    let loading = this.uiUtils.showLoading(this.dataText.loading)
+    loading.present()    
+
+    let tmp = this.selectedDate.replace("-03:00", "")    
+    let dateYear = moment(tmp).format('YYYY')  
+    let dateMonth = moment(tmp).format('MM')  
+
+    this.clearMoney()
+
+    this.totalJobs = 0
+    this.totalFinal = 0
+    this.worksArray= []    
+    this.reportsArray = []    
+  
+
+    this.works = this.db.getAllWorksAcceptedsDate(dateYear, dateMonth)
+      
+    this.worksSubscription = this.works.subscribe( data => {
+      this.codeChangedCallback(data)      
+      loading.dismiss()    
+    })
+  }
+
+  codeChangedCallback(data){
+
+
+    this.worksArray = []
+
+    data.forEach(element => {
+
+      let info = element.payload.val()
+      info.key = element.payload.key     
+      info.expand = false
+      info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")      
+      
+
+
+      if(info.id && info.id === this.code)
+        this.addArray(info)
+                  
+
+    });    
+
+
+    this.organizaFila()
+
+  }
+
+  changeStatus(work){
+  
+
+    let msg  = work.status === "Aguardando confirmação" ? 
+          "Deseja modificar o status para <b>CONFIRMADO</b>?" : 
+          "Deseja modificar o status para <b>AGUARDANDO CONFIRMAÇÃO</b>?"
+
+    
+    let alert = this.uiUtils.showConfirm(this.dataText.atention, msg)  
+    alert.then((result) => {
+
+      if(result){              
+        work.status === "Aguardando confirmação" ? work.status = 'Confirmado' : work.status = 'Aguardando confirmação'  
+
+        this.db.updateBetStatus(work.key, work.status)
+        .then(() => {
+
+          this.uiUtils.showAlertSuccess("Status modificado com sucesso!")
+        })
+
+      }                    
+    })
+
+    
   }
 
 

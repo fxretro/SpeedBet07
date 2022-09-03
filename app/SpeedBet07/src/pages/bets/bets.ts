@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DataTextProvider } from '../../providers/data-text/data-text'
 
+
 @IonicPage()
 @Component({
   selector: 'page-bets',
@@ -159,10 +160,20 @@ export class BetsPage {
       info.key = element.payload.key
 
       if(info.status !== 'Desativado'){
-        
-        this.usersClientsArray.push(info)
 
-      }      
+        console.log(this.dataInfo.userInfo.uid, info.cambista)
+
+        if(this.dataInfo.userInfo.userType === 1){
+          this.usersClientsArray.push(info)                                                     
+        }        
+
+        else if(this.dataInfo.userInfo.uid === info.cambista){
+          this.usersClientsArray.push(info)                                                     
+        }
+
+
+      }
+       
         
       
     });
@@ -175,7 +186,7 @@ export class BetsPage {
 
   loadValues(){
     this.payload = this.navParams.get('payload')
-    console.log(this.payload)
+    console.log(this.payload)    
   }
 
 
@@ -207,64 +218,32 @@ export class BetsPage {
 
       this.servicesArray.push(info)
     });
+
+    this.loadOddSelected()
   }
 
+  loadOddSelected(){
+
+    if(this.payload){
+
+      if(this.payload.type === 1)
+        this.selectedService = "Casa"
+      
+      if(this.payload.type === 2)
+        this.selectedService = "Empate"
+      
+      if(this.payload.type === 3)
+        this.selectedService = "Fora"
+      
+
+    }
+  }
    
   
-  add(){
-
-    let loading = this.uiUtils.showLoading(this.dataText.pleaseWait)    
-    loading.present()  
-    
-    let service = {
-
-
-      name: this.selectedService, 
-      total: this.finalValue, 
-      paymentKey: this.dataText.notAvailable, 
-      paymentPath: this.dataText.notAvailable, 
-      paymentMethod: this.dataText.notAvailable, 
-      clientName: this.client,            
-      professionalName: this.dataText.notAvailable,
-      uid: this.dataInfo.userInfo.uid
-    }    
-
-    this.dataInfo.userInfo.carInfo = service    
-    let data = {}
-
-    this.storageNative.set('last', data);    
-    this.uiUtils.showAlertSuccess(this.dataText.sucess)
-
-    loading.dismiss()
-
-    this.clear()
-
-  }  
-
+  
  
 
   enviaQuickRun(){
-
-    this.checkAddress()
-    .then(() => {
-        this.enviaQuickRunOk()
-    })  
-    .catch(() => {
-
-      this.uiUtils.showAlertError(this.dataText.errorSent5)
-    })
-          
-  }
-
-  checkAddress(){
-
-    return new Promise<void>(function(resolve, reject){      
-      resolve()
-
-    });  
-  }
-
-  enviaQuickRunOk(){
     
     this.requestSent = true
     this.enviaQuickRunFinish()
@@ -273,6 +252,9 @@ export class BetsPage {
 
   enviaQuickRunFinish(){
 
+
+    if(!this.client)
+      this.client = "Avulso"
     
     let data = {
 
@@ -282,13 +264,19 @@ export class BetsPage {
       service: this.selectedService, 
       cliente: this.client,
       cambista: this.dataInfo.userInfo.uid,
-      datetime: moment().format()
+      datetime: moment().format(),
+      status: this.dataInfo.userInfo.userType === 3 ? "Aguardando confirmação" : "Confirmado",
+      id: this.makeid(6)
 
     }
+
+
 
     this.enviaQuickRunFim(data)
                       
    }
+
+  
 
    enviaQuickRunFim(data){
    
@@ -298,16 +286,19 @@ export class BetsPage {
 
     this.storageNative.set('lastQuick', data);     
     console.log(data)
+        
             
     this.db.addBet(data)
 
       .then(() => {              
 
         loading.dismiss()
-        this.sendCallback()
+        this.sendCallback(data)
                 
       })      
-      .catch(() => {
+      .catch((error) => {
+
+        console.log(error)
         this.uiUtils.showAlertError("Falha ao realizar aposta")      
       })
 
@@ -315,11 +306,10 @@ export class BetsPage {
    }
 
 
-   sendCallback(){
+   sendCallback(data){
 
     this.navCtrl.pop()
-    this.uiUtils.showAlertSuccess("Aposta realizada com sucesso")   
-
+    this.uiUtils.showAlert("Aposta realizada com sucesso", "Identificador <h1 style=\" text-align: center;\">" + data.id + "</h1>")   .present()
     this.requestSent = false
     this.anArray = []    
     
@@ -347,9 +337,19 @@ export class BetsPage {
    
 
     goPageReports(){
-
       this.navCtrl.push('HistoryPage', {payload: this.payload})
     }
+
+    makeid(length) {
+      var result           = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * 
+   charactersLength));
+     }
+     return result;
+  }
 
    
 }

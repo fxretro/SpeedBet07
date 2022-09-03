@@ -47,16 +47,7 @@ export class MonitorPage {
 
   startInterface(){
 
-
-    let type = this.navParams.get('payload')
-
-    console.log('Tipo de jogo : ', type)
-
-    if(type === 1)
-      this.get()
-    else 
-      this.getToday()    
-    
+    this.get()
   }
 
 
@@ -68,16 +59,7 @@ export class MonitorPage {
       this.getCallback(data)
     })
   }
-
-  getToday(){
-        
-    this.services = this.db.getChampionshipsGames()
-
-    this.services.subscribe(data => {
-      this.getCallback(data)
-    })
-  }
-
+  
   getCallback(data){
 
     this.matchesArray = []
@@ -101,39 +83,19 @@ export class MonitorPage {
 
     loading.dismiss()
 
-  }
-
-
-  
+  }  
  
   goBack(){
     this.navCtrl.pop()
   }
 
-  expand(work){
-    work.msgShow = !work.msgShow
+  goPageBets(work, type){
 
-  }
-
-
-  goPageBets(work){
-    console.log(work)
+    work.type = type
     this.navCtrl.push('BetsPage', {payload: work})
   }
   
-  open(service){
-
-    let url = service.link
-    
-    let options = 'location=no';
-
-    if(this.dataInfo.isWeb)
-      this.iab.create(url, '_blank', options);    
-    else 
-      this.iab.create(encodeURI(url), '_system', options);
-  }
-
-
+ 
   matchChanged(event){
 
     console.log('Procurando jogo  ',event.value.name)
@@ -162,9 +124,6 @@ export class MonitorPage {
 
 
     this.championships = tmp
-
-    console.log(this.championships)
-
     
   }
 

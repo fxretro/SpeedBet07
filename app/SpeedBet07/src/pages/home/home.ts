@@ -76,19 +76,14 @@ export class HomePage {
     this.events.publish(this.dataInfo.eventFcmStart, 1);    
   }
  
-  goPageSettings(){
-    this.navCtrl.push('SettingsPage')
-  } 
-
-
+  
   goHistoryPage(){        
     this.navCtrl.push('HistoryPage')
   }
 
   
-  goPageOportunities(match_type){
-    console.log(match_type)
-    this.navCtrl.push('MonitorPage', {payload: match_type})
+  goPageOportunities(){    
+    this.navCtrl.push('MonitorPage')
   }
 
   goPageRegister(){

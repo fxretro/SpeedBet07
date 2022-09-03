@@ -24,21 +24,17 @@
   <ion-content padding>
 
     <ion-list padding no-lines>
+      
 
-      <ion-card  (click)="goPageRegister()">
+      <ion-card  (click)="goPageRegister()" *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType != 3">
         <img src="assets/imgs/cadastro.png"/>        
       </ion-card>
 
-      <ion-card  (click)="goPageClients()">
+      <ion-card  (click)="goPageClients()"  *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType != 3">
         <img src="assets/imgs/clientes.png"/>        
-
       </ion-card>
 
-      <ion-card  (click)="goPageOportunities(1)">
-        <img src="assets/imgs/oportunidades.png"/>        
-      </ion-card>
-      
-      <ion-card  (click)="goPageOportunities(2)">        
+      <ion-card  (click)="goPageOportunities()">        
         <img src="assets/imgs/asiaticos.png"/>        
       </ion-card>      
 

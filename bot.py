@@ -5,7 +5,7 @@ from uteis.helper import *
 import configparser
 import asyncio
 import uteis.database as Db
-
+import re
 
 ###########################################################
 # Variáveis 
@@ -105,14 +105,14 @@ def parse_robot_kabum_tirosecovirtual(configs, msg, bet_type):
     message = msg
     msg = message.split("\n")            
 
-    championship = msg[2]
+    championship = msg[2][:-1]
 
     match1 = msg[6]
     match2 = msg[7]
     match3 = msg[8]
     match4 = msg[9]
 
-    url = msg[13]
+    url = re.search("(?P<url>https?://[^\s]+)", message).group("url")
     matches = [championship, match1, match2, match3, match4]
 
     parse_robot_tirosecovirtual_continue(configs, matches, url, bet_type, message)
@@ -128,64 +128,6 @@ def parse_robot_tirosecovirtual_continue(configs, text, url, bet_type, message):
     if configs.get('only_save') == 0:
         bot_futebol_virtual_ambos(config, configs, text, url, key)        
 
-
-
-###########################################################
-# Modo cliente - Executa direto do banco de dados
-###########################################################
-
-
-def refresh_bets():
-
-    log('Inicializando verificação')
-
-    bets = Db.get_urls()            
-    my_matches = Db.get_urls_match()      
-    today = datetime.datetime.now() 
-    
-    try:        
-
-        for bet in bets:
-
-            uid_match = bet.get("uid")            
-
-            if uid_match is not uid:
-
-                datetime_match = bet.get("datetime")
-
-                match = bet.get("link")            
-                msg = bet.get("msg")    
-                bet_type = bet.get("bet_type")
-                
-                now = datetime.datetime.strptime(datetime_match, '%d/%m/%Y %H:%M:%S')            
-                now = now + datetime.timedelta(seconds=int(timer_check))            
-                        
-                if now > today:
-
-                    if not match in my_matches:     
-
-                        my_matches.append(match)                 
-                        check_status(msg, bet_type)
-                        Db.add_match(datetime_match, match, bet_type, uid)
-                
-        log('Verificação finalizada. Aguardando...')
-
-
-    except exception as e:
-        log('Não foi possível verificar. Aguardando...', colour='red')
-        pass
-
-
-###########################################################
-# Modo cliente - Executa direto do banco de dados
-###########################################################
-
-
-def main_sync():
-
-    log('Inicializando sistema modo database')               
-    setInterval(refresh_bets, int(timerr))
-    
 
 
 ###########################################################
@@ -205,7 +147,6 @@ async def main():
 
 
 asyncio.run(main())
-#main_sync()    
     
 
     

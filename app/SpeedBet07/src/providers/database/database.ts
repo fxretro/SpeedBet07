@@ -50,8 +50,7 @@ export class DatabaseProvider {
     let uid = this.authProvider.currentUser().uid   
     let path = "/userProfile/" + state_
 
-    let status = "Perfil verificado"   
-          
+    let status = "Perfil verificado"             
     let credits = 9999
             
     return this.db.list(path)
@@ -300,6 +299,15 @@ export class DatabaseProvider {
     return this.db.list(path).push(data)
   }
 
+  updateBetStatus(uid_, status_){
+
+    let dateYear = moment().format('YYYY')  
+    let dateMonth = moment().format('MM')     
+    let path = "/betsDone/"  + this.dataInfo.defaultState + "/" +  dateYear + "/" + dateMonth
+
+    return this.db.list(path).update(uid_, { status: status_ })
+  }
+
   getAllWorksAcceptedsDate(year, month){  
     
     let path = '/betsDone/'+ this.dataInfo.defaultState + "/" +  year + "/" + month
@@ -309,6 +317,22 @@ export class DatabaseProvider {
       ref => ref.orderByKey())
       .snapshotChanges()     
   } 
+
+
+  getBetId(id){    
+  
+    let dateYear = moment().format('YYYY')  
+    let dateMonth = moment().format('MM')  
+    let path = '/betsDone/'+ this.dataInfo.defaultState + "/" +  dateYear + "/" + dateMonth
+
+    console.log(path)
+
+    return this.db.list("/betsDone/" + path, 
+      ref => ref.orderByChild('id')
+      .startAt(id)
+      .endAt(id + "\uf8ff"))
+      .snapshotChanges()        
+  }
 
 
     /****************

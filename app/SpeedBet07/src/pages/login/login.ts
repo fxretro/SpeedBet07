@@ -44,12 +44,7 @@ export class LoginPage {
     
     this.autoLogin = this.navParams.get("autoLogin")
 
-    //this.username = "admin@dbltecnologia.com.br"        
-    //this.password = "123456"    
-
-
     this.dataInfo.isHome = false
-
 
     if(this.autoLogin == undefined)
       this.autoLogin = true      
@@ -63,25 +58,13 @@ export class LoginPage {
       });                  
     }
 
-    
-
-    // this.loginDev()
         
-  }  
-
-  loginDev(){          
-    
-    this.username = "admin@dbltecnologia.com.br"        
-    this.password = "123456"    
-    this.loginUser()    
-  }
+  }    
   
   
   goHome(){    
-
     
     this.userConfig = this.db.getUser().subscribe(data => {  
-      
       
       this.goPageHomeUserContinue(data)            
         this.userConfig.unsubscribe()
@@ -97,15 +80,9 @@ export class LoginPage {
     data.forEach(element => {               
       this.dataInfo.userInfo = element.payload.val()
       this.dataInfo.userType = element.payload.val().userType
-      
-      
+            
     });
-
-
-
-
-    
-      
+          
     this.getConfigurations() 
     
   }
@@ -114,7 +91,6 @@ export class LoginPage {
     
     let sub = this.db.getAllSettings()  
     .subscribe(data => {
-
 
       this.getCallback(sub, data)
       
@@ -127,13 +103,8 @@ export class LoginPage {
 
       let uid = this.authProvider.currentUserUid()    
       
-
       if(uid === element.uid){
-
           this.dataInfo.configs = element
-
-          
-          console.log(this.dataInfo.configs)
       }
     })
   
@@ -165,21 +136,8 @@ export class LoginPage {
     
     else 
         this.uiUtils.showAlertError("Acesso negado, favor entrar em contato com o suporte")                       
-    
-
 
   }  
-
-
-  
-  goPageDev(){
-            
-    setTimeout(() => {  
-                         
-      // this.navCtrl.setRoot('RegionsPage');
-
-    }, 1000);
-  }
 
   startInterface(){    
     
@@ -191,10 +149,17 @@ export class LoginPage {
         // this.dataInfo.defaultState = data      
 
     })
-
-    
-  
+      
   }  
+
+  loginUserAnon(){
+
+    this.username = "cliente@gmail.com"        
+    this.password = "123456"    
+    this.loginUser()    
+    this.dataInfo.isAdmin = false
+
+  }
 
   loginUser(): void {        
 
@@ -208,6 +173,7 @@ export class LoginPage {
       this.loginContinue(this.username.trim(), this.password.trim())
     }
   }
+
 
   loginContinue(email, pass){
     
@@ -226,20 +192,13 @@ export class LoginPage {
 
       console.log(error)
 
-
       loading.dismiss().then( () => {
         self.uiUtils.showAlert(this.dataText.warning, this.dataInfo.titleAuthError).present()
       });
     });    
   }
 
-  
-
-  selectedStateChanged(){
-
-  }
-
-  
+    
   languageChanged(){
 
     this.languageSelected === 0 ?  this.languageSelected = 1 : this.languageSelected = 0
@@ -258,8 +217,6 @@ export class LoginPage {
                 
     })
    
-
-
   }
 
   goToSignup(): void {

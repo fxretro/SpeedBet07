@@ -299,21 +299,7 @@ export class ClientsPage {
           handler: () => {            
             this.edit(payload_)
           }
-        },        
-        {
-          text: 'Resetar senha',
-          icon: !this.platform.is('ios') ? 'refresh' : null,
-          handler: () => {
-            this.updateProfilePassword(payload_)
-          }
-        },        
-        {
-          text: this.dataText.disableUser,
-          icon: !this.platform.is('ios') ? 'md-close-circle' : null,
-          handler: () => {
-            this.disableUser(payload_)
-          }
-        },                      
+        },                                
         {
           text: this.dataText.remove,
           icon: !this.platform.is('ios') ? 'md-trash' : null,
@@ -376,19 +362,12 @@ export class ClientsPage {
     if(!payload_.uid)
       payload_.uid = payload_.key
                      
-    this.httpd.apiRemoveUser({uid: payload_.uid})
-      .subscribe((result) => {              
+      this.db.updateUserStatus(payload_.uid, 'Removido')
+      .then(() => {
 
         loading.dismiss()
-        this.uiUtils.showAlertSuccess(this.dataText.removeSuccess)
-
-        this.db.updateUserStatus(payload_.uid, 'Removido')
-        .then(() => {
-
-
-          this.reload()
-        })        
-      })    
+        this.reload()
+      })        
   }
 
   disableUser(payload_){

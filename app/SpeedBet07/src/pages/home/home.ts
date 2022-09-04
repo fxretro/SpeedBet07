@@ -55,9 +55,26 @@ export class HomePage {
 
   addServices(){
 
-    this.db.addServices("Casa")
-    this.db.addServices("Empate")
-    this.db.addServices("Fora")
+    //this.db.addServices("Casa")
+    //this.db.addServices("Empate")
+    //this.db.addServices("Fora")
+    this.db.addServices("Mais de 1.5")
+    this.db.addServices("Mais de 2.5")
+    this.db.addServices("Mais de 3.5")
+    this.db.addServices("Mais de 4.5")
+    this.db.addServices("Mais de 5.5")
+
+    this.db.addServices("Menos de 0.5")
+    this.db.addServices("Menos de 1.5")
+    this.db.addServices("Menos de 2.5")
+    this.db.addServices("Menos de 3.5")
+    this.db.addServices("Menos de 4.5")
+    this.db.addServices("Menos de 5.5")
+
+    this.db.addServices("Ambas marcam SIM")
+    this.db.addServices("Ambas marcam NÃO")
+
+    this.db.addServices("Dupla chance CASA ou EMPATE")
 
   }
 
@@ -72,8 +89,8 @@ export class HomePage {
       this.serviceSubscription.unsubscribe()
   }
 
-  startInterface(){
-    this.events.publish(this.dataInfo.eventFcmStart, 1);    
+  startInterface(){    
+    this.events.publish(this.dataInfo.eventFcmStart, 1);   
   }
  
   

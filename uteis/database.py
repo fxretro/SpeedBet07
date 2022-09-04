@@ -246,25 +246,14 @@ def add_championship_game_today(
       'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})
 
 
-def add_championship_game(
-          championship, 
-          date_game, 
-          hour_game, 
-          team_a, 
-          team_b,           
-          odd_a,
-          odd_b,
-          odd_c):  
+def add_championship_game(championship, matches):  
 
-  print('Salvando jogo de campeonato ', championship, date_game, hour_game, team_a, team_b, odd_a, odd_b, odd_c)
+  print('Salvando jogo de campeonato ', championship, matches)
 
-  db_speed.child("championship_matches").push({
+  path = "championship_matches/" + moment.now().format('DDMMYYYY')
+
+  db_speed.child(path).push({
+      'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'),
       'championship': championship, 
-      'date_game': date_game, 
-      'hour_game': hour_game, 
-      'team_a': team_a, 
-      'team_b': team_b,       
-      'odd_a': odd_a, 
-      'odd_b': odd_b, 
-      'odd_c': odd_c,       
-      'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})
+      'matches': matches
+      })

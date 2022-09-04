@@ -10,28 +10,37 @@ import database as Db
 def start():    
 
     with open("/tmp/bet/bet.html") as fp:
-        soup = BeautifulSoup(fp, "lxml")                
+        soup = BeautifulSoup(fp, "lxml")                       
 
-        championship = soup.find(class_="eventlist-country").find(class_="name").getText()        
-        print('Inicializando scrape próximos jogos do campeonato ', championship)
-
-        for all_bets in soup.find_all(class_='containerCards'):                                
-            parse(championship, all_bets)    
+        for all_bets in soup.find_all(class_='eventlistContainer'):                                
+            parse(all_bets)    
 
 
 
-def parse(championship, all_bets):     
+def parse(all_bets):     
     
-    for match in all_bets:
+    for match in all_bets:        
 
-        data       = match.find_all(class_="dateAndHour")[0].find(class_="date").getText()
-        hora       = match.find_all(class_="dateAndHour")[0].find(class_="hour").getText()
-        time_a     = match.find_all(class_="nameTeam")[0].getText()
-        time_b     = match.find_all(class_="nameTeam")[1].getText()
-        odd_casa   = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[0].getText()
-        odd_empate = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[1].getText()
-        odd_fora   = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[2].getText()              
+        championships = match.find_all(class_="pais")
 
-        Db.add_championship_game(championship, data, hora, time_a, time_b, odd_casa, odd_empate, odd_fora)        
+        for championship in championships:
+
+            name         = championship.find_all(class_="eventlist-country")[0].find(class_="name").getText()                
+            matches      = []
+
+            for match in championship.find(class_="eventlist-events").find_all(class_="containerCards"):
+                
+                data         = match.find_all(class_="dateAndHour")[0].find(class_="date").getText()
+                hora         = match.find_all(class_="dateAndHour")[0].find(class_="hour").getText()
+                time_a       = match.find_all(class_="nameTeam")[0].getText()
+                time_b       = match.find_all(class_="nameTeam")[1].getText()
+                odd_casa     = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[0].getText()
+                odd_empate   = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[1].getText()
+                odd_fora     = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[2].getText()              
+
+                matches.append({'data': data, 'hora': hora, 'time_a': time_a, 'time_b': time_b, 'odd_casa': odd_casa, 'odd_empate': odd_empate, 'odd_fora': odd_fora})
+
+
+            Db.add_championship_game(name, matches)        
                                              
 start()

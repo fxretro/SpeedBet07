@@ -41,6 +41,7 @@ export class BetsPage {
   public anArrayRun:any=[];
 
   acceptedsArray: any = []
+  isMultiple: Boolean  = false
 
   constructor(
     public navCtrl: NavController,
@@ -80,9 +81,9 @@ export class BetsPage {
   apostaChanged(){
 
 
-    let odd_a = this.payload.odd_a.replace(',', '.')
-    let odd_b = this.payload.odd_b.replace(',', '.')
-    let odd_c = this.payload.odd_c.replace(',', '.')
+    let odd_a = this.payload.odd_casa.replace(',', '.')
+    let odd_b = this.payload.odd_empate.replace(',', '.')
+    let odd_c = this.payload.odd_fora.replace(',', '.')
 
     this.finalValueReceived = 0
 
@@ -185,8 +186,15 @@ export class BetsPage {
 
 
   loadValues(){
+
+    this.isMultiple = this.navParams.get('isMultiple') 
+
+    if(this.isMultiple){
+      console.log('Multiple')
+    }
+    
     this.payload = this.navParams.get('payload')
-    console.log(this.payload)    
+    
   }
 
 
@@ -224,7 +232,8 @@ export class BetsPage {
 
   loadOddSelected(){
 
-    if(this.payload){
+
+    if(this.payload && this.payload.type){
 
       if(this.payload.type === 1)
         this.selectedService = "Casa"
@@ -349,6 +358,10 @@ export class BetsPage {
    charactersLength));
      }
      return result;
+  }
+
+  addBet(match, type){
+    console.log(match, type)
   }
 
    

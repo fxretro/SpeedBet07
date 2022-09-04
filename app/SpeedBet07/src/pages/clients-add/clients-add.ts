@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, ActionSheetController, Platform, NavParams, MenuController, Events } from 'ionic-angular';
-import { CameraProvider } from '../../providers/camera/camera'
 import { UiUtilsProvider } from '../../providers/ui-utils/ui-utils'
 import { DataInfoProvider } from '../../providers/data-info/data-info'
 import { StorageProvider } from '../../providers/storage/storage';
@@ -8,10 +7,8 @@ import 'rxjs/add/operator/debounceTime';
 import { FormControl } from '@angular/forms';
 import { DatabaseProvider } from '../../providers/database/database';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import * as moment from 'moment';
-import { AuthProvider } from '../../providers/auth/auth';
-import { HttpdProvider } from '../../providers/httpd/httpd';
 import { DataTextProvider } from '../../providers/data-text/data-text'
+import { timestamp } from 'rxjs/operators';
 
 
 
@@ -22,55 +19,13 @@ import { DataTextProvider } from '../../providers/data-text/data-text'
 })
 export class ClientsAddPage {
 
-  @ViewChild('razaoSocialInput') razaoSocialInput;
-  @ViewChild('cnpjInput') cnpjInput;
   @ViewChild('nameInput') nameInput;
-  @ViewChild('lastNameInput') lastNameInput;
-  @ViewChild('addressInput') addressInput;
-  @ViewChild('complementInput') complementInput;
-  @ViewChild('telInput') telInput;
-  @ViewChild('cpfInput') cpfInput;
-  @ViewChild('plateInput') plateInput;
-  @ViewChild('agencyInput') agencyInput;
-  @ViewChild('accountInput') accountInput;  
-  @ViewChild('prefixoInput') prefixoInput;      
 
   public formGroup: FormGroup;  
   
-  public fullname:string = "";
- 	public email:string = "";
-  public password:string = "";
-  public password1:string = "";
-
-  base64Image: string = '';
-  selectedPhoto: any;  
-  selectedBank: string = '';
-  agency: string = '';
-  account: string = '';
-  complement: string = '';  
-  uid_: string = ''
-  description: string = '';
-  item: string = ''
-  cnpj: string;
-  prefixo: string  
-  
-  clientInfo: any = []
-  primeiroUso: Boolean = false;
-  photoChanged: Boolean = false
-  
   searchControl: FormControl;
-  searching: any = false;
-
-  selectedService: string = "Caminhão"
-  plate: string = ""
-
-  services: any = [];  
-
-  state_: string = 'RJ'
-  city_: string = "Rio de Janeiro"
-  citiesArray: any = []
+  searching: any = false;  
   payload: any 
-
 
 
   constructor(
@@ -79,14 +34,11 @@ export class ClientsAddPage {
     public actionsheetCtrl: ActionSheetController,
     public uiUtils: UiUtilsProvider,    
     public storage: StorageProvider, 
-    public camera: CameraProvider,    
     public navParams: NavParams,
     public events: Events,
     public menu: MenuController,
     public db: DatabaseProvider,    
     private formBuilder: FormBuilder,
-    public auth: AuthProvider,
-    public httpd: HttpdProvider,
     public dataText: DataTextProvider,
     public dataInfo: DataInfoProvider) {              
   }
@@ -106,102 +58,28 @@ export class ClientsAddPage {
   startInterface(){
     
     this.payload = this.navParams.get('payload')    
-    this.clear()
-    this.stateChanged(this.dataInfo.defaultState)
-    
 
-    if(this.payload){      
+    if(this.payload)
       this.loadInfo()
-    }
-  }
-  razaoSocialInputChanged(){
-    if(this.cnpjInput)
-      this.cnpjInput.setFocus();
-  }
   
-  cnpjInputChanged(){
-    if(this.nameInput)
-      this.nameInput.setFocus();
   }
 
+ 
   nameInputChanged(){
 
-    if(this.lastNameInput)
-      this.lastNameInput.setFocus();
   }
-
-  lastNameInputChanged(){
-    if(this.addressInput)
-      this.addressInput.setFocus();
-  }
-
-  addressInputChanged(){
-    if(this.complementInput)
-    this.complementInput.setFocus();
-  }
-
-  complementInputChanged(){
-    if(this.telInput)
-      this.telInput.setFocus();
-  }
-
-  cepInputChanged(){
-
-  }
-
-  numeroInputChanged(){
-
-  }
-
-  districtChanged(){
-
-  }
-
-  telInputChanged(){
-    if(this.cpfInput)
-      this.cpfInput.setFocus();
-  }
-
-  cpfnputChanged(){
-
-    if(this.dataInfo.userInfo.userType === 1)
-      this.uiUtils.showAlertSuccess("Favor conferir as informações e clicar em 'Salvar'")
-
-    else {
-
-      if(this.prefixoInput)    
-        this.prefixoInput.setFocus();
-
-    }
-  }
-
+  
 
   initForm() {    
         
-    this.formGroup = this.formBuilder.group({   
-
-      
-      razaoSocial: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      cnpj: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-      name: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-      lastName: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-      address: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(300)]],
-      complement: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(300)]],
-      postCode: ['',[Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
-      numero: ['',[Validators.required, Validators.minLength(0), Validators.maxLength(5)]],      
-      district: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(300)]],
-      cpf: ['',[Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
-      tel:  ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
-      state: ['',[Validators.required, Validators.minLength(2), Validators.maxLength(20)]],      
-      city: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(300)]],
-
+    this.formGroup = this.formBuilder.group({              
+      name: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(40)]],           
     });
   }
   
  
   loadInfo(){   
     this.menu.enable(true);
-    this.clear()
     this.loginInfoUser()   
   }   
 
@@ -209,41 +87,11 @@ export class ClientsAddPage {
     
     let payload = this.payload    
 
-    this.formGroup.patchValue({
-      razaoSocial: payload.razaoSocial,
-      cnpj: payload.cnpj,
-      name: payload.name,
-      lastName: payload.lastName,
-      address: payload.address,
-      state: payload.state,
-      city: payload.city,
-      cpf: payload.cpf,
-      tel: payload.tel,
-      district: payload.district,
-      numero: payload.numero,
-      postCode: payload.postCode,
-      complement: payload.complement
-
+    this.formGroup.patchValue({     
+      name: payload.name,      
+   
     })    
-
-    this.email = payload.email
-
-    this.description = payload.description
-    this.base64Image = payload.photo      
-    this.agency = payload.agency
-    this.prefixo = payload.prefixo
-    this.selectedBank = payload.bank
-    this.account = payload.account
-    this.selectedService = payload.carName
-    this.plate = payload.carPlate 
-    this.cnpj = payload.cnpj    
-    this.state_ = payload.state 
-    this.city_ = payload.city     
-    this.state_ = payload.state
-    this.stateChanged(this.state_)
-    this.uid_ = payload.uid
-
-
+   
   
   }
  
@@ -251,26 +99,24 @@ export class ClientsAddPage {
 
     if(this.formGroup.valid){
 
-      this.saveCheck()
-        .then(() => {
+      let alert = this.uiUtils.showConfirm(this.dataText.warning, "Tem certeza?")  
+      alert.then((result) => {
+  
+        if(result){    
+          
+          if(this.payload)
+            this.savedOk()    
+          else
+            this.add()
+        }
+          
+          
+      })   
+      .catch((error) => {
+        this.uiUtils.showAlertError(error)
+      })
 
-          let alert = this.uiUtils.showConfirm(this.dataText.warning, "Tem certeza?")  
-          alert.then((result) => {
-      
-            if(result){              
-              this.update()    
-            }
-              
-              
-          })   
-          .catch((error) => {
-            this.uiUtils.showAlertError(error)
-          })
-        })
-
-    }
-    
-        
+    }            
       
     else {            
       this.uiUtils.showAlertError(this.dataText.checkAllFields)   
@@ -279,215 +125,14 @@ export class ClientsAddPage {
 
   }
 
-  saveCheck(){
 
-    return new Promise<void>((resolve, reject) => {
-
-      if(! this.formGroup.value.name)
-        reject("Favor informar o nome")
-    
-      else if(! this.formGroup.value.lastName)
-        reject("Favor informar o sobrenome")      
-    
-      else if(! this.formGroup.value.address)
-        reject("Favor informar o seu endereço")
-    
-      else if(! this.formGroup.value.tel)
-        reject("Favor informar o seu número para contato")
-    
-    resolve()
-
-    })    
-  }
-
-  finish(){
-    var self = this
-
-    let alert = this.uiUtils.showConfirm(this.dataText.warning, "Tem certeza?")  
-    alert.then((result) => {
-
-      if(result)  
-        self.update()    
-    })    
-  }
-
-  clear(){
-    this.complement = ""       
-    this.selectedBank = "" 
-    this.agency = "" 
-    this.account = ""     
-    this.cnpj = ""     
-    this.plate = ""
-    this.prefixo = ""
-    this.prefixo = ""
-    this.selectedService = ""
-    this.description = ""
-    this.uid_ = ''
-    this.photoChanged = false
-  }
-
-  update(){
-
-    if(this.base64Image){
-
-      if(this.photoChanged)
-        this.uploadWithPic()
-      else 
-        this.uploadFinish(this.base64Image) 
-    }
-      
-    else 
-      this.uploadFinish("")   
-  }
-
-  uploadWithPic(){    
-
-    let loading = this.uiUtils.showLoading("Carregando")
-    loading.present()
-
-    let datanow = moment().format("YYYYDDMMhhmmss")
-    let path = "/pictures/" + datanow + '/'    
-
-    this.storage.uploadPicture(this.base64Image)
-
-      .then(snapshot => {
-
-        snapshot.ref.getDownloadURL().then(url => {
-          loading.dismiss()
-
-          this.events.publish('userInfo:updatePhoto', url)
-          this.uploadFinish(url)           
-
-        }).catch(err => {
-          loading.dismiss()
-          this.uiUtils.showAlert(this.dataText.warning, err).present()
-          
-        })
-      })
-      .catch( error => {
-        loading.dismiss()
-        this.uiUtils.showAlert(this.dataText.warning, error).present()
-      })        
-  }
-
-  uploadFinish(url: string){
-
-    if(this.payload)  
-        this.updateFinish(url)
-      else
-        this.addFinish(url)
-    
-    
-  }
-
-  updateFinish(url){
-
-    let loading = this.uiUtils.showLoading(this.dataInfo.pleaseWait)
-    loading.present()
-
-    let self = this    
-
-    this.defaultValues()    
-          
-    this.db.updateClient(      
-      this.dataInfo.userInfo.uid,
-      this.email,
-      "",
-      this.formGroup.value.name, 
-      this.formGroup.value.lastName, 
-      this.formGroup.value.address, 
-      this.formGroup.value.complement,
-      this.formGroup.value.numero,
-      this.formGroup.value.postCode,
-      this.formGroup.value.district,
-      this.formGroup.value.tel, 
-      url,       
-      this.dataInfo.userInfo.userType, 
-      this.description, 
-      this.selectedBank,
-      this.agency,
-      this.account,
-      this.formGroup.value.cpf,
-      this.cnpj,                  
-      this.formGroup.value.state,
-      this.formGroup.value.city,            
-      "")
-
-  .then( () =>{
-    
-      loading.dismiss()
-      self.uiUtils.showAlertSuccess("Atualizações realizadas com sucesso")
-      .then( () => {
-
-        this.navCtrl.pop()     
-        
-      })      
-    })
-
-    .catch( (error) => {      
-      loading.dismiss()
-      this.uiUtils.showAlertError(this.dataText.errorRegister9)
-    })
-  }
-
-  addFinish(url: string){
+  add(){                    
 
     let loading = this.uiUtils.showLoading(this.dataText.pleaseWait)
     loading.present()
-
-    let data = {email: this.email, password: this.password, name: this.formGroup.value.name}
-    console.log(data)
-
-
-    this.httpd.apiAddUser(data)
-    .subscribe((callback) => {
-
-      loading.dismiss()
-      this.addCallback(callback)      
-    })
-                      
-  }
-
-  addCallback(data){
-
-    if(data.success)
-      this.savedOk(data)      
-    else
-      this.uiUtils.showAlertError(this.dataText.errorRegister)       
-  } 
-
-  savedOk(data){                    
-
-    let loading = this.uiUtils.showLoading(this.dataText.pleaseWait)
-    loading.present()
-
-    this.defaultValues() 
-
-    this.defaultValues()    
           
-    this.db.updateClient(
-      data.uid,
-      this.email,
-      "",
-      this.formGroup.value.name, 
-      this.formGroup.value.lastName, 
-      this.formGroup.value.address, 
-      this.formGroup.value.complement,
-      this.formGroup.value.numero,
-      this.formGroup.value.postCode,
-      this.formGroup.value.district,
-      this.formGroup.value.tel, 
-      "",       
-      this.dataInfo.userInfo.userType, 
-      this.description, 
-      this.selectedBank,
-      this.agency,
-      this.account,
-      this.formGroup.value.cpf,
-      this.cnpj,                  
-      this.formGroup.value.state,
-      this.formGroup.value.city,            
-      "")
+    this.db.addClient(
+      this.formGroup.value.name)
 
   .then( () =>{
     
@@ -511,185 +156,36 @@ export class ClientsAddPage {
   }
 
 
-  defaultValues(){
-    this.description = this.dataInfo.titleCompleteDescription
+  savedOk(){                    
 
-    if(! this.selectedService  || this.selectedService.length === 0)
-      this.selectedService = this.dataText.notInformade
+    let loading = this.uiUtils.showLoading(this.dataText.pleaseWait)
+    loading.present()
+          
+    this.db.updateClient(
+      this.payload.key,      
+      this.formGroup.value.name)
 
-    if(! this.plate  || this.plate.length === 0)
-      this.plate = this.dataText.notInformade
-
-    if(! this.cnpj || this.cnpj.length === 0)
-      this.cnpj = this.dataText.notInformade   
-
-    if(! this.selectedBank  || this.selectedBank.length === 0)
-      this.selectedBank = this.dataText.notInformade   
-
-    if(! this.agency  || this.agency.length === 0)
-      this.agency = this.dataText.notInformade   
-
-    if(! this.account  || this.account.length === 0)
-      this.account = this.dataText.notInformade            
-
-    if(! this.prefixo  || this.prefixo.length === 0)
-      this.prefixo = this.dataText.notInformade    
-  
-  }
-
-  selectPicture(){
-    this.openMenu()
-  }
-
-  openFilePhoto(event){
-      this.base64Image = event.srcElement.files[0];
-  }
-
-  picChange(event: any) {
-
-    if(event.target.files && event.target.files[0]){
-      let reader = new FileReader();
-
-      reader.onload = (event:any) => {
-        this.base64Image = event.target.result;
-        this.photoChanged = true
-      }
-      reader.readAsDataURL(event.target.files[0]);
-    }    
-  }
-
-  grabPicture() {
- 
-    let loading = this.uiUtils.showLoading(this.dataInfo.pleaseWait)      
-    loading.present();
-
-    this.camera.grabPicture().then((imageData) => {
-
-      this.selectedPhoto  = this.dataInfo.dataURItoBlob('data:image/jpeg;base64,' + imageData);                  
-      this.base64Image = 'data:image/jpeg;base64,' + imageData
-      this.photoChanged = true
+  .then( () =>{
+    
       loading.dismiss()
 
-    }, (err) => {
+      this.uiUtils.showAlertSuccess("Cliente atualizado com sucesso")
+      .then( () => {
+
+        this.navCtrl.pop()     
+        
+      })      
+    })
+
+    .catch( (error) => {      
       loading.dismiss()
-    });
-   }
-
-    onSuccess = (snapshot) => {        
-    this.base64Image = snapshot.downloadURL;
-  }
-  
-  onError = (error) => {
-   // console.log('error', error);
-  }
-
-  accessGallery(){    
-     this.camera.getPicture().then((imageData) => {
-      this.base64Image = 'data:image/jpeg;base64,' + imageData
-      this.photoChanged = true
-
-    }, (err) => {
-     //console.log(err);
-    });
-   }
-
-  delPicture(){
-    this.base64Image = ""
-  }      
-
-  handlerCamera(){
+      this.uiUtils.showAlertError(this.dataText.errorRegister9)
+    })
     
-    if(! this.dataInfo.isWeb)
-      this.grabPicture()
-    else
-      this.uiUtils.showAlert(this.dataText.warning, "Disponível apenas no aplicativo mobile").present()
-  }
-
-  handlerGalery(){
-    if(! this.dataInfo.isWeb)
-      this.accessGallery()
-    else
-      this.uiUtils.showAlert(this.dataText.warning, "Disponível apenas no aplicativo mobile").present()
     
-  }
-  
-  openMenu() {
-    let actionSheet = this.actionsheetCtrl.create({
-      title: this.dataInfo.titleChangePic,
-      cssClass: 'action-sheets-basic-page',
-      buttons: [
-        {
-          text: 'Camera',
-          role: 'destructive',
-          icon: !this.platform.is('ios') ? 'camera' : null,
-          handler: () => {
-            this.handlerCamera()
-          }
-        },
-        {
-          text: 'Album',
-          icon: !this.platform.is('ios') ? 'albums' : null,
-          handler: () => {
-            this.handlerGalery()
-          }
-        },       
-        {
-          text: this.dataText.cancel,
-          role: 'cancel',
-          icon: !this.platform.is('ios') ? 'close' : null
-        }
-      ]
-      
-    });
-    actionSheet.present();
-  }    
-  
-  stateChanged(event){
-  
-  }
-  
-  passwordInputChanged(){
-
-  }
-
-
-  signUp(){
-    if(this.formGroup.valid && this.email && this.password){
-
-      let alert = this.uiUtils.showConfirm(this.dataText.warning, this.dataInfo.titleAreYouSure)  
-      alert.then((result) => {
-
-      if(result)  
-        this.signupContinue()    
-       })
-    }
-    
-    else {
-      this.uiUtils.showAlertError(this.dataText.checkAllFields)
-    }    
-  }
-
-  signupContinue(){
-    
-    let loading = this.uiUtils.showLoading(this.dataInfo.titleCreatingProfile)    
-    loading.present() 
-
-    if(this.base64Image){
-
-      if(this.photoChanged)
-        this.uploadWithPic()
-      else 
-          this.uploadFinish(this.base64Image) 
-    }
-      
-    else 
-      this.uploadFinish("")
-
-
-    loading.dismiss()
     
   }
 
- 
 
+  
 }

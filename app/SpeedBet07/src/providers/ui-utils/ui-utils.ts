@@ -16,6 +16,42 @@ export class UiUtilsProvider {
     
   }
 
+  presentPromptNumber(title_, subtitle_) {
+
+    return new Promise((resolve, reject) =>{
+
+      let alert = this.alertCtrl.create({
+        title: title_,
+        inputs: [
+          {
+            name: 'question',
+            placeholder: subtitle_,
+            type: 'number'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: data => {
+              reject(data)
+            }
+          },
+          {
+            text: 'Enviar',
+            handler: data => {
+              resolve(data.question)
+            }
+          }
+        ]
+      });
+      alert.present();
+
+    })
+
+    
+  }
+
   showLoading(title: string){
     let loading = this.loadingCtrl.create({
       content: title

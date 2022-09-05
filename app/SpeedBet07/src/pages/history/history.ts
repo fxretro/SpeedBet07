@@ -147,7 +147,6 @@ export class HistoryPage {
 
   clearMoney(){
 
-
     this.totalMoney = 0
     this.totalComission = 0
   }
@@ -276,6 +275,8 @@ export class HistoryPage {
     }
 
     info.finalValueStr = Number(info.finalValue).toFixed(2)
+    info.betValueStr = Number(info.betValue).toFixed(2)
+
     this.worksArray.push(info)
     this.totalComission += Number(info.finalValue)
     this.totalJobs++
@@ -430,7 +431,6 @@ export class HistoryPage {
     this.worksArray= []    
     this.reportsArray = []    
   
-
     this.works = this.db.getAllWorksAcceptedsDate(dateYear, dateMonth)
       
     this.worksSubscription = this.works.subscribe( data => {
@@ -451,11 +451,8 @@ export class HistoryPage {
       info.expand = false
       info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")      
       
-
-
-      if(info.id && info.id === this.code)
-        this.addArray(info)
-                  
+       if(info.id && info.id === this.code)
+        this.addArray(info)            
 
     });    
 
@@ -488,6 +485,81 @@ export class HistoryPage {
     })
 
     
+  }
+
+  whatsapp(item){
+
+    this.uiUtils.presentPromptNumber("Atenção", "Favor informar o número do telefone do cliente")
+    .then((num) => {
+
+      let msg = "Olá, faço parte da equipe do SpeedBet07 e gostaria de falar com você sobre a aposta realizada. Segue os dados ".concat(this.getBetInfo(item))
+      console.log(msg)
+
+      if(num){
+        var win = window.open(`https://wa.me/+55${num}?text=${msg}`, '_blank');
+      }
+
+      else {
+        this.uiUtils.showAlertSuccess("Usuário não possui número cadastrado")
+      }
+
+    })
+    
+  }
+
+
+  getBetInfo(work){
+
+    let status = work.status
+    let finalValue = work.finalValue
+    let betValue = work.betValue
+    let cambista = work.cambistaNome
+
+    let msg = "Sua aposta foi recebida e está com o status " + 
+                status + ". O valor apostado foi de R$" + Number(betValue).toFixed(2) + 
+                ". O valor a ser recebido caso positivo é de R$ " + Number(finalValue).toFixed(2) +
+                ". A aposta foi realizada pelo cambista " + cambista + ".\n\n." +
+                "Segue as informações adicionais: \n\n" 
+    
+    work.match.forEach(element => {
+
+      let championship = element.championship
+      let data = element.data
+      let hora = element.hora
+      let odd_casa = element.odd_casa
+      let odd_casa_ativo = element.odd_casa_ativo
+      let odd_empate = element.odd_empate
+      let odd_empate_ativo = element.odd_empate_ativo
+      let odd_fora = element.odd_fora
+      let odd_fora_ativo = element.odd_fora_ativo
+      let time_a = element.time_a
+      let time_b = element.time_b
+
+      let msgOdd_a = odd_casa_ativo === 1 ? "ODD Casa: " + odd_casa : "" 
+      let msgOdd_b = odd_empate_ativo === 1 ? "ODD Casa: " + odd_empate : "" 
+      let msgOdd_c = odd_fora_ativo === 1 ? "ODD Fora: " + odd_fora : "" 
+
+      let msgOddFinal = msgOdd_a
+
+      if(msgOdd_b.length > 0)
+        msgOddFinal = msgOdd_b
+      
+      if(msgOdd_c.length > 0)
+        msgOddFinal = msgOdd_c
+
+
+      let matchMsg = 
+          "Campeonato: " + championship + ".\n\n"+
+          "Data: " + data + ".\n\n"+
+          "Hora: " + hora + ".\n\n"+
+          "Jogo: " + time_a + " x " + time_b + "\n\n"
+
+      msg += matchMsg
+
+    });
+
+    return msg
+
   }
 
 

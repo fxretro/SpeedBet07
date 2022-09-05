@@ -10,9 +10,14 @@
 
 <ion-content class="trips detail-bg">
   
-  <ion-item>
+  <ion-item *ngIf="isMultiple">
     <ion-label stacked>Valor da aposta</ion-label>
-    <ion-input type="number" [(ngModel)]="betValue" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
+    <ion-input type="number" [(ngModel)]="betValue"  [disabled]="true"></ion-input>
+  </ion-item>  
+
+  <ion-item *ngIf="isMultiple">
+    <ion-label stacked>Resultado positivo</ion-label>
+    <ion-input type="number" [(ngModel)]="finalValue" [disabled]="true"></ion-input>
   </ion-item>  
 
   <ion-item no-lines *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3">    
@@ -41,7 +46,7 @@
       <ion-item no-lines>    
         <ion-label stacked>Aposta</ion-label>  
 
-        <ion-select [(ngModel)]="selectedService">
+        <ion-select [(ngModel)]="selectedService" (ionChange)="apostaChanged()">
           <ion-option *ngFor="let service of servicesArray">{{service.name}}</ion-option>
         </ion-select>                          
 
@@ -49,18 +54,16 @@
 
    
       <ion-item>
-        <ion-label stacked>Valor da aposta</ion-label><ion-input type="number" [(ngModel)]="finalValue" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
+        <ion-label stacked>Valor da aposta</ion-label><ion-input type="number" [(ngModel)]="betValue" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
       </ion-item>  
 
       <ion-item>
-        <ion-label stacked>Resultado positivo</ion-label><ion-input type="number" [(ngModel)]="finalValueReceived" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
+        <ion-label stacked>Resultado positivo</ion-label><ion-input type="number" [(ngModel)]="finalValue" [disabled]="true"></ion-input>
       </ion-item>  
                                                                  
     </ion-card>
 
-    
-
-
+  
     <ion-card class="trip card" text-wrap no-lines  *ngIf="payload && isMultiple">
 
       <ion-item text-wrap *ngFor="let match of payload" no-lines no-padding>          
@@ -76,18 +79,6 @@
           <p *ngIf="match.odd_casa_ativo === 1">Cotação: {{match.odd_casa}}</p>
           <p *ngIf="match.odd_empate_ativo === 1">Cotação: {{match.odd_empate}}</p>
           <p *ngIf="match.odd_fora_ativo === 1">Cotação: {{match.odd_fora}}</p>
-
-          <ion-row>                
-
-            <ion-col>
-              <button ion-button icon-start clear small (click)="DDD(match)" color="danger">
-                  <ion-icon name="md-trash"></ion-icon>
-                  Remover
-              </button>
-            </ion-col> 
-
-          </ion-row>
-          
                                                    
       </ion-item>
                                                            
@@ -107,7 +98,7 @@
   <ion-list>        
         
       <button ion-button block class="btn bg-theme mrg-bt-10 text-white" (click)="enviaQuickRun()" [disabled]="finalValue <= 0">
-        <ion-icon name="md-send"  item-start style="margin-right: 15px;"></ion-icon>Enviar R$ {{finalValue}}
+        <ion-icon name="md-send"  item-start style="margin-right: 15px;"></ion-icon>Enviar R$ {{betValue}}
       </button>               
 
     </ion-list>

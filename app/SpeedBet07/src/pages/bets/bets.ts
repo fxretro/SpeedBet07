@@ -26,7 +26,6 @@ export class BetsPage {
 
   betValue: number = 0
   finalValue: number = 0
-  finalValueReceived: number = 0
   comission: number = 0
   servicesArray: any = []
 
@@ -80,26 +79,27 @@ export class BetsPage {
 
 
   apostaChanged(){
+    
 
 
     let odd_a = this.payload.odd_casa.replace(',', '.')
     let odd_b = this.payload.odd_empate.replace(',', '.')
     let odd_c = this.payload.odd_fora.replace(',', '.')
 
-    this.finalValueReceived = 0
+    this.finalValue = 0
 
     if(this.selectedService && Array.isArray(this.selectedService)){
 
       this.selectedService.forEach(element => {
 
         if(element === "Casa")
-          this.finalValueReceived += this.finalValue * Number(odd_a)
+          this.finalValue += this.betValue * Number(odd_a)
 
         if(element === "Empate")
-          this.finalValueReceived += this.finalValue * Number(odd_b)
+          this.finalValue += this.betValue * Number(odd_b)
 
         if(element === "Fora")
-          this.finalValueReceived += this.finalValue * Number(odd_c)
+          this.finalValue += this.betValue * Number(odd_c)
 
         
       });
@@ -109,30 +109,24 @@ export class BetsPage {
     else {
 
       if(this.selectedService === "Casa")
-        this.finalValueReceived += this.finalValue * Number(odd_a)
+        this.finalValue += this.betValue * Number(odd_a)
 
       if(this.selectedService === "Empate")
-        this.finalValueReceived += this.finalValue * Number(odd_b)
+        this.finalValue += this.betValue * Number(odd_b)
 
       if(this.selectedService === "Fora")
-        this.finalValueReceived += this.finalValue * Number(odd_c)
+        this.finalValue += this.betValue * Number(odd_c)
 
     }
     
+    
 
-    this.finalValueReceived = Number(this.finalValueReceived.toFixed(2))    
+    this.finalValue = Number(this.finalValue.toFixed(2))    
 
   }
 
 
   clientChanged(){    
-
-    this.usersClientsArray.forEach(element => {
-
-      if(element.name === this.client)
-          console.log(element)
-      
-    });
     
   }
      
@@ -237,9 +231,7 @@ export class BetsPage {
     }
   }
    
-  
-  
- 
+
 
   enviaQuickRun(){
     
@@ -250,45 +242,51 @@ export class BetsPage {
 
   enviaQuickRunFinish(){
 
+    if(this.dataInfo.userInfo.userType !== 3 && !this.client)
+      this.uiUtils.showAlertError("Favor selecionar o cliente")
 
-    if(!this.client)
-      this.client = "Avulso"
+    else if(!this.isMultiple && !this.selectedService)
+      this.uiUtils.showAlertError("Favor informar a aposta")
 
-    if(!this.selectedService)  
-      this.selectedService = "Multipla"
+    else if(this.dataInfo.userInfo.userType !== 3 && !this.finalValue)
+      this.uiUtils.showAlertError("Favor informar o valor da aposta")
+
+    else {
+
+      if(this.dataInfo.userInfo.userType === 3 && !this.client)
+        this.client = "Avulso"
+
+      if(!this.selectedService)  
+        this.selectedService = "Multipla"
       
 
-    let data = {
+      let data = {
 
-      match: this.payload, 
-      finalValue: this.finalValue,
-      finalValueReceived: this.finalValueReceived, 
-      service: this.selectedService, 
-      cliente: this.client,
-      cambista: this.dataInfo.userInfo.uid,
-      datetime: moment().format(),
-      status: this.dataInfo.userInfo.userType === 3 ? "Aguardando confirmação" : "Confirmado",
-      id: this.makeid(6)
+        match: this.payload, 
+        finalValue: this.finalValue,
+        service: this.selectedService, 
+        cliente: this.client,
+        cambista: this.dataInfo.userInfo.uid,
+        cambistaNome: this.dataInfo.userInfo.name,
+        datetime: moment().format(),
+        status: this.dataInfo.userInfo.userType === 3 ? "Aguardando confirmação" : "Confirmado",
+        id: this.makeid(6),
+        betValue: this.betValue
+
+      }
+
+      this.enviaQuickRunFim(data)
 
     }
 
-
-
-    this.enviaQuickRunFim(data)
-                      
    }
 
   
 
    enviaQuickRunFim(data){
-   
 
     let loading = this.uiUtils.showLoading(this.dataText.pleaseWait)    
     loading.present()
-
-    this.storageNative.set('lastQuick', data);     
-    console.log(data)
-        
             
     this.db.addBet(data)
 
@@ -300,7 +298,6 @@ export class BetsPage {
       })      
       .catch((error) => {
 
-        console.log(error)
         this.uiUtils.showAlertError("Falha ao realizar aposta")      
       })
 
@@ -317,26 +314,6 @@ export class BetsPage {
     
    }
 
-         
-  
-   recoveryLastQuickRun(){
-
-    this.storageNative.get('lastQuick')
-
-    .then((data)=>{
-
-      if(data)
-          this.recoveryLastContinue(data)      
-      else 
-        this.uiUtils.showAlertError(this.dataText.errorSent4)            
-    })
-  }   
-
-
-    recoveryLastContinue(data){
-       
-    }
-   
 
     goPageReports(){
       this.navCtrl.push('HistoryPage', {payload: this.payload})
@@ -347,20 +324,11 @@ export class BetsPage {
       var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       var charactersLength = characters.length;
       for ( var i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * 
-   charactersLength));
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
      }
      return result;
   }
 
-  addBet(match, type){
-    console.log(match, type)
-  }
-  
-  remove(match){
-
-    console.log(match)
-  }
 
    
 }

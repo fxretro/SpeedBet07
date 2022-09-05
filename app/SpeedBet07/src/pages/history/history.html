@@ -99,6 +99,7 @@
               <p *ngIf="bet.id"><b>Identificador:</b> {{bet.id}} </p>
               <p *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3"><b>{{dataText.clients}}:</b> {{bet.cliente}} </p>
               <p *ngIf="bet.datetimeStr"><b>{{dataText.datetime}}:</b> {{bet.datetimeStr}} </p>
+              <p *ngIf="bet.betValueStr"><b>Valor apostado:</b> R${{bet.betValueStr}} </p>
               <p *ngIf="bet.finalValueStr"><b>Valor final:</b> R${{bet.finalValueStr}} </p>
 
               <ion-item *ngFor="let matchh of bet.match" no-lines>
@@ -132,6 +133,14 @@
                 <button ion-button icon-start clear small (click)="changeStatus(bet)" color="danger">                                                                            
                     <ion-icon name="clipboard"></ion-icon>                        
                     Aguardando confirmação
+                </button>
+              </ion-col>
+
+
+              <ion-col *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && bet.status === 'Confirmado'">
+                <button ion-button icon-start clear small (click)="whatsapp(bet)" color="secondary">                                                                            
+                    <ion-icon name="logo-whatsapp"></ion-icon>                        
+                    Notificar
                 </button>
               </ion-col>
 

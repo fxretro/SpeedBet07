@@ -8,8 +8,6 @@ import { FormControl } from '@angular/forms';
 import { DatabaseProvider } from '../../providers/database/database';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DataTextProvider } from '../../providers/data-text/data-text'
-import { timestamp } from 'rxjs/operators';
-
 
 
 @IonicPage()

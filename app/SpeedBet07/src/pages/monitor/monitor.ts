@@ -99,6 +99,25 @@ export class MonitorPage {
     loading.dismiss()
 
   }  
+
+  clear(){
+
+    this.championships.forEach(info => {      
+      
+      info.matches.forEach(element => {
+
+        element.odd_casa_ativo = 0
+        element.odd_empate_ativo = 0
+        element.odd_fora_ativo = 0
+        
+      });
+
+    });
+
+    this.finalValue = 0
+    this.betValue = 0
+
+  }
  
   goBack(){
     this.navCtrl.pop()
@@ -171,7 +190,6 @@ export class MonitorPage {
     });
 
     this.finalValue = this.finalValue * this.betValue
-
     this.finalValue = Number(this.finalValue.toFixed(2))
 
 
@@ -180,6 +198,7 @@ export class MonitorPage {
 
   goPageBets(work){
     this.navCtrl.push('BetsPage', {payload: work})
+    this.clear()
   }
   
  
@@ -226,12 +245,15 @@ export class MonitorPage {
   }
 
   finish(){
+
     this.navCtrl.push('BetsPage', {
         payload: this.championshipsLeagues, 
         isMultiple: true, 
         finalValue: this.finalValue,
         betValue: this.betValue  
       })
+
+    this.clear()
   }
 
   apostaChanged(){

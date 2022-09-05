@@ -20,7 +20,9 @@ export class MonitorPage {
   championships: any = []
   championshipsLeagues: any = []
   matchesArray: any = []
+
   finalValue: number = 0
+  betValue: number = 0
 
   
   constructor(
@@ -168,7 +170,10 @@ export class MonitorPage {
       
     });
 
+    this.finalValue = this.finalValue * this.betValue
+
     this.finalValue = Number(this.finalValue.toFixed(2))
+
 
   }
 
@@ -221,10 +226,16 @@ export class MonitorPage {
   }
 
   finish(){
+    this.navCtrl.push('BetsPage', {
+        payload: this.championshipsLeagues, 
+        isMultiple: true, 
+        finalValue: this.finalValue,
+        betValue: this.betValue  
+      })
+  }
 
-    console.log(this.championshipsLeagues)
-
-    this.navCtrl.push('BetsPage', {payload: this.championshipsLeagues, isMultiple: true})
+  apostaChanged(){
+    this.refreshValues()
   }
 
 

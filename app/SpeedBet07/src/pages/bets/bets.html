@@ -9,6 +9,19 @@
 
 
 <ion-content class="trips detail-bg">
+  
+  <ion-item>
+    <ion-label stacked>Valor da aposta</ion-label>
+    <ion-input type="number" [(ngModel)]="betValue" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
+  </ion-item>  
+
+  <ion-item no-lines *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3">    
+
+    <ion-label stacked>{{dataText.selectClients}}</ion-label>  
+    <ion-select [(ngModel)]="client" (ionChange)="clientChanged()">         
+      <ion-option *ngFor="let cl of usersClientsArray">{{cl.name}}</ion-option>
+    </ion-select>                          
+  </ion-item>      
 
   <ion-list  no-lines no-padding>  
 
@@ -28,19 +41,11 @@
       <ion-item no-lines>    
         <ion-label stacked>Aposta</ion-label>  
 
-        <ion-select [(ngModel)]="selectedService" multiple="true">
+        <ion-select [(ngModel)]="selectedService">
           <ion-option *ngFor="let service of servicesArray">{{service.name}}</ion-option>
         </ion-select>                          
 
       </ion-item>       
-      
-      <ion-item no-lines *ngIf="dataInfo.userInfo.userType !== 3">    
-
-        <ion-label stacked>{{dataText.selectClients}}</ion-label>  
-        <ion-select [(ngModel)]="client" (ionChange)="clientChanged()">         
-          <ion-option *ngFor="let cl of usersClientsArray">{{cl.name}}</ion-option>
-        </ion-select>                          
-      </ion-item>      
 
    
       <ion-item>
@@ -55,70 +60,35 @@
 
     
 
+
     <ion-card class="trip card" text-wrap no-lines  *ngIf="payload && isMultiple">
 
       <ion-item text-wrap *ngFor="let match of payload" no-lines no-padding>          
 
-        <ion-list-header color="primary">{{match.championship}} </ion-list-header>   
+        <ion-list-header color="primary" *ngIf="match.odd_casa_ativo === 1">Casa</ion-list-header>   
+        <ion-list-header color="primary" *ngIf="match.odd_empate_ativo === 1">Empate</ion-list-header>   
+        <ion-list-header color="primary" *ngIf="match.odd_fora_ativo === 1">Fora</ion-list-header>   
 
-          <ion-col col-2>
-
-            {{match.data}}
-            {{match.hora}}
-          
-          </ion-col>
-
-          <ion-col>{{match.time_a}} x {{match.time_b}}</ion-col>
+          <p>{{match.championship}} </p>
+          <p>{{match.data}} {{match.hora}}</p>
+          <p>{{match.time_a}} x {{match.time_b}}</p>
+          <p>Vencedor do Encontro</p>
+          <p *ngIf="match.odd_casa_ativo === 1">Cotação: {{match.odd_casa}}</p>
+          <p *ngIf="match.odd_empate_ativo === 1">Cotação: {{match.odd_empate}}</p>
+          <p *ngIf="match.odd_fora_ativo === 1">Cotação: {{match.odd_fora}}</p>
 
           <ion-row>                
-        
 
-            <ion-col *ngIf="match.odd_casa_ativo === 0">
-              <button ion-button icon-start clear small (click)="addBet(match, 1)" color="primary">
-                  <ion-icon name="md-home"></ion-icon>
-                  C {{match.odd_casa}}
-              </button>
-            </ion-col> 
-            
-            <ion-col *ngIf="match.odd_casa_ativo === 1">
-              <button ion-button icon-start clear small (click)="addBet(match, 1)" color="secondary">
-                  <ion-icon name="md-home"></ion-icon>
-                  C {{match.odd_casa}}
-              </button>
-            </ion-col>  
-
-
-            <ion-col *ngIf="match.odd_empate_ativo === 0">
-              <button ion-button icon-start clear small (click)="addBet(match, 2)" color="primary">
-                  <ion-icon name="md-home"></ion-icon>
-                  E {{match.odd_empate}}
-              </button>
-            </ion-col> 
-            
-            <ion-col *ngIf="match.odd_empate_ativo === 1">
-              <button ion-button icon-start clear small (click)="addBet(match, 2)" color="secondary">
-                  <ion-icon name="md-home"></ion-icon>
-                  E {{match.odd_empate}}
+            <ion-col>
+              <button ion-button icon-start clear small (click)="DDD(match)" color="danger">
+                  <ion-icon name="md-trash"></ion-icon>
+                  Remover
               </button>
             </ion-col> 
 
-
-            <ion-col *ngIf="match.odd_fora_ativo === 0">
-              <button ion-button icon-start clear small (click)="addBet(match, 3)" color="primary">
-                  <ion-icon name="md-home"></ion-icon>
-                  F {{match.odd_fora}}
-              </button>
-            </ion-col> 
-            
-            <ion-col *ngIf="match.odd_fora_ativo === 1">
-              <button ion-button icon-start clear small (click)="addBet(match, 3)" color="secondary">
-                  <ion-icon name="md-home"></ion-icon>
-                  F {{match.odd_fora}}
-              </button>
-            </ion-col> 
-            
           </ion-row>
-                                             
+          
+                                                   
       </ion-item>
                                                            
     </ion-card>

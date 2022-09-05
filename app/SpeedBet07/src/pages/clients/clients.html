@@ -61,11 +61,19 @@
     <ion-row>
          
       <ion-col>    
-        <button ion-button icon-start clear small (click)="options(worker)">          
+        <button ion-button icon-start clear small (click)="edit(worker)">          
           <ion-icon name="md-clipboard" color="primary"></ion-icon>            
-          <div>{{dataText.options}}</div>
+          <div>Editar</div>
         </button>
       </ion-col>
+
+      <ion-col>    
+        <button ion-button icon-start clear small (click)="removeUser(worker)">          
+          <ion-icon name="md-trash" color="danger"></ion-icon>            
+          <div>Remover</div>
+        </button>
+      </ion-col>
+      
 
     </ion-row>
       

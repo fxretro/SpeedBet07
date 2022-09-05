@@ -3,18 +3,14 @@
   <ion-navbar text-center no-border-bottom>
     
     <ion-title>Jogos</ion-title>     
-
     
     <ion-buttons end>                   
 
-      <!--<button ion-button style="color: white" (click)="get()" class="mrg-bt-10">                          
-        ATUALIZAR
-      </button>-->
-      
-      <button ion-button style="color: white" (click)="finish()" class="mrg-bt-10">                          
+      <button ion-button style="color: white" (click)="finish()" class="mrg-bt-10" [disabled]="finalValue <= 0">                          
         FINALIZAR R${{finalValue}}
       </button>
 
+      
     </ion-buttons>
 
   </ion-navbar>     
@@ -26,18 +22,23 @@
   <ion-item  no-lines>
     <ion-label stacked>{{dataText.search}}</ion-label>
     
-    <ionic-selectable
-    
+    <ionic-selectable    
       item-content 
       [(ngModel)]="client"
       [items]="matchesArray"
       itemValueField="name"
       itemTextField="name"
-      [canSearch]="true"
-      
+      [canSearch]="true"      
       (onChange)="matchChanged($event)">
     </ionic-selectable>
   </ion-item>
+
+
+
+  <ion-item>
+    <ion-label stacked>Valor da aposta</ion-label>
+    <ion-input type="number" [(ngModel)]="betValue" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
+  </ion-item>  
 
   <ion-list no-padding>    
 
@@ -57,7 +58,6 @@
               <ion-col>{{match.time_a}} x {{match.time_b}}</ion-col>
                                         
               <ion-row>                
-        
 
                 <ion-col *ngIf="match.odd_casa_ativo === 0">
                   <button ion-button icon-start clear small (click)="addBet(match, 1)" color="primary">

@@ -79,72 +79,57 @@
 
     <ion-list *ngIf="worksArray.length > 0"  no-lines no-padding> 
 
-      <ion-list-header class="bg-theme text-white" *ngIf="worksArray && worksArray.length > 0">{{dataText.resumeServices}}</ion-list-header>
+      <br>
 
-       <ion-row>
-          <ion-col><p><b>Total apostas:</b> {{totalJobs}} </p></ion-col>
-          <ion-col><p><b>Total recebido:</b> {{dataText.currency}} {{totalComissionStr}} </p></ion-col>
-       </ion-row>       
+      <ion-list-header class="bg-theme text-white" *ngIf="worksArray && worksArray.length > 0">Resumo</ion-list-header>
+
+       <ion-item>
+          <p><b>Total apostas:</b> {{totalJobs}} </p>
+          <p><b>Total recebido:</b> {{dataText.currency}} {{totalComissionStr}} </p>
+          <br>
+       </ion-item>       
        
                         
-      <ion-card class="trip card" text-wrap no-lines *ngIf="worksArray && worksArray.length > 0">
-
-      </ion-card>
-
-            
       <ion-list-header class="bg-theme text-white">{{dataText.results}}</ion-list-header>
     
-      <ion-card class="trip card" text-wrap *ngFor="let work of worksArray" no-lines>
+      <ion-card class="trip card" text-wrap *ngFor="let bet of worksArray" no-lines>
 
         <ion-item>
                    
-            <p *ngIf="work.id"><b>Identificador:</b> {{work.id}} </p>
-            <p *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3"><b>{{dataText.clients}}:</b> {{work.cliente}} </p>
-            <p *ngIf="work.datetimeStr"><b>{{dataText.datetime}}:</b> {{work.datetimeStr}} </p>
+              <p *ngIf="bet.id"><b>Identificador:</b> {{bet.id}} </p>
+              <p *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3"><b>{{dataText.clients}}:</b> {{bet.cliente}} </p>
+              <p *ngIf="bet.datetimeStr"><b>{{dataText.datetime}}:</b> {{bet.datetimeStr}} </p>
+              <p *ngIf="bet.finalValueStr"><b>Valor final:</b> R${{bet.finalValueStr}} </p>
 
-            <p><b>Aposta:</b> {{work.service}} </p>
-            <p><b>Status:</b> {{work.status}} </p>
-            <p><b>Valor aposta:</b> R${{work.finalValue}} </p>
-            <p><b>Valor receber:</b> R${{work.finalValueReceived}} </p>
+              <ion-item *ngFor="let matchh of bet.match" no-lines>
 
-            <ion-card-content style="margin-top: 10px;" *ngIf="work.expand">                    
+                <ion-title *ngIf="!bet.isMultiple && bet.service">{{bet.service}}</ion-title>   
+                <ion-title *ngIf="matchh.odd_casa_ativo === 1">Casa</ion-title>   
+                <ion-title *ngIf="matchh.odd_empate_ativo === 1">Empate</ion-title>   
+                <ion-title *ngIf="matchh.odd_fora_ativo === 1">Fora</ion-title>
 
-              <p><b>Tempo realizado: {{work.match.timer_now}} </b></p> 
-              <p><b>Jogo:</b> {{work.match.team_a}} <b>{{work.match.team_a_score}}</b> x <b>{{work.match.team_b_score}}</b> {{work.match.team_b}}</p>   
-    
-              <p><b>Total de eventos:</b> {{work.match.event_count}}</p>
-              <p><b>Odd Casa: </b> {{work.match.odd_a}}</p>
-              <p><b>Odd Empate: </b> {{work.match.odd_b}}</p>
-              <p><b>Odd Visitante: </b> {{work.match.odd_c}}</p>              
-              
-            </ion-card-content>
+                <p>{{matchh.championship}} </p>
+                <p>{{matchh.data}} {{matchh.hora}}</p>
+                <p>{{matchh.time_a}} x {{matchh.time_b}}</p>
+                <p>Vencedor do Encontro</p>
+                <p *ngIf="matchh.odd_casa_ativo === 1">Cotação: {{matchh.odd_casa}}</p>
+                <p *ngIf="matchh.odd_empate_ativo === 1">Cotação: {{matchh.odd_empate}}</p>
+                <p *ngIf="matchh.odd_fora_ativo === 1">Cotação: {{matchh.odd_fora}}</p>
+                  
+              </ion-item>
 
 
             <ion-row>                                    
 
-              <ion-col *ngIf="! work.expand">
-                  <button ion-button icon-start clear small (click)="expand(work)">
-                      <ion-icon name="arrow-down"></ion-icon>
-                      {{dataText.expand}} 
-                  </button>
-              </ion-col>      
-
-              <ion-col *ngIf="work.expand">
-                <button ion-button icon-start clear small (click)="expand(work)" color="danger">                                                                            
-                    <ion-icon name="arrow-up"></ion-icon>                        
-                    {{dataText.less}}
-                </button>
-              </ion-col>
-
-              <ion-col *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && work.status === 'Aguardando confirmação'">
-                <button ion-button icon-start clear small (click)="changeStatus(work)" color="secondary">                                                                            
+              <ion-col *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && bet.status === 'Aguardando confirmação'">
+                <button ion-button icon-start clear small (click)="changeStatus(bet)" color="secondary">                                                                            
                     <ion-icon name="clipboard"></ion-icon>                        
                     Confirmado
                 </button>
               </ion-col>
 
-              <ion-col  *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && work.status === 'Confirmado'">
-                <button ion-button icon-start clear small (click)="changeStatus(work)" color="danger">                                                                            
+              <ion-col  *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && bet.status === 'Confirmado'">
+                <button ion-button icon-start clear small (click)="changeStatus(bet)" color="danger">                                                                            
                     <ion-icon name="clipboard"></ion-icon>                        
                     Aguardando confirmação
                 </button>
@@ -168,7 +153,7 @@
 
   <ion-footer style="margin-left: 10px; margin-right: 10px;">
 
-    <ion-row>          
+    <!--<ion-row>          
 
       <ion-col *ngIf="!isReportOpen">
         <button ion-button block class="btn bg-theme mrg-bt-10 text-white" (click)="showReport()">
@@ -184,17 +169,21 @@
         </button> 
       </ion-col>
 
-      <ion-col>
-        <button ion-button full text-uppercase (click)="showHistory()" class="btn bg-theme mrg-bt-10 text-white ">
-            <ion-icon name="md-search" style="margin-right: 10px;"></ion-icon> {{dataText.search}}
-        </button>
-      </ion-col>
-
-      </ion-row>
+       <ion-col>
+          <button ion-button full text-uppercase (click)="downloadExcel()" [disabled]="worksArray.length === 0" class="btn bg-theme mrg-bt-10 text-white ">
+            <ion-icon name="md-download"  style="margin-right: 10px;"></ion-icon> Download
+          </button>  
+        </ion-col>
+      
+      </ion-row>-->
 
       <ion-row>
 
-        
+        <ion-col>
+          <button ion-button full text-uppercase (click)="showHistory()" class="btn bg-theme mrg-bt-10 text-white ">
+              <ion-icon name="md-search" style="margin-right: 10px;"></ion-icon> {{dataText.search}}
+          </button>
+        </ion-col>
   
         <ion-col>
           <button ion-button full text-uppercase (click)="clear()" class="btn bg-theme mrg-bt-10 text-white ">
@@ -202,12 +191,6 @@
           </button>
         </ion-col>  
   
-        <ion-col>
-          <button ion-button full text-uppercase (click)="downloadExcel()" [disabled]="worksArray.length === 0" class="btn bg-theme mrg-bt-10 text-white ">
-            <ion-icon name="md-download"  style="margin-right: 10px;"></ion-icon> Download
-          </button>  
-        </ion-col>
-
 
       </ion-row>
       

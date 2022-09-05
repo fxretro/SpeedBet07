@@ -24,6 +24,7 @@ export class BetsPage {
   selectedService: any  
   client: any  
 
+  betValue: number = 0
   finalValue: number = 0
   finalValueReceived: number = 0
   comission: number = 0
@@ -137,9 +138,7 @@ export class BetsPage {
      
 
   getClients(){
-
     this.getClientsContinue()
-    
   }
 
   getClientsContinue(){
@@ -162,8 +161,6 @@ export class BetsPage {
 
       if(info.status !== 'Desativado'){
 
-        console.log(this.dataInfo.userInfo.uid, info.cambista)
-
         if(this.dataInfo.userInfo.userType === 1){
           this.usersClientsArray.push(info)                                                     
         }        
@@ -172,28 +169,20 @@ export class BetsPage {
           this.usersClientsArray.push(info)                                                     
         }
 
-
       }
        
-        
       
     });
 
   }
 
   
-
-
-
   loadValues(){
 
     this.isMultiple = this.navParams.get('isMultiple') 
-
-    if(this.isMultiple){
-      console.log('Multiple')
-    }
-    
     this.payload = this.navParams.get('payload')
+    this.finalValue = this.navParams.get('finalValue')
+    this.betValue = this.navParams.get('betValue')
     
   }
 
@@ -202,7 +191,7 @@ export class BetsPage {
   
     this.key = ""
     this.finalValue = 0
-
+    this.betValue = 0
     
   }
 
@@ -264,7 +253,11 @@ export class BetsPage {
 
     if(!this.client)
       this.client = "Avulso"
-    
+
+    if(!this.selectedService)  
+      this.selectedService = "Multipla"
+      
+
     let data = {
 
       match: this.payload, 
@@ -362,6 +355,11 @@ export class BetsPage {
 
   addBet(match, type){
     console.log(match, type)
+  }
+  
+  remove(match){
+
+    console.log(match)
   }
 
    

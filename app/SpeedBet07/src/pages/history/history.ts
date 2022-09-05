@@ -77,8 +77,6 @@ export class HistoryPage {
   startInterface(){
     this.isReportOpen = false
     this.status = "Finalizado"
-
-    // this.status = "Cancelado"
     let statustmp = this.navParams.get('status')
 
     if(statustmp)
@@ -92,9 +90,6 @@ export class HistoryPage {
   
   }
 
-
-
-  
 
   getClients(){
     
@@ -242,8 +237,8 @@ export class HistoryPage {
       let info = element.payload.val()
       info.key = element.payload.key     
       info.expand = false
-      info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")           
-
+      info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")  
+      
 
       if(this.dataInfo.userInfo.userType !== 3){
 
@@ -257,11 +252,9 @@ export class HistoryPage {
 
         }
 
-
         
       }
-        
-                  
+             
 
     });    
 
@@ -273,12 +266,19 @@ export class HistoryPage {
 
   addArray(info){
 
-    console.log(info)
+    info.isMultiple = Array.isArray(info.match)
 
+    if(!info.isMultiple){
+
+      let tmp = info.match
+      info.match = [tmp]
+
+    }
+
+    info.finalValueStr = Number(info.finalValue).toFixed(2)
     this.worksArray.push(info)
     this.totalComission += Number(info.finalValue)
     this.totalJobs++
-
     this.totalComissionStr = this.totalComission.toFixed(2)
 
   }
@@ -296,9 +296,6 @@ export class HistoryPage {
       return isBefore ? 1 : -1;
       
     })
-
-    console.log(this.worksArray)
-
 
   }
 

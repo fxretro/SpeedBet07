@@ -9,10 +9,11 @@ import { Subscription } from 'rxjs/Subscription'
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DataTextProvider } from '../../providers/data-text/data-text'
 
-@IonicPage()
+@IonicPage({})
 @Component({
   selector: 'page-history',
   templateUrl: 'history.html',
+  
 })
 export class HistoryPage {
 
@@ -51,6 +52,9 @@ export class HistoryPage {
   status: string = "" 
   code: string = "" 
 
+  workKey: string
+
+
   constructor(public navCtrl: NavController, 
     public uiUtils: UiUtilsProvider,    
     public dataInfo: DataInfoProvider,    
@@ -59,6 +63,20 @@ export class HistoryPage {
     private iab: InAppBrowser,
     public dataText: DataTextProvider,
     public navParams: NavParams) {
+
+       
+
+      if (document.URL.indexOf("?") > 0) {
+
+        let splitURL = document.URL.split("?");        
+        this.workKey = splitURL[1]
+
+        if(this.workKey)
+          this.directView()  
+        
+      }
+
+      
   }
 
   ionViewDidLoad() {    
@@ -66,6 +84,17 @@ export class HistoryPage {
       this.startInterface()
     else
       this.navCtrl.setRoot('LoginPage')
+  }
+
+  directView(){
+
+    console.log('directView ', this.workKey)
+
+    this.dataInfo.isHome = true
+    this.dataInfo.appUserType = 1                  
+    this.code = this.workKey.replace("id=", "")
+    this.selectedDate = moment().format() 
+    this.codeChanged()
   }
 
   
@@ -86,7 +115,11 @@ export class HistoryPage {
     this.selectedDate = moment().startOf('month').format() 
     
     this.usersWorkers = []    
-    this.getClients()
+  
+
+
+    if(this.dataInfo.userInfo)
+      this.getClients()
   
   }
 
@@ -237,7 +270,7 @@ export class HistoryPage {
       info.key = element.payload.key     
       info.expand = false
       info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")  
-      
+      info.betLink = "https://speedbet07.web.app/#/history?id="+info.id
 
       if(this.dataInfo.userInfo.userType !== 3){
 
@@ -562,6 +595,8 @@ export class HistoryPage {
 
   }
 
+
+  
 
 
 }

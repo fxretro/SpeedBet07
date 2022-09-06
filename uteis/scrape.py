@@ -2,11 +2,6 @@ from bs4 import BeautifulSoup
 import database as Db
 
 
-###########################################################
-# Campeonatos com Link direto
-###########################################################
-
-
 def start():    
 
     with open("/tmp/bet/bet.html") as fp:
@@ -38,7 +33,7 @@ def parse(all_bets):
                 odd_empate   = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[1].getText()
                 odd_fora     = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[2].getText()              
 
-                matches.append({'data': data, 'hora': hora, 'time_a': time_a, 'time_b': time_b, 'odd_casa': odd_casa, 'odd_empate': odd_empate, 'odd_fora': odd_fora})
+                matches.append({'data': data, 'hora': hora, 'time_a': time_a, 'time_b': time_b, 'odd_casa': odd_casa, 'odd_empate': odd_empate, 'odd_fora': odd_fora, 'status': 'Aguardando'})
 
 
             Db.add_championship_game(name, matches)        

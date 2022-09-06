@@ -102,6 +102,8 @@
               <p *ngIf="bet.betValueStr"><b>Valor apostado:</b> R${{bet.betValueStr}} </p>
               <p *ngIf="bet.finalValueStr"><b>Valor final:</b> R${{bet.finalValueStr}} </p>
 
+              <p *ngIf="bet.betLink"><b>Compartilhar:</b> <a href={{bet.betLink}}>Clique aqui para compartilhar</a> </p>
+
               <ion-item *ngFor="let matchh of bet.match" no-lines>
 
                 <ion-title *ngIf="!bet.isMultiple && bet.service">{{bet.service}}</ion-title>   

@@ -212,8 +212,6 @@ def get_configurations(uid):
 
 
 def add_notification(typee, title, msg, tokens):  
-
-  print('Salvando notificação ', title, msg)
   db_big.child("notifications").push({'type': typee, 'title': title, 'msg': msg,  'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'tokens': tokens})
 
 
@@ -222,29 +220,17 @@ def add_notification(typee, title, msg, tokens):
 # Scrape 
 ###########################################################
 
-def add_championship_game_today(
-          championship, 
-          date_game, 
-          hour_game, 
-          team_a, 
-          team_b,           
-          odd_a,
-          odd_b,
-          odd_c):  
+def get_hampionship_game():
 
-  print('Salvando jogo de campeonato ', championship, date_game, hour_game, team_a, team_b, odd_a, odd_b, odd_c)
+  path = "championship_matches/" + moment.now().format('DDMMYYYY')
 
-  db_speed.child("championship_matches_today").push({
-      'championship': championship, 
-      'date_game': date_game, 
-      'hour_game': hour_game, 
-      'team_a': team_a, 
-      'team_b': team_b,       
-      'odd_a': odd_a, 
-      'odd_b': odd_b, 
-      'odd_c': odd_c,       
-      'datetime': moment.now().format('DD/MM/YYYY HH:mm:ss')})
+  all = db_speed.child(path).get()
+  allArray = []
 
+  for user in all.each():        
+          allArray.append(user.val())        
+
+  return allArray
 
 def add_championship_game(championship, matches):  
 

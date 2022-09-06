@@ -164,7 +164,8 @@ export class DatabaseProvider {
   /** JOGOS E CAMPEONATOS */
 
   getChampionshipsGames(){
-
+  
+    
     let path = "championship_matches/" + moment().format('DDMMYYYY')
     console.log(path)
 

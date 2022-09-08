@@ -1,21 +1,20 @@
 
 <ion-header>
 
-  <ion-navbar text-center no-border-bottom>
-    <ion-title *ngIf="! isMultiple">Apostas</ion-title>  
-    <ion-title *ngIf="isMultiple">Apostas multiplas</ion-title>  
+  <ion-navbar text-center no-border-bottom>    
+    <ion-title>Apostas</ion-title>  
   </ion-navbar>
 </ion-header>
 
 
 <ion-content class="trips detail-bg">
   
-  <ion-item *ngIf="isMultiple">
+  <ion-item>
     <ion-label stacked>Valor da aposta</ion-label>
     <ion-input type="number" [(ngModel)]="betValue"  [disabled]="true"></ion-input>
   </ion-item>  
 
-  <ion-item *ngIf="isMultiple">
+  <ion-item>
     <ion-label stacked>Resultado positivo</ion-label>
     <ion-input type="number" [(ngModel)]="finalValue" [disabled]="true"></ion-input>
   </ion-item>  
@@ -28,54 +27,20 @@
     </ion-select>                          
   </ion-item>      
 
-  <ion-list  no-lines no-padding>  
-
-    <ion-card class="trip card" text-wrap no-lines  *ngIf="payload && !isMultiple">
-
-      <ion-card-header color="primary"><ion-title>{{payload.time_a}} x {{payload.time_b}}</ion-title> </ion-card-header>         
-
-      <ion-item no-lines>                           
-      
-        <p><b>Data: {{payload.data}} {{payload.hora}} </b></p> 
-        <p><b>Odd Casa: </b> {{payload.odd_casa}}</p>
-        <p><b>Odd Empate: </b> {{payload.odd_empate}}</p>
-        <p><b>Odd Visitante: </b> {{payload.odd_fora}}</p>       
-
-        </ion-item>
-
-      <ion-item no-lines>    
-        <ion-label stacked>Aposta</ion-label>  
-
-        <ion-select [(ngModel)]="selectedService" (ionChange)="apostaChanged()">
-          <ion-option *ngFor="let service of servicesArray">{{service.name}}</ion-option>
-        </ion-select>                          
-
-      </ion-item>       
-
-   
-      <ion-item>
-        <ion-label stacked>Valor da aposta</ion-label><ion-input type="number" [(ngModel)]="betValue" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
-      </ion-item>  
-
-      <ion-item>
-        <ion-label stacked>Resultado positivo</ion-label><ion-input type="number" [(ngModel)]="finalValue" [disabled]="true"></ion-input>
-      </ion-item>  
-                                                                 
-    </ion-card>
-
+  <ion-list  no-lines no-padding>     
   
-    <ion-card class="trip card" text-wrap no-lines  *ngIf="payload && isMultiple">
+    <ion-card class="trip card" text-wrap no-lines  *ngIf="payload">
 
       <ion-item text-wrap *ngFor="let match of payload" no-lines no-padding>          
 
-        <ion-list-header color="primary" *ngIf="match.odd_casa_ativo === 1">Casa</ion-list-header>   
-        <ion-list-header color="primary" *ngIf="match.odd_empate_ativo === 1">Empate</ion-list-header>   
-        <ion-list-header color="primary" *ngIf="match.odd_fora_ativo === 1">Fora</ion-list-header>   
+        
+          <ion-title *ngIf="match.odd_casa_ativo === 1">Casa</ion-title>
+          <ion-title *ngIf="match.odd_empate_ativo === 1">Empate</ion-title>
+          <ion-title *ngIf="match.odd_fora_ativo === 1">Fora</ion-title>
 
           <p>{{match.championship}} </p>
           <p>{{match.data}} {{match.hora}}</p>
           <p>{{match.time_a}} x {{match.time_b}}</p>
-          <p>Vencedor do Encontro</p>
           <p *ngIf="match.odd_casa_ativo === 1">Cotação: {{match.odd_casa}}</p>
           <p *ngIf="match.odd_empate_ativo === 1">Cotação: {{match.odd_empate}}</p>
           <p *ngIf="match.odd_fora_ativo === 1">Cotação: {{match.odd_fora}}</p>

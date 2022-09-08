@@ -23,6 +23,7 @@ export class MonitorPage {
 
   finalValue: number = 0
   betValue: number = 0
+  client: string = ""
 
   
   constructor(
@@ -56,11 +57,21 @@ export class MonitorPage {
 
   get(){
         
-    this.services = this.db.getChampionshipsGames()
 
-    this.services.subscribe(data => {
-      this.getCallback(data)
+    return new Promise<void>((resolve, reject) =>{
+
+
+      this.services = this.db.getChampionshipsGames()
+
+      this.services.subscribe(data => {
+        this.getCallback(data)
+
+        resolve()
+        
+      })
+
     })
+    
   }
   
   getCallback(data){
@@ -69,27 +80,46 @@ export class MonitorPage {
     this.championships = []
     this.championshipsLeagues = []
 
+    this.client = ""
+
 
     let loading = this.uiUtils.showLoading(this.dataInfo.pleaseWait)    
-    loading.present() 
+    loading.present()     
     
     data.forEach(element => {      
 
-      let info = element.payload.val()   
-
-      this.championships.push(info)       
+      let info = element.payload.val()    
+      let tmp = []        
 
       info.matches.forEach(element => {
 
-        element.championship = info.championship
-        element.odd_casa_ativo = 0
-        element.odd_empate_ativo = 0
-        element.odd_fora_ativo = 0
+        let matchDate = moment(element.data, "DD/M")
+        let matchTime = moment(element.hora, "H:mm")
+        
+        if(moment().isBefore(matchTime, 'hour')){
 
-        this.matchesArray.push({name: element.time_a})
-        this.matchesArray.push({name: element.time_b})
+          element.data = matchDate.format("DD/MM")
+          element.championship = info.championship
+          element.odd_casa_ativo = 0
+          element.odd_empate_ativo = 0
+          element.odd_fora_ativo = 0
+  
+          this.matchesArray.push({name: element.time_a})
+          this.matchesArray.push({name: element.time_b})
+
+          tmp.push(element)
+
+        }       
         
       });
+
+      if(tmp.length > 0){
+
+        info.matches = tmp
+        this.championships.push(info)    
+
+      }
+      
       
       
 
@@ -125,37 +155,30 @@ export class MonitorPage {
 
   addBet(work, type){
 
-    console.log(work,type)
+    this.unmark(work, type) 
+    this.refreshValues()                  
+  }
+
+
+  unmark(work, type){
 
     if(type === 1){
       work.odd_empate_ativo = 0
       work.odd_fora_ativo = 0
       work.odd_casa_ativo === 0 ? work.odd_casa_ativo = 1 : work.odd_casa_ativo =0
     }
-      
           
     if(type === 2){
       work.odd_casa_ativo = 0
       work.odd_fora_ativo = 0
       work.odd_empate_ativo === 0 ? work.odd_empate_ativo = 1 : work.odd_empate_ativo =0  
     }
-      
 
     if(type === 3){
       work.odd_empate_ativo = 0
       work.odd_casa_ativo = 0
       work.odd_fora_ativo === 0 ? work.odd_fora_ativo = 1 : work.odd_fora_ativo =0  
     }
-      
-
-  
-    if(!this.championshipsLeagues.includes(work))
-      this.championshipsLeagues.push(work)
-    else
-      this.championshipsLeagues.pop(work)
-
-
-    this.refreshValues()
   }
 
 
@@ -197,13 +220,29 @@ export class MonitorPage {
 
 
   goPageBets(work){
-    this.navCtrl.push('BetsPage', {payload: work})
-    this.clear()
+    this.uiUtils.showAlertSuccess("Disponível em breve")
   }
   
  
   matchChanged(event){
+
+    this.get()
+    .then(() => {
+
+
+      if(event.value && event.value.name.length > 0)
+        this.matchChangedContinue(event)
+
+    })
+
     
+    
+            
+  }
+
+
+  matchChangedContinue(event){
+
     let tmp = []
     let tmp1 = []
 
@@ -241,10 +280,33 @@ export class MonitorPage {
 
 
     this.championships = tmp1
-    
   }
 
+  
+
   finish(){
+
+
+    this.championshipsLeagues = []
+
+    this.championships.forEach(element => {
+
+      element.matches.forEach(element1 => {
+
+        if(element1.odd_casa_ativo === 1)
+          this.championshipsLeagues.push(element1)
+        
+
+        if(element1.odd_empate_ativo === 1)
+          this.championshipsLeagues.push(element1)
+        
+
+        if(element1.odd_fora_ativo === 1)
+          this.championshipsLeagues.push(element1)
+                
+      });      
+      
+    });
 
     this.navCtrl.push('BetsPage', {
         payload: this.championshipsLeagues, 
@@ -252,8 +314,6 @@ export class MonitorPage {
         finalValue: this.finalValue,
         betValue: this.betValue  
       })
-
-    this.clear()
   }
 
   apostaChanged(){

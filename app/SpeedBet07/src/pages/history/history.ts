@@ -34,12 +34,6 @@ export class HistoryPage {
   totalMoney: number = 0
   totalMoneyStr: string
   
-  totalPrePaid: number = 0  
-  totalPrePaidStr: string
-
-  totalCard: number = 0  
-  totalCardStr: string
-
   totalComission: number = 0  
   totalComissionStr: string  
 
@@ -49,9 +43,7 @@ export class HistoryPage {
   isReportOpen: Boolean = false
   textHeader: string = "Relatórios"
   
-  status: string = "" 
   code: string = "" 
-
   workKey: string
 
 
@@ -85,11 +77,13 @@ export class HistoryPage {
     else
       this.navCtrl.setRoot('LoginPage')
   }
+    
+  ngOnDestroy() {
+   if(this.worksSubscription)
+    this.worksSubscription.unsubscribe()
+  }  
 
   directView(){
-
-    console.log('directView ', this.workKey)
-
     this.dataInfo.isHome = true
     this.dataInfo.appUserType = 1                  
     this.code = this.workKey.replace("id=", "")
@@ -97,29 +91,22 @@ export class HistoryPage {
     this.codeChanged()
   }
 
-  
-  ngOnDestroy() {
-   if(this.worksSubscription)
-    this.worksSubscription.unsubscribe()
-  }  
-
   startInterface(){
     this.isReportOpen = false
-    this.status = "Finalizado"
-    let statustmp = this.navParams.get('status')
 
-    if(statustmp)
-      this.status = statustmp    
-    
     this.selectedDateEnd = moment().format() 
     this.selectedDate = moment().startOf('month').format() 
     
-    this.usersWorkers = []    
-  
-
+    
+    this.usersWorkers = []      
 
     if(this.dataInfo.userInfo)
       this.getClients()
+
+    if(this.navParams.get('code')){
+      this.code = this.navParams.get('code')
+      this.codeChanged()
+    }
   
   }
 
@@ -168,9 +155,7 @@ export class HistoryPage {
 
   clear(){    
     this.client = ""
-    this.worker = ""
-    this.status = "Todos"
-   
+    this.worker = ""   
     this.worksArray= []    
     this.reportsArray = []    
 
@@ -210,12 +195,7 @@ export class HistoryPage {
   getHistory(){
 
 
-    this.clearMoney()
-
-    this.totalJobs = 0
-    this.totalFinal = 0
-    this.worksArray= []    
-    this.reportsArray = []    
+  
   
             
     let totalm = moment(this.selectedDateEnd).diff(this.selectedDate, 'months')
@@ -250,6 +230,14 @@ export class HistoryPage {
 
     let loading = this.uiUtils.showLoading(this.dataText.loading)
     loading.present()    
+
+    this.clearMoney()
+
+    this.totalJobs = 0
+    this.totalFinal = 0
+    this.worksArray= []    
+    this.reportsArray = []    
+
 
     this.works = this.db.getAllWorksAcceptedsDate(year, month)
       
@@ -310,6 +298,7 @@ export class HistoryPage {
     info.finalValueStr = Number(info.finalValue).toFixed(2)
     info.betValueStr = Number(info.betValue).toFixed(2)
 
+    
     this.worksArray.push(info)
     this.totalComission += Number(info.finalValue)
     this.totalJobs++
@@ -373,8 +362,8 @@ export class HistoryPage {
           this.worksArray, 
           this.totalJobs, 
           this.totalComissionStr, 
-          this.totalPrePaidStr, 
-          this.totalCardStr, 
+          this.totalComissionStr, 
+          this.totalComissionStr, 
           this.totalMoneyStr, 
           this.totalFinalStr)
 

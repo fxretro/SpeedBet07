@@ -14,11 +14,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
   templateUrl: 'home.html'
 })
 export class HomePage {  
-
-  private serviceSubscription: Subscription;
-
-  paymentTitle: string = "Aguardando"
-  totalRegisterCompleted: string = "100"
+    
+  code: string = ""
 
   constructor(public navCtrl: NavController, 
     public uiUtils: UiUtilsProvider,    
@@ -66,14 +63,10 @@ export class HomePage {
 
   ngOnDestroy() {
     this.events.unsubscribe(this.dataInfo.eventFcmStart);
-
-    if(this.serviceSubscription)
-      this.serviceSubscription.unsubscribe()
   }
 
   startInterface(){    
     this.events.publish(this.dataInfo.eventFcmStart, 1);   
-    //this.addServices()
   }
  
   
@@ -102,12 +95,16 @@ export class HomePage {
     if(this.dataInfo.isWeb)
       this.iab.create(url, '_blank', options);    
     else 
-      this.iab.create(encodeURI(url), '_system', options);
+      this.iab.create(encodeURI(url), '_system', options);      
+  }
 
-      
+  codeChanged(){    
+
+    if(this.code.length === 6)
+      this.navCtrl.push('HistoryPage', {code: this.code})
+
   }
 
   
 }
-
 

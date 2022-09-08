@@ -166,7 +166,8 @@ export class DatabaseProvider {
   getChampionshipsGames(){
   
     
-    let path = "championship_matches/" + moment().format('DDMMYYYY')
+    //let path = "championship_matches/" + moment().format('DDMMYYYY')
+    let path = "championship_matches/06092022/"
     console.log(path)
 
     return this.db.list(path, 

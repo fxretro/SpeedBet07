@@ -177,6 +177,8 @@ export class BetsPage {
     this.payload = this.navParams.get('payload')
     this.finalValue = this.navParams.get('finalValue')
     this.betValue = this.navParams.get('betValue')
+
+    console.log(this.payload)
     
   }
 

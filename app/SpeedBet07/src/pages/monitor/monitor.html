@@ -4,11 +4,18 @@
     
     <ion-title>Jogos</ion-title>     
     
-    <ion-buttons end>                   
-
-      <button ion-button style="color: white" (click)="finish()" class="mrg-bt-10" [disabled]="finalValue <= 0">                          
-        FINALIZAR R${{finalValue}}
+    <ion-buttons end>       
+      
+      <button ion-button style="color: white" (click)="get()" class="mrg-bt-10">                          
+        ATUALIZAR
       </button>
+
+      <button ion-button style="color: white" (click)="clear()" class="mrg-bt-10">                          
+        LIMPAR
+      </button>
+
+
+      
 
       
     </ion-buttons>
@@ -124,3 +131,11 @@
   </ion-list>
 
 </ion-content>
+
+<ion-footer>
+
+  <button ion-button  full (click)="finish()" class="mrg-bt-10" [disabled]="finalValue <= 0">                          
+    FINALIZAR R${{finalValue}}
+  </button>
+
+</ion-footer>

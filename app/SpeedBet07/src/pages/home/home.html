@@ -1,7 +1,7 @@
 <ion-header class="bg-theme text-white">
 
     <ion-navbar text-center no-border-bottom>      
-      <ion-title> Painel </ion-title>
+      <ion-title> Home </ion-title>
       
       <ion-buttons end>                                   
 
@@ -17,6 +17,13 @@
   </ion-header>
   
   <ion-content padding>
+
+    <ion-row>
+      <ion-item>
+        <ion-label stacked>Pesquisa rápida cupom</ion-label>
+        <ion-input type="text" [(ngModel)]="code" [attr.maxlength]="18" (keyup.enter)="codeChanged()" (ionBlur)="codeChanged()"></ion-input>
+      </ion-item>          
+    </ion-row>
 
     <ion-list padding no-lines>
       

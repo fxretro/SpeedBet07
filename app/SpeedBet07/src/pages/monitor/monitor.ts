@@ -57,9 +57,7 @@ export class MonitorPage {
 
   get(){
         
-
     return new Promise<void>((resolve, reject) =>{
-
 
       this.services = this.db.getChampionshipsGames()
 
@@ -89,6 +87,8 @@ export class MonitorPage {
     data.forEach(element => {      
 
       let info = element.payload.val()    
+      info.key = element.payload.key
+
       let tmp = []        
 
       info.matches.forEach(element => {
@@ -103,6 +103,7 @@ export class MonitorPage {
           element.odd_casa_ativo = 0
           element.odd_empate_ativo = 0
           element.odd_fora_ativo = 0
+          element.key = info.key
   
           this.matchesArray.push({name: element.time_a})
           this.matchesArray.push({name: element.time_b})
@@ -115,16 +116,13 @@ export class MonitorPage {
 
       if(tmp.length > 0){
 
+        
         info.matches = tmp
         this.championships.push(info)    
 
-      }
-      
-      
-      
+      }                  
 
-    });
-    
+    });    
 
     loading.dismiss()
 
@@ -292,6 +290,8 @@ export class MonitorPage {
     this.championships.forEach(element => {
 
       element.matches.forEach(element1 => {
+
+        element1.key = element.key
 
         if(element1.odd_casa_ativo === 1)
           this.championshipsLeagues.push(element1)

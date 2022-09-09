@@ -46,6 +46,11 @@ export class HistoryPage {
   code: string = "" 
   workKey: string
 
+  matchesArray = []
+  championships = []
+  championshipsLeagues = []
+
+
 
   constructor(public navCtrl: NavController, 
     public uiUtils: UiUtilsProvider,    
@@ -97,6 +102,7 @@ export class HistoryPage {
     this.selectedDateEnd = moment().format() 
     this.selectedDate = moment().startOf('month').format() 
     
+    this.getMatches()
     
     this.usersWorkers = []      
 
@@ -153,6 +159,76 @@ export class HistoryPage {
     console.log(event.value.uid)    
   }
 
+
+  getMatches(){
+        
+    return new Promise<void>((resolve, reject) =>{
+
+      this.db.getChampionshipsGames()
+
+      .subscribe(data => {
+        this.getMatchesCallback(data)
+
+        resolve()
+        
+      })
+
+    })
+    
+  }
+  
+  getMatchesCallback(data){
+
+    this.matchesArray = []
+    this.championships = []
+
+    this.client = ""
+
+    let loading = this.uiUtils.showLoading(this.dataInfo.pleaseWait)    
+    loading.present()     
+    
+    data.forEach(element => {      
+
+      let info = element.payload.val()    
+      let key = element.payload.key
+
+      let tmp = []        
+
+      info.matches.forEach(element => {
+
+        let matchDate = moment(element.data, "DD/M")
+        let matchTime = moment(element.hora, "H:mm")
+        
+        if(moment().isBefore(matchTime, 'hour')){
+
+          element.data = matchDate.format("DD/MM")
+          element.championship = info.championship
+          element.odd_casa_ativo = 0
+          element.odd_empate_ativo = 0
+          element.odd_fora_ativo = 0
+          element.key = key
+
+          tmp.push(element)
+
+        }       
+        
+      });
+
+      if(tmp.length > 0){
+
+        info.key = key
+        info.matches = tmp
+        this.championships.push(info)    
+
+      }                  
+
+    });    
+
+    loading.dismiss()
+
+  }  
+
+
   clear(){    
     this.client = ""
     this.worker = ""   
@@ -167,12 +243,6 @@ export class HistoryPage {
 
     this.totalMoney = 0
     this.totalComission = 0
-  }
-
-  showReport(){
-    this.isReportOpen = true
-    this.textHeader = "Relatórios"
-    this.showReports()
   }
 
 
@@ -192,11 +262,7 @@ export class HistoryPage {
     
   }
 
-  getHistory(){
-
-
-  
-  
+  getHistory(){    
             
     let totalm = moment(this.selectedDateEnd).diff(this.selectedDate, 'months')
     
@@ -219,10 +285,7 @@ export class HistoryPage {
     
       this.workGet(dateMonth, dateYear)          
 
-
-
     }
-
     
   }  
 
@@ -262,7 +325,6 @@ export class HistoryPage {
 
       if(this.dataInfo.userInfo.userType !== 3){
 
-
         if(this.dataInfo.userInfo.uid === info.uid ||
           this.dataInfo.userInfo.userType ||          
           info.uid === info.cambista){
@@ -298,7 +360,30 @@ export class HistoryPage {
     info.finalValueStr = Number(info.finalValue).toFixed(2)
     info.betValueStr = Number(info.betValue).toFixed(2)
 
-    
+    info.matchInfo = this.getMatchInfo(info)    
+
+    if(info.matchInfo && Array.isArray(info.matchInfo) && info.matchInfo.length > 0){
+
+      info.match.forEach(element => {
+
+        info.matchInfo.forEach(element1 => {
+
+          if(element.team_a === element1.team_a && element.team_b === element1.team_b){
+
+            info.match.pop(element)
+            info.match.push(Object.assign(element, element1))
+
+          }
+          
+        });
+        
+      });
+
+    }
+        
+
+    console.log(info.match)
+
     this.worksArray.push(info)
     this.totalComission += Number(info.finalValue)
     this.totalJobs++
@@ -306,6 +391,57 @@ export class HistoryPage {
 
   }
 
+  getMatchInfo(info){    
+
+    let tmp = []
+    
+    info.match.forEach(element => {
+
+      let key = element.key      
+
+      this.championships.forEach(element1 => {
+
+        if(tmp.length === 0 && key === element1.key && element1.match_results){
+
+          element1.match_results.forEach(element2 => {
+
+            element2.ganhou = 0
+            
+            if(element2.time_a === element.time_a && element2.time_b === element.time_b){   
+              
+              
+              if(Number(element2.score_home) > Number(element2.score_away))
+                element2.ganhou = 1
+
+              if(Number(element2.score_home) < Number(element2.score_away))
+                element2.ganhou = 2
+
+              if(Number(element2.score_home) <= Number(element2.score_away))
+                element2.ganhou = 3
+
+
+              console.log('ganhou? ', element2.ganhou)
+
+
+              tmp.push(element2)
+            }
+            
+          });
+
+          
+        }
+          
+        
+      });
+
+      
+    });
+
+    
+
+    return tmp
+    
+  }
 
   organizaFila(){    
            
@@ -321,103 +457,7 @@ export class HistoryPage {
     })
 
   }
-
-  organizaFilaRelatorios(){    
-
-    this.reportsArray.sort((a, b) => {
-
-      let date1 = moment(a.datetime).format()
-      let date2 = moment(b.datetime).format()
-      
-      let isBefore = moment(date1).isBefore(date2)      
-
-      return isBefore ? 1 : -1;
-      
-    })
-  }
-
-
-
-
-  
-  downloadExcel(){
-    let alert = this.uiUtils.showConfirm(this.dataText.warning, "Deseja realizar o download via excel?")  
-    alert.then((result) => {
-
-      if(result){
-        this.downloadExcelContinue()      
-      }        
-    })       
-  }
-
-  
-  downloadExcelContinue(){
-
-    let loading = this.uiUtils.showLoading(this.dataText.loading)
-    loading.present()    
-
-
-    this.db.addReport(this.selectedDate, 
-          this.selectedDateEnd, 
-          this.worksArray, 
-          this.totalJobs, 
-          this.totalComissionStr, 
-          this.totalComissionStr, 
-          this.totalComissionStr, 
-          this.totalMoneyStr, 
-          this.totalFinalStr)
-
-
-    .then(() => {
-
-      loading.dismiss()
-      this.uiUtils.showAlertSuccess("Favor aguarde. Estamos processando seu relatório")
-      this.showReports()
-    })
-  }
-
-  showReports(){
-
-    let loading = this.uiUtils.showLoading(this.dataText.loading)
-    loading.present()
-    
-    this.db.getReports()
-    .subscribe((data => {
-
-      this.showReportsContinue(data)
-      loading.dismiss()
-
-    }))
-  }
-
-
-  showReportsContinue(data){
-
-    this.reportsArray = []
-    this.worksArray = []
-
-    data.forEach(element => {
-
-      let info = element.payload.val()
-      info.data = moment(info.data).format("MM/YYYY")
-      info.dataEnd = moment(info.dataEnd).format("DD/MM/YYYY")            
-      info.datetimeStart = moment(info.datetimeStart).format("DD/MM/YYYY")
-      info.datetimeEnd = moment(info.datetimeEnd).format("DD/MM/YYYY")
-      
-      this.reportsArray.push(info)
-    });
-
-    this.organizaFilaRelatorios()
-    
-  }
-  
-  expand(work){
-    work.expand = !work.expand    
-  }  
-
-  open(data){        
-    this.iab.create(data.url);
-  }
+ 
   
   openDirect(data){  
       
@@ -462,7 +502,6 @@ export class HistoryPage {
   }
 
   codeChangedCallback(data){
-
 
     this.worksArray = []
 

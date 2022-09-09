@@ -94,10 +94,14 @@
     
       <ion-card class="trip card" text-wrap *ngFor="let bet of worksArray" no-lines>
 
-        <ion-item>
-                   
+            <ion-item no-padding>
+
+              <h1 class="bg-green text-white text-center"    *ngIf="bet.status && bet.status === 'Confirmado'">CONFIRMADA</h1>   
+              <h1 class="bg-theme text-white text-center"    *ngIf="bet.status && bet.status === 'Aguardando confirmação'">AGUARDANDO</h1>   
+
               <p *ngIf="bet.id"><b>Identificador:</b> {{bet.id}} </p>
               <p *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3"><b>{{dataText.clients}}:</b> {{bet.cliente}} </p>
+              <p *ngIf="bet.status"><b>{{dataText.status}}:</b> {{bet.status}} </p>
               <p *ngIf="bet.datetimeStr"><b>{{dataText.datetime}}:</b> {{bet.datetimeStr}} </p>
               <p *ngIf="bet.betValueStr"><b>Valor apostado:</b> R${{bet.betValueStr}} </p>
               <p *ngIf="bet.finalValueStr"><b>Valor final:</b> R${{bet.finalValueStr}} </p>
@@ -106,15 +110,35 @@
 
               <ion-item *ngFor="let matchh of bet.match" no-lines>
 
+                <h1 class="bg-green text-white text-center"  *ngIf="matchh.odd_casa_ativo   === 1  && matchh.ganhou === 1 && bet.status === 'Confirmado'">Você GANHOU!</h1>   
+                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_empate_ativo === 1  && matchh.ganhou === 1 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
+                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_fora_ativo   === 1  && matchh.ganhou === 1 && bet.status === 'Confirmado'">Você PERDEU!</h1>
+
+                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_casa_ativo   === 1  && matchh.ganhou === 2 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
+                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_empate_ativo === 1  && matchh.ganhou === 2 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
+                <h1 class="bg-green text-white text-center"  *ngIf="matchh.odd_fora_ativo   === 1  && matchh.ganhou === 2 && bet.status === 'Confirmado'">Você GANHOU!</h1>
+
+                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_casa_ativo   === 1  && matchh.ganhou === 3 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
+                <h1 class="bg-green text-white text-center"  *ngIf="matchh.odd_empate_ativo === 1  && matchh.ganhou === 3 && bet.status === 'Confirmado'">Você GANHOU!</h1>   
+                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_fora_ativo   === 1  && matchh.ganhou === 3 && bet.status === 'Confirmado'">Você PERDEU!</h1>
+
+
                 <ion-title *ngIf="!bet.isMultiple && bet.service">{{bet.service}}</ion-title>   
-                <ion-title *ngIf="matchh.odd_casa_ativo === 1">Casa</ion-title>   
-                <ion-title *ngIf="matchh.odd_empate_ativo === 1">Empate</ion-title>   
-                <ion-title *ngIf="matchh.odd_fora_ativo === 1">Fora</ion-title>
+                
+                <ion-title *ngIf="matchh.odd_casa_ativo   === 1">Apostou na casa</ion-title>   
+                <ion-title *ngIf="matchh.odd_empate_ativo === 1">Apostou em Empate</ion-title>   
+                <ion-title *ngIf="matchh.odd_fora_ativo   === 1">Apostou em Fora</ion-title>
+
+                
+                
 
                 <p>{{matchh.championship}} </p>
+                
                 <p>{{matchh.data}} {{matchh.hora}}</p>
-                <p>{{matchh.time_a}} x {{matchh.time_b}}</p>
-                <p>Vencedor do Encontro</p>
+
+                <p *ngIf="! matchh.score_away">{{matchh.time_a}} x {{matchh.time_b}}</p>
+                <p *ngIf="matchh.score_away">{{matchh.time_a}} <b>{{matchh.score_home}}</b>x<b>{{matchh.score_away}}</b> {{matchh.time_b}}</p>
+
                 <p *ngIf="matchh.odd_casa_ativo === 1">Cotação: {{matchh.odd_casa}}</p>
                 <p *ngIf="matchh.odd_empate_ativo === 1">Cotação: {{matchh.odd_empate}}</p>
                 <p *ngIf="matchh.odd_fora_ativo === 1">Cotação: {{matchh.odd_fora}}</p>
@@ -146,14 +170,13 @@
                 </button>
               </ion-col>
 
-              
-
-            </ion-row>
             
 
+            </ion-row>
+
+          
           </ion-item>
-       
-                                  
+                                                     
         </ion-card>
 
     </ion-list>
@@ -164,30 +187,7 @@
 
   <ion-footer style="margin-left: 10px; margin-right: 10px;">
 
-    <!--<ion-row>          
-
-      <ion-col *ngIf="!isReportOpen">
-        <button ion-button block class="btn bg-theme mrg-bt-10 text-white" (click)="showReport()">
-          <ion-icon name="folder-open" item-start style="margin-right: 15px;"></ion-icon>          
-          {{dataText.reportsGenerated}}
-        </button>
-      </ion-col>
-
-      <ion-col *ngIf="isReportOpen">
-        <button ion-button block class="btn bg-theme mrg-bt-10 text-white" (click)="showHistory()">
-          <ion-icon name="md-search" item-start style="margin-right: 15px;"></ion-icon>
-          {{dataText.newSearch}}
-        </button> 
-      </ion-col>
-
-       <ion-col>
-          <button ion-button full text-uppercase (click)="downloadExcel()" [disabled]="worksArray.length === 0" class="btn bg-theme mrg-bt-10 text-white ">
-            <ion-icon name="md-download"  style="margin-right: 10px;"></ion-icon> Download
-          </button>  
-        </ion-col>
-      
-      </ion-row>-->
-
+   
       <ion-row>
 
         <ion-col>

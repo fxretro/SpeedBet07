@@ -274,8 +274,12 @@ export class BetsPage {
         status: this.dataInfo.userInfo.userType === 3 ? "Aguardando confirmação" : "Confirmado",
         id: this.makeid(6),
         betValue: this.betValue
-
+        
+        
       }
+
+
+      console.log(data)
 
       this.enviaQuickRunFim(data)
 

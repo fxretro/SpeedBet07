@@ -100,6 +100,8 @@ export class HomePage {
 
   codeChanged(){    
 
+    console.log('codeChanged')
+
     if(this.code.length === 6)
       this.navCtrl.push('HistoryPage', {code: this.code})
 

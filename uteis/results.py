@@ -52,17 +52,14 @@ def compare(all_matches, results):
 
         matches_tmp = []
 
-
-        print(matches.get('key'), matches.get('status'))
-
-        if matches.get('status') == 'Aguardando':
-
-            for match in matches.get('matches'):
+        for match in matches.get('matches'):
 
                 new_matches = check_results(match, results)                
                 matches_tmp.append(new_matches)
 
-            matches['match_tmp'] = matches_tmp
+        matches['match_tmp'] = matches_tmp        
+
+            
 
     reorder_infomations(all_matches)
 
@@ -87,13 +84,13 @@ def check_results(match, results):
                 match['score_home'] = score_home
                 match['score_away'] = score_away
                 match['stage'] = stage
-                match['status'] = 'Verificado'
+                match['status'] = 'Aguardando'
 
             elif time_b.find(team_away) >= 3:
                 match['score_home'] = score_home
                 match['score_away'] = score_away
                 match['stage'] = stage
-                match['status'] = 'Verificado'
+                match['status'] = 'Aguardando'
             
 
     return match   
@@ -103,10 +100,6 @@ def check_results(match, results):
 def reorder_infomations(all_matches):
     
     for match in all_matches:
-
-        print(match)
-
-        if match.get('status') == 'Aguardando':
-            Db.update_championship_game(match.get('key'), match.get('match_tmp'), match.get('match_tmp'))
+        Db.update_championship_game(match.get('key'), match.get('match_tmp'), match.get('match_tmp'))
                                              
 start()

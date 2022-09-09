@@ -3,6 +3,31 @@ page-history {
     .bg-theme {	  
         background: $theme-color !important;
     }
+
+    .bg-green {	  
+        background: green !important;
+    }
+
+    .bg-red {	  
+        background: red !important;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+
+    .border-red {
+        border-top: 3px solid red;
+     }
+
+     .border-green {
+        border-top: 3px solid green;
+     }
+
+     .border-blue {
+        border-top: 3px solid blue;
+     }
       
     .header {
         &.bg-transparent {

@@ -222,8 +222,7 @@ def add_notification(typee, title, msg, tokens):
 
 def get_hampionship_game():
 
-  #path = "championship_matches/" + moment.now().format('DDMMYYYY')
-  path = "championship_matches/07092022/"
+  path = "championship_matches/" + moment.now().format('DDMMYYYY')
 
   all = db_speed.child(path).get()
   allArray = []
@@ -250,6 +249,5 @@ def add_championship_game(championship, matches):
 
 def update_championship_game(key, match_tmp, matches):
 
-  #path = "championship_matches/" + moment.now().format('DDMMYYYY')
-  path = "championship_matches/07092022/"
-  db_speed.child(path+key).update({'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'match_results': match_tmp, 'matches': matches})
+  path = "championship_matches/" + moment.now().format('DDMMYYYY')
+  db_speed.child(path+key).update({'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'match_results': match_tmp, 'matches': matches, 'status': 'Verificado'})

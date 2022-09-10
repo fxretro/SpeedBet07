@@ -97,18 +97,25 @@ export class HistoryPage {
   }
 
   startInterface(){
-    this.isReportOpen = false
 
-    this.selectedDateEnd = moment().format() 
-    this.selectedDate = moment().startOf('month').format() 
+    if(this.dataInfo.userInfo.userType !== 3){
+
+      this.isReportOpen = false
+
+      this.selectedDateEnd = moment().format() 
+      this.selectedDate = moment().startOf('month').format() 
     
-    this.getMatches()
+      this.getMatches()
+      
+      this.usersWorkers = []      
+
+      if(this.dataInfo.userInfo)
+        this.getClients()
+
+
+    }
+
     
-    this.usersWorkers = []      
-
-    if(this.dataInfo.userInfo)
-      this.getClients()
-
     if(this.navParams.get('code')){
       this.code = this.navParams.get('code')
       this.codeChanged()
@@ -137,13 +144,13 @@ export class HistoryPage {
       
       if(info.status !== 'Desativado'){
 
-        if(this.dataInfo.userInfo.userType === 1){
+        if(this.dataInfo.userInfo.userType === 1)
           this.clientsWorkersArray.push(info)                                                     
-        }
+        
 
-        else if(this.dataInfo.userInfo.uid === info.cambista){
+        else if(this.dataInfo.userInfo.uid === info.cambista)
           this.clientsWorkersArray.push(info)                                                     
-        }
+        
 
 
       }
@@ -175,6 +182,7 @@ export class HistoryPage {
 
     })
     
+
   }
   
   getMatchesCallback(data){
@@ -190,44 +198,17 @@ export class HistoryPage {
     data.forEach(element => {      
 
       let info = element.payload.val()    
-      let key = element.payload.key
+      info.key = element.payload.key
 
-      let tmp = []        
-
-      info.matches.forEach(element => {
-
-        let matchDate = moment(element.data, "DD/M")
-        let matchTime = moment(element.hora, "H:mm")
-        
-        if(moment().isBefore(matchTime, 'hour')){
-
-          element.data = matchDate.format("DD/MM")
-          element.championship = info.championship
-          element.odd_casa_ativo = 0
-          element.odd_empate_ativo = 0
-          element.odd_fora_ativo = 0
-          element.key = key
-
-          tmp.push(element)
-
-        }       
-        
-      });
-
-      if(tmp.length > 0){
-
-        info.key = key
-        info.matches = tmp
-        this.championships.push(info)    
-
-      }                  
-
+      this.championships.push(info)   
     });    
 
     loading.dismiss()
 
   }  
 
+
+ 
 
   clear(){    
     this.client = ""
@@ -311,9 +292,7 @@ export class HistoryPage {
   }
 
     
-  worksCallback(data){   
-    
-    
+  worksCallback(data){           
 
     data.forEach(element => {
 
@@ -323,20 +302,8 @@ export class HistoryPage {
       info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")  
       info.betLink = "https://speedbet07.web.app/#/history?id="+info.id
 
-      if(this.dataInfo.userInfo.userType !== 3){
-
-        if(this.dataInfo.userInfo.uid === info.uid ||
-          this.dataInfo.userInfo.userType ||          
-          info.uid === info.cambista){
-
-
-          this.addArray(info)
-
-        }
-
-        
-      }
-             
+      if(this.dataInfo.userInfo.uid === info.cambista || this.dataInfo.userInfo.userType === 1)
+        this.addArray(info)
 
     });    
 
@@ -350,97 +317,18 @@ export class HistoryPage {
 
     info.isMultiple = Array.isArray(info.match)
 
-    if(!info.isMultiple){
+    if(!info.isMultiple)
+      info.match = [info.match]
 
-      let tmp = info.match
-      info.match = [tmp]
-
-    }
-
+  
     info.finalValueStr = Number(info.finalValue).toFixed(2)
     info.betValueStr = Number(info.betValue).toFixed(2)
-
-    info.matchInfo = this.getMatchInfo(info)    
-
-    if(info.matchInfo && Array.isArray(info.matchInfo) && info.matchInfo.length > 0){
-
-      info.match.forEach(element => {
-
-        info.matchInfo.forEach(element1 => {
-
-          if(element.team_a === element1.team_a && element.team_b === element1.team_b){
-
-            info.match.pop(element)
-            info.match.push(Object.assign(element, element1))
-
-          }
-          
-        });
-        
-      });
-
-    }
-        
-
-    console.log(info.match)
 
     this.worksArray.push(info)
     this.totalComission += Number(info.finalValue)
     this.totalJobs++
     this.totalComissionStr = this.totalComission.toFixed(2)
 
-  }
-
-  getMatchInfo(info){    
-
-    let tmp = []
-    
-    info.match.forEach(element => {
-
-      let key = element.key      
-
-      this.championships.forEach(element1 => {
-
-        if(tmp.length === 0 && key === element1.key && element1.match_results){
-
-          element1.match_results.forEach(element2 => {
-
-            element2.ganhou = 0
-            
-            if(element2.time_a === element.time_a && element2.time_b === element.time_b){   
-              
-              
-              if(Number(element2.score_home) > Number(element2.score_away))
-                element2.ganhou = 1
-
-              if(Number(element2.score_home) < Number(element2.score_away))
-                element2.ganhou = 2
-
-              if(Number(element2.score_home) <= Number(element2.score_away))
-                element2.ganhou = 3
-
-
-              console.log('ganhou? ', element2.ganhou)
-
-
-              tmp.push(element2)
-            }
-            
-          });
-
-          
-        }
-          
-        
-      });
-
-      
-    });
-
-    
-
-    return tmp
-    
   }
 
   organizaFila(){    

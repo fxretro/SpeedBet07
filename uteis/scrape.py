@@ -36,6 +36,8 @@ def parse(all_bets):
                 matches.append({'data': data, 'hora': hora, 'time_a': time_a, 'time_b': time_b, 'odd_casa': odd_casa, 'odd_empate': odd_empate, 'odd_fora': odd_fora, 'status': 'Aguardando'})
 
 
-            Db.add_championship_game(name, matches)        
-                                             
+            Db.add_championship_game(name, matches)    
+                
+
+print('Inicializando Scrape dos jogos do dia')                                                                            
 start()

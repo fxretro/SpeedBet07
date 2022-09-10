@@ -95,6 +95,13 @@ db_speed = firebase_speed.database()
 
 
 ###########################################################
+###########################################################
+# GhostBet
+###########################################################
+###########################################################
+
+
+###########################################################
 # Uteis
 ###########################################################
 
@@ -217,12 +224,47 @@ def add_notification(typee, title, msg, tokens):
 
 
 ###########################################################
+###########################################################
+# SpeedBet 07
+###########################################################
+###########################################################
+
+
+###########################################################
 # Scrape 
 ###########################################################
+
+
+def get_bets():
+
+  path = "betsDone/SpeedBet07/" + moment.now().format('YYYY') + '/' + moment.now().format('MM') + '/'
+  all = db_speed.child(path).get()
+  
+  allArray = []
+
+  for user in all.each(): 
+          data = user.val()
+          data['key'] = user.key()
+          allArray.append(data)        
+
+  return allArray
+
+
+def update_bets(key, matches_new, matches_old):
+
+  path = "betsDone/SpeedBet07/" + moment.now().format('YYYY') + '/' + moment.now().format('MM')+'/'+key  
+  data  ={'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'match': matches_new, 'matches_old': matches_old}
+  db_speed.child(path).update(data)
+
+
+
+
+
 
 def get_hampionship_game():
 
   path = "championship_matches/" + moment.now().format('DDMMYYYY')
+  #path = "championship_matches/09092022/"
 
   all = db_speed.child(path).get()
   allArray = []
@@ -231,7 +273,7 @@ def get_hampionship_game():
           data = user.val()
           data['key'] = user.key()
           allArray.append(data)        
-
+#
   return allArray
 
 
@@ -247,7 +289,9 @@ def add_championship_game(championship, matches):
 
 
 
-def update_championship_game(key, match_tmp, matches):
+def update_championship_game(key, match_tmp):
 
-  path = "championship_matches/" + moment.now().format('DDMMYYYY')
-  db_speed.child(path+key).update({'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'match_results': match_tmp, 'matches': matches, 'status': 'Verificado'})
+  path = "championship_matches/" + moment.now().format('DDMMYYYY')+'/'+key
+  #path = "championship_matches/09092022"+'/'+key
+  
+  db_speed.child(path).update({'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'match_results': match_tmp, 'status': 'Verificado'})

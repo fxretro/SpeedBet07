@@ -80,17 +80,16 @@ def check_results(match, results):
             score_away = match_result.get('score_away')
             stage      = match_result.get('stage')
             
-            if time_a.find(team_home) >= 3:
-                match['score_home'] = score_home
-                match['score_away'] = score_away
-                match['stage'] = stage
-                match['status'] = 'Aguardando'
+            condition_1 = time_a    in team_home
+            condition_2 = team_home in time_a            
+            condition_3 = time_b    in team_away
+            condition_4 = team_away in time_b
+                                       
+            if condition_1 or condition_2 or condition_3 or condition_4:
 
-            elif time_b.find(team_away) >= 3:
                 match['score_home'] = score_home
                 match['score_away'] = score_away
                 match['stage'] = stage
-                match['status'] = 'Aguardando'
             
 
     return match   
@@ -98,8 +97,12 @@ def check_results(match, results):
 
 
 def reorder_infomations(all_matches):
+
     
-    for match in all_matches:
-        Db.update_championship_game(match.get('key'), match.get('match_tmp'), match.get('match_tmp'))
-                                             
+    for match in all_matches:        
+        Db.update_championship_game(match.get('key'), match.get('match_tmp'))
+   
+
+
+print('Conferindo resultado dos jogos do dia de hoje')                                                                        
 start()

@@ -165,7 +165,7 @@ export class DatabaseProvider {
 
   getChampionshipsGames(){
     
-    let path = "championship_matches/" + moment().format('DDMMYYYY')
+    let path = "championship_matches/" + moment().add(-1, 'days').format('DDMMYYYY')
 
     return this.db.list(path, 
         ref => ref.orderByKey())

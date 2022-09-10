@@ -71,13 +71,13 @@ def get_status_bet_match(match):
     score_home = int(match['score_home'])
     score_away = int(match['score_away'])
 
-    if odd_casa_ativo == 1 and score_home > score_away:
+    if odd_casa_ativo   == 1 and score_home > score_away:
         bet_win = 1
 
     if odd_empate_ativo == 1 and score_home == score_away:
         bet_win = 2
 
-    if odd_fora_ativo == 1 and score_away > score_home:
+    if odd_fora_ativo   == 1 and score_away > score_home:
         bet_win = 3
 
     return bet_win

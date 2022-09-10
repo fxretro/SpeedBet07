@@ -111,17 +111,17 @@
 
               <ion-item *ngFor="let matchh of bet.match" no-lines>
 
-                <h1 class="bg-green text-white text-center"  *ngIf="matchh.odd_casa_ativo   === 1  && matchh.bet_win === 1 && bet.status === 'Confirmado'">Você GANHOU!</h1>   
-                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_empate_ativo === 1  && matchh.bet_win === 1 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
-                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_fora_ativo   === 1  && matchh.bet_win === 1 && bet.status === 'Confirmado'">Você PERDEU!</h1>
+                <h1 class="bg-green text-white text-center"    *ngIf="matchh.odd_casa_ativo   === 1  && matchh.bet_win === 1 && bet.status === 'Confirmado'">Você GANHOU!</h1>   
+                <h1 class="bg-red text-white text-center"      *ngIf="matchh.odd_empate_ativo === 1  && matchh.bet_win === 1 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
+                <h1 class="bg-red text-white text-center"      *ngIf="matchh.odd_fora_ativo   === 1  && matchh.bet_win === 1 && bet.status === 'Confirmado'">Você PERDEU!</h1>
 
-                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_casa_ativo   === 1  && matchh.bet_win === 2 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
-                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_empate_ativo === 1  && matchh.bet_win === 2 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
-                <h1 class="bg-green text-white text-center"  *ngIf="matchh.odd_fora_ativo   === 1  && matchh.bet_win === 2 && bet.status === 'Confirmado'">Você GANHOU!</h1>
+                <h1 class="bg-red text-white text-center"      *ngIf="matchh.odd_casa_ativo   === 1  && matchh.bet_win === 2 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
+                <h1 class="bg-green text-white text-center"    *ngIf="matchh.odd_empate_ativo === 1  && matchh.bet_win === 2 && bet.status === 'Confirmado'">Você GANHOU!</h1>   
+                <h1 class="bg-red text-white text-center"      *ngIf="matchh.odd_fora_ativo   === 1  && matchh.bet_win === 2 && bet.status === 'Confirmado'">Você PERDEU!</h1>
 
-                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_casa_ativo   === 1  && matchh.bet_win === 3 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
-                <h1 class="bg-green text-white text-center"  *ngIf="matchh.odd_empate_ativo === 1  && matchh.bet_win === 3 && bet.status === 'Confirmado'">Você GANHOU!</h1>   
-                <h1 class="bg-red text-white text-center"    *ngIf="matchh.odd_fora_ativo   === 1  && matchh.bet_win === 3 && bet.status === 'Confirmado'">Você PERDEU!</h1>
+                <h1 class="bg-red text-white text-center"      *ngIf="matchh.odd_casa_ativo   === 1  && matchh.bet_win === 3 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
+                <h1 class="bg-red text-white text-center"      *ngIf="matchh.odd_empate_ativo === 1  && matchh.bet_win === 3 && bet.status === 'Confirmado'">Você PERDEU!</h1>   
+                <h1 class="bg-green text-white text-center"    *ngIf="matchh.odd_fora_ativo   === 1  && matchh.bet_win === 3 && bet.status === 'Confirmado'">Você GANHOU!</h1>
 
 
                 <ion-title *ngIf="!bet.isMultiple && bet.service">{{bet.service}}</ion-title>   

@@ -24,6 +24,7 @@ export class LoginPage {
   username: string
   password: string
   languageSelected: number = 0
+  isClient: Boolean = false
 
   constructor(public navCtrl: NavController, 
     public dataInfo: DataInfoProvider,    
@@ -125,7 +126,14 @@ export class LoginPage {
       if(! this.dataInfo.isHome){
 
         this.dataInfo.isHome= true
-        this.navCtrl.setRoot(HomePage);   
+
+        if(!this.isClient)
+          this.navCtrl.setRoot(HomePage);   
+
+        else
+          this.navCtrl.setRoot("MonitorPage");   
+
+        
   
       }
             
@@ -149,6 +157,9 @@ export class LoginPage {
         // this.dataInfo.defaultState = data      
 
     })
+
+    if(this.isClient)
+      this.loginUserAnon()
       
   }  
 
@@ -207,10 +218,9 @@ export class LoginPage {
     this.storage.set('language', this.dataText.languageSelected)
     .then(() => {        
                
-      if(this.dataText.languageSelected === 1){
-        // this.dataInfo.defaultState = "DF"
+      if(this.dataText.languageSelected === 1)
         this.dataText.translateEnglish()
-      }
+      
       else 
         this.dataText.translatePortuguese()
       

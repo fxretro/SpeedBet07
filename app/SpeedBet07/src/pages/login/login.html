@@ -15,19 +15,18 @@
 
                 <ion-item class="bg-light text-theme">                                           
                     <ion-label stacked>Email</ion-label>  
-                    <ion-input type="text" value="" [(ngModel)]="username" placeholder="Email"></ion-input>
+                    <ion-input type="text" value="" [(ngModel)]="username" placeholder="Email" [disabled]="isClient"></ion-input>
                 </ion-item>
 
                 <ion-item class="bg-light text-theme">
                     <ion-label stacked>Senha</ion-label>  
-                    <ion-input class="password" type="password" value="" [(ngModel)]="password" placeholder="Senha"></ion-input>
+                    <ion-input class="password" type="password" value="" [(ngModel)]="password" placeholder="Senha"  [disabled]="isClient"></ion-input>
                 </ion-item>
                 
               
             </ion-list>                        
-            
-            <button ion-button block full text-uppercase class="bg-theme text-white btn round shadow-blue" (click)="loginUserAnon()">SOU CLIENTE</button>
-            <button ion-button block full text-uppercase class="bg-theme text-white btn round shadow-blue" (click)="loginUser()">SOU CAMBISTA</button>
+                        
+            <button ion-button block full text-uppercase class="bg-theme text-white btn round shadow-blue" (click)="loginUser()">ENTRAR</button>
             
             
         </div>

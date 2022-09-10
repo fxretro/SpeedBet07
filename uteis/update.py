@@ -64,21 +64,27 @@ def get_status_bet_match(match):
 
     bet_win = 0   
 
-    odd_casa_ativo   = match['odd_casa_ativo']
-    odd_empate_ativo = match['odd_empate_ativo']
-    odd_fora_ativo   = match['odd_fora_ativo']
-  
-    score_home = int(match['score_home'])
-    score_away = int(match['score_away'])
+    try:
 
-    if odd_casa_ativo   == 1 and score_home > score_away:
-        bet_win = 1
+        odd_casa_ativo   = match['odd_casa_ativo']
+        odd_empate_ativo = match['odd_empate_ativo']
+        odd_fora_ativo   = match['odd_fora_ativo']
+    
+        score_home = int(match['score_home'])
+        score_away = int(match['score_away'])
 
-    if odd_empate_ativo == 1 and score_home == score_away:
-        bet_win = 2
+        if odd_casa_ativo   == 1 and score_home > score_away:
+            bet_win = 1
 
-    if odd_fora_ativo   == 1 and score_away > score_home:
-        bet_win = 3
+        if odd_empate_ativo == 1 and score_home == score_away:
+            bet_win = 2
+
+        if odd_fora_ativo   == 1 and score_away > score_home:
+            bet_win = 3
+
+    except: 
+        print('Ignorando jogo não finalizado ou adiado', match['time_a'], match['time_b'])
+        pass
 
     return bet_win
     

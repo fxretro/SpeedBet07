@@ -107,7 +107,7 @@
               <p *ngIf="bet.betValueStr"><b>Valor apostado:</b> R${{bet.betValueStr}} </p>
               <p *ngIf="bet.finalValueStr"><b>Valor final:</b> R${{bet.finalValueStr}} </p>
 
-              <p *ngIf="bet.betLink"><b>Compartilhar:</b> <a href={{bet.betLink}}>Clique aqui para compartilhar</a> </p>
+              <p *ngIf="bet.betLink"><b>Compartilhar:</b> <a href={{bet.betLink}} data-action="share/whatsapp/share" target="_blank">Clique para abrir e segure para compartilhar</a> </p>
 
               <ion-item *ngFor="let matchh of bet.match" no-lines>
 
@@ -153,27 +153,18 @@
             <ion-row>                                    
 
               <ion-col *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && bet.status === 'Aguardando confirmação'">
-                <button ion-button icon-start clear small (click)="changeStatus(bet)" color="secondary">                                                                            
-                    <ion-icon name="clipboard"></ion-icon>                        
-                    Confirmado
-                </button>
-              </ion-col>
-
-              <ion-col  *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && bet.status === 'Confirmado'">
                 <button ion-button icon-start clear small (click)="changeStatus(bet)" color="danger">                                                                            
                     <ion-icon name="clipboard"></ion-icon>                        
                     Aguardando confirmação
                 </button>
               </ion-col>
 
-
-              <ion-col>
-                <button ion-button icon-start clear small (click)="whatsapp(bet)" color="secondary">                                                                            
-                    <ion-icon name="logo-whatsapp"></ion-icon>                        
-                    Compartilhar
+              <ion-col  *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3 && bet.status === 'Confirmado'">
+                <button ion-button icon-start clear small (click)="changeStatus(bet)" color="secondary">                                                                            
+                    <ion-icon name="clipboard"></ion-icon>                        
+                    Confirmado
                 </button>
               </ion-col>
-            
 
             </ion-row>
 

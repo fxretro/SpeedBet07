@@ -13,7 +13,7 @@ export class DataInfoProvider {
 
   
   // CONFIGURAÇÕES DO APP  
-  appName: string = "Speed Bet 07"
+  appName: string = "SpeedBet07"
    
   appVersion: string = ""   
   appIsActive: Boolean = true

@@ -438,10 +438,10 @@ export class HistoryPage {
 
   whatsapp(item){
 
-    this.uiUtils.presentPromptNumber("Atenção", "Favor informar o número do telefone do cliente")
+    this.uiUtils.presentPromptNumber("Atenção", "Favor informar o número o qual você deseja compartilhar as informações da aposta")
     .then((num) => {
 
-      let msg = "Olá, faço parte da equipe do SpeedBet07 e gostaria de falar com você sobre a aposta realizada. Segue os dados ".concat(this.getBetInfo(item))
+      let msg = "Olá, segue as informações da operação realizada. ".concat(this.getBetInfo(item))
       console.log(msg)
 
       if(num){
@@ -464,7 +464,7 @@ export class HistoryPage {
     let betValue = work.betValue
     let cambista = work.cambistaNome
 
-    let msg = "Sua aposta foi recebida e está com o status " + 
+    let msg = "Sua aposta foi recebida. Identificador:  " + work.id + ". Status atual: "
                 status + ". O valor apostado foi de R$" + Number(betValue).toFixed(2) + 
                 ". O valor a ser recebido caso positivo é de R$ " + Number(finalValue).toFixed(2) +
                 ". A aposta foi realizada pelo cambista " + cambista + ".\n\n." +

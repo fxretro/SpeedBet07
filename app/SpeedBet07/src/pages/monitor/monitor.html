@@ -56,7 +56,7 @@
     <ion-input type="number" [(ngModel)]="betValue" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
   </ion-item>  
 
-  <ion-list no-padding>    
+  <ion-list no-padding  no-lines>    
 
       <ion-item text-wrap *ngFor="let campeonato of championships" no-lines no-padding>          
 
@@ -64,15 +64,31 @@
 
             <ion-item text-wrap *ngFor="let match of campeonato.matches" no-lines no-padding>
 
-              <ion-col col-2>
-
-                {{match.data}}
-                {{match.hora}}
+              <p style="text-align: center;">{{match.data}} {{match.hora}}</p>
               
-              </ion-col>
   
-              <ion-col>{{match.time_a}} x {{match.time_b}}</ion-col>
-                                        
+              <ion-item no-lines style="border-top: 0px;border-bottom: 0px;">
+
+                  <ion-avatar item-start>
+                    <img src="./assets/imgs/logo.png" *ngIf="! match.logo_a_path">
+                    <img src="{{match.logo_a_path}}" *ngIf="match.logo_a_path">
+                  </ion-avatar>
+                    
+                  <p>{{match.time_a}}</p>
+
+                </ion-item>
+
+                <ion-item no-lines style="border-top: 0px;border-bottom: 0px;">
+                 
+                  <ion-avatar item-start>
+                    <img src="./assets/imgs/logo.png" *ngIf="! match.logo_b_path">
+                    <img src="{{match.logo_b_path}}" *ngIf="match.logo_b_path">
+                  </ion-avatar>
+                  
+                  <p>{{match.time_b}}</p>
+
+                </ion-item>
+                                                
               <ion-row>                
 
                 <ion-col *ngIf="match.odd_casa_ativo === 0">

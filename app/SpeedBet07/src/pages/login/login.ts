@@ -24,7 +24,7 @@ export class LoginPage {
   username: string
   password: string
   languageSelected: number = 0
-  isClient: Boolean = false
+  isClient: Boolean = true
 
   constructor(public navCtrl: NavController, 
     public dataInfo: DataInfoProvider,    

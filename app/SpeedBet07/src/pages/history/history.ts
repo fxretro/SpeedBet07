@@ -61,6 +61,9 @@ export class HistoryPage {
     public dataText: DataTextProvider,
     public navParams: NavParams) {
 
+
+      this.selectedDateEnd = moment().endOf('day').format() 
+      this.selectedDate = moment().startOf('month').format() 
        
 
       if (document.URL.indexOf("?") > 0) {
@@ -111,8 +114,6 @@ export class HistoryPage {
 
       if(this.dataInfo.userInfo)
         this.getClients()
-
-
     }
 
     
@@ -149,10 +150,7 @@ export class HistoryPage {
         
 
         else if(this.dataInfo.userInfo.uid === info.cambista)
-          this.clientsWorkersArray.push(info)                                                     
-        
-
-
+          this.clientsWorkersArray.push(info)                                                             
       }
       
               
@@ -433,6 +431,17 @@ export class HistoryPage {
       }                    
     })
     
+  }
+
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+
+    this.get()
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 2000);
   }
 
 

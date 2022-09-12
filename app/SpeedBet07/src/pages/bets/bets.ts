@@ -317,12 +317,18 @@ export class BetsPage {
     this.uiUtils.showAlert("Aposta realizada com sucesso", "Identificador <h1 style=\" text-align: center;\">" + data.id + "</h1>")   .present()
     this.requestSent = false
     this.anArray = []    
+    this.searchCode(data.id)
     
    }
 
 
     goPageReports(){
       this.navCtrl.push('HistoryPage', {payload: this.payload})
+    }
+
+    searchCode(code){
+      this.navCtrl.push('HistoryPage', {code: code})
+  
     }
 
     makeid(length) {

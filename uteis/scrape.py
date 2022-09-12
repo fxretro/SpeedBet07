@@ -20,6 +20,7 @@ def parse(all_bets):
 
         for championship in championships:
 
+
             name         = championship.find_all(class_="eventlist-country")[0].find(class_="name").getText()                
             matches      = []
 
@@ -31,9 +32,24 @@ def parse(all_bets):
                 time_b       = match.find_all(class_="nameTeam")[1].getText()
                 odd_casa     = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[0].getText()
                 odd_empate   = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[1].getText()
-                odd_fora     = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[2].getText()              
+                odd_fora     = match.find_all(class_="outcomesMain")[0].find_all(class_="odd")[2].getText()         
+                logo_a       = match.find_all(class_="logoTeam")[0].find('img').attrs['src'].replace("bet_files/", "")
+                logo_b       = match.find_all(class_="logoTeam")[1].find('img').attrs['src'].replace("bet_files/", "")
 
-                matches.append({'data': data, 'hora': hora, 'time_a': time_a, 'time_b': time_b, 'odd_casa': odd_casa, 'odd_empate': odd_empate, 'odd_fora': odd_fora, 'status': 'Aguardando'})
+                logo_a_path  = "https://img.sportradar.com/ls/crest/medium/"+logo_a
+                logo_b_path  = "https://img.sportradar.com/ls/crest/medium/"+logo_b
+
+                matches.append({
+                    'data': data, 
+                    'hora': hora, 
+                    'time_a': time_a, 
+                    'time_b': time_b, 
+                    'odd_casa': odd_casa, 
+                    'odd_empate': odd_empate, 
+                    'odd_fora': odd_fora, 
+                    'logo_a_path': logo_a_path, 
+                    'logo_b_path': logo_b_path, 
+                    'status': 'Aguardando'})
 
 
             Db.add_championship_game(name, matches)    

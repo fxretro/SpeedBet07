@@ -14,6 +14,10 @@
         LIMPAR
       </button>
 
+      <button ion-button style="color: white" (click)="goPageHistory()" class="mrg-bt-10">                          
+        HISTÓRICO
+      </button>
+
 
       
 
@@ -25,6 +29,11 @@
 </ion-header>
 
 <ion-content class="trips detail-bg">
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
 
   <ion-item  no-lines>
     <ion-label stacked>{{dataText.search}}</ion-label>

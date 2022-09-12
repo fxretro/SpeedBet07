@@ -4,6 +4,6 @@ while true
 do
 
     python ./uteis/update.py
-    sleep 300 
+    sleep 1200 
 done
 

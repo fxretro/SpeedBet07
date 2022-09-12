@@ -320,6 +320,23 @@ export class MonitorPage {
     this.refreshValues()
   }
 
+  goPageHistory(){
+    this.navCtrl.push('HistoryPage')
+  }
+
+
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+
+    this.get()
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 2000);
+  }
+ 
+
 
 
 }

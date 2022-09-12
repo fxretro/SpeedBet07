@@ -7,6 +7,10 @@
     
   <ion-content padding>
 
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
     
     <ion-list no-lines>
 
@@ -130,19 +134,14 @@
                 <ion-title *ngIf="matchh.odd_empate_ativo === 1">Apostou em Empate</ion-title>   
                 <ion-title *ngIf="matchh.odd_fora_ativo   === 1">Apostou em Fora</ion-title>
 
-                
-                
-
                 <h3>{{matchh.championship}} </h3>
 
                 <p *ngIf="matchh.stage"><b>Status atual:</b> {{matchh.stage}}</p>
                 <p *ngIf="matchh.score_away">{{matchh.time_a}} <b>{{matchh.score_home}}</b>x<b>{{matchh.score_away}}</b> {{matchh.time_b}}</p>
                 
                 <p><b>Horário:</b> {{matchh.data}} {{matchh.hora}}</p>
-
                 
                 <p *ngIf="! matchh.score_away">{{matchh.time_a}} x {{matchh.time_b}}</p>
-
                 <p *ngIf="matchh.odd_casa_ativo === 1"><b>Cotação:</b> {{matchh.odd_casa}}</p>
                 <p *ngIf="matchh.odd_empate_ativo === 1"><b>Cotação:</b> {{matchh.odd_empate}}</p>
                 <p *ngIf="matchh.odd_fora_ativo === 1"><b>Cotação:</b> {{matchh.odd_fora}}</p>

@@ -298,6 +298,7 @@ export class HistoryPage {
       info.key = element.payload.key     
       info.expand = false
       info.datetimeStr = moment(info.datetime).format("DD/MM/YYYY hh:mm:ss")  
+      
       info.betLink = "https://speedbet07.web.app/#/history?id="+info.id
 
       if(this.dataInfo.userInfo.uid === info.cambista || this.dataInfo.userInfo.userType === 1)

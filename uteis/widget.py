@@ -107,6 +107,7 @@ def bot_futebol_virtual_ambos(system_config, configs, text, url, key):
          
    start_browser(url)
    time.sleep(configs.get("delay_start"))
+   check_focus(system_config)
 
 
    if check_login(system_config):    
@@ -136,7 +137,6 @@ def bot_futebol_virtual_ambos_continue(system_config, configs, text, key):
    bet = text[2]
    bot_futebol_virtual_ambos_finish(system_config, configs, key, text[1], text[0], bet)
 
-   time.sleep(configs.get("delay_end"))        
    Helper.log("Finalizado", key=key, type=1)
    close_browser_tab()   
    
@@ -160,12 +160,10 @@ def bot_futebol_virtual_ambos_finish(system_config, configs, key, match, league,
     click_mouse(x, yy)
     Helper.log("Realizando investimento em " + match, key=key, type=1)        
 
-    info = Db.get_urls_tsv_key(key)[0]
-
     configs = Helper.get_configs(system_config['default']['uid'])
     
     if configs.get('stopped') == 0:        
-        bot_futebol_virtual_ambos_salva(configs, info, key, league, bet)
+        bot_futebol_virtual_ambos_salva(configs, key, bet)
 
     else:
         Helper.log('Robo em modo stop efetuado pelo administrador', colour='red')
@@ -173,7 +171,7 @@ def bot_futebol_virtual_ambos_finish(system_config, configs, key, match, league,
         
 
 
-def bot_futebol_virtual_ambos_salva(configs, info, key, league, bet):
+def bot_futebol_virtual_ambos_salva(configs,  key, bet):
 
     click_selected_text(color, 'Valor de Aposta')
 
@@ -187,18 +185,10 @@ def bot_futebol_virtual_ambos_salva(configs, info, key, league, bet):
     click_mouse(x, y)
     click_mouse(x + configs.get("move_right_bet"), y)      
     pyautogui.press('enter')
-            
-    Helper.log(Helper.get_msg_next_play(configs), key=key, type=1)       
-                                                
+                                                            
     time.sleep(configs.get("delay"))                                
     click_selected_text(color, 'Terminar', 2)       
-    time.sleep(configs.get("delay"))    
-
-    click_selected_text(color, Helper.get_diff_league(league), 1)     
-    time.sleep(configs.get("delay"))    
-    click_selected_text(color, league, 1)      
-
-    time.sleep(configs.get("delay_fifa_end"))                                                                                
+                                                                            
 
            
 def save_evidences():

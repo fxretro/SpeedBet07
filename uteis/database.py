@@ -263,8 +263,8 @@ def update_bets(key, matches_new, matches_old):
 
 def get_hampionship_game():
 
-  path = "championship_matches/" + moment.now().format('DDMMYYYY')
-  #path = "championship_matches/09092022/"
+  #path = "championship_matches/" + moment.now().format('DDMMYYYY')
+  path = "championship_matches/19092022/"
 
   all = db_speed.child(path).get()
   allArray = []
@@ -291,7 +291,7 @@ def add_championship_game(championship, matches):
 
 def update_championship_game(key, match_tmp):
 
-  path = "championship_matches/" + moment.now().format('DDMMYYYY')+'/'+key
-  #path = "championship_matches/09092022"+'/'+key
+  #path = "championship_matches/" + moment.now().format('DDMMYYYY')+'/'+key
+  path = "championship_matches/19092022"+'/'+key
   
   db_speed.child(path).update({'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'match_results': match_tmp, 'status': 'Verificado'})

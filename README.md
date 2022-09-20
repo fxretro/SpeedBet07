@@ -8,10 +8,10 @@ Atenção: Enviar no min 60 segundos antes de entrar na contagem final
 Atenção: No valor da aposta, enviar somente valores inteiros
 
 
-GHOST BET - FUTEBOL VIRTUAL
-Superliga
-04:13
-1
+* GHOST BET - FUTEBOL VIRTUAL   - TEXTO QUE IDENTIFICA PARA O ROBO
+* Superliga - NOME DA LIGA
+* 04:13 - HORÁRIO PARA ENVIAR A BET
+* 1 - VALOR DA BET EM INTEIRO
 
 ## Tipos de ligas
 
@@ -30,7 +30,6 @@ Superliga
 6. Deixa o browser em primeiro plano
 
 
-
 1. Open the firefox browser
 2. Open bet website
 3. Do login
@@ -40,8 +39,8 @@ Superliga
 
 
 
-COPIA E COLA NO SEU TELEGRAM
-COPY AND PAST ON YOUR TELEGRAM
+### COPIA E COLA NO SEU TELEGRAM
+### COPY AND PAST ON YOUR TELEGRAM
 
 
     GHOST BET - FUTEBOL VIRTUAL
@@ -49,6 +48,21 @@ COPY AND PAST ON YOUR TELEGRAM
     05:25
     1
 
+## Pegando resultados 
+
+
+Rode o comando scripts/refresh_results.sh
+
+### Caso queira trocar a data do resultado:
+
+1. Altere a data no script do banco de dados para   path = "championship_matches/19092022/", trocando a ultima parte pela data no formato DDMMYYYY
+3. Depois, rode o script 
+4. Altere a data modificada anteriormente no database para como estava anteriormente
+
+
+## Salvando resultados
+
+Rode o comando scripts/refresh_bets.sh
 
 ## Contatos
 

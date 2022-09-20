@@ -37,6 +37,7 @@ def parse(all_bets):
             score_home = match.find_all(class_="event__score event__score--home")[0].getText()
             score_away = match.find_all(class_="event__score event__score--away")[0].getText()
             
+            print({'stage': stage, 'team_home': team_home, 'team_away': team_away, 'score_home': score_home, 'score_away': score_away})
             all_matches.append({'stage': stage, 'team_home': team_home, 'team_away': team_away, 'score_home': score_home, 'score_away': score_away})  
             
         except:
@@ -69,6 +70,9 @@ def check_results(match, results):
     time_a = keep_names_simple(match.get('time_a'))
     time_b = keep_names_simple(match.get('time_b'))
 
+    print('.................................')
+    print('Verificando times', time_a, time_b)
+
     for result in results:        
 
         for match_result in result:
@@ -84,6 +88,8 @@ def check_results(match, results):
             condition_2 = team_home in time_a            
             condition_3 = time_b    in team_away
             condition_4 = team_away in time_b
+
+            print('Condições', team_home, team_away, condition_1, condition_2, condition_3, condition_4)
                                        
             if condition_1 or condition_2 or condition_3 or condition_4:
 

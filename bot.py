@@ -55,10 +55,7 @@ def notifications(event):
             if isinstance(attr, types.DocumentAttributeSticker):
                 id=attr.stickerset.id
 
-                print('Recebido sticker ', id)   
-
                 tokens = Db.get_tokens()             
-                print(tokens)
                 
                 if str(id) == '3827034221168295937':                    
                     Db.add_notification(1, "Notificação importante", "Atenção! Entrada no FIFA Virtual em alguns instantes", tokens)

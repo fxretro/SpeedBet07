@@ -5,7 +5,6 @@ from datetime import datetime
 from datetime import timedelta
 
 from logging import exception
-from uteis.widget import *
 from pyfiglet import  figlet_format
 from PIL import ImageColor
 
@@ -16,7 +15,6 @@ except ImportError:
     
 
 color = ImageColor.getcolor('#FF8800', "RGB")
-leagues = ["Euro Cup", "Campeonato do Mundo", "Premiership", "Superliga"]
 
 
 ###########################################################
@@ -80,55 +78,4 @@ def log(text, colour = 'green', font='slant', figlet=False, key='0', type=0):
                 '['+ datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text, font=font), colour))
     else:
         six.print_('['+ datetime.now().strftime("%d.%b %Y %H:%M:%S") + ']' + text)
-
-
-
-def get_msg_next_play(configs):
-
-    msg_delay = "Fechando bet e aguardando delay para o próximo jogo. Tempo programado " + str(configs.get("delay_fifa_end")) 
-    return msg_delay
-
-
-def get_diff_league(league):
-
-    for lg in leagues:
-
-        if lg is not league:
-            return lg
-
-    return "Euro Cup"
-
-
-    
-def setInterval(func,time):
-
-    e = threading.Event()
-    while not e.wait(time):
-        func()
-
-
-
-###########################################################
-# Parse text
-###########################################################
-
-def parse_text_tiroseco(texts):
-    
-    time_str = texts[0]
-    date_format_str = '%H:%M'
-    given_time = datetime.strptime(time_str, date_format_str)    
-    given_time = datetime.strptime(time_str, date_format_str)    
-    
-    final_time1 = given_time + timedelta(minutes=3)        
-    final_time_str1 = final_time1.strftime('%H:%M')
-
-    final_time2 = given_time + timedelta(minutes=6)        
-    final_time_str2 = final_time2.strftime('%H:%M')
-
-    final_time3 = given_time + timedelta(minutes=9)        
-    final_time_str3 = final_time3.strftime('%H:%M')
-    
-    timess = [time_str, final_time_str1, final_time_str2, final_time_str3]    
-
-    return timess
 

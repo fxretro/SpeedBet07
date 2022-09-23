@@ -16,6 +16,8 @@ def start():
 
     reorder_infomations(all_matches, bets)
 
+    print('Finalizado')
+
 
 def reorder_infomations(all_matches, bets):
 
@@ -24,6 +26,7 @@ def reorder_infomations(all_matches, bets):
         for matches in bet.get('match'):
 
             match_info = search_match_results(matches, all_matches)
+            print(match_info)
             
             matches_old = matches   
             matches = match_info       

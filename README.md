@@ -48,8 +48,10 @@ Atenção: No valor da aposta, enviar somente valores inteiros
     05:25
     1
 
-## Pegando resultados 
 
+# SpeedBet07
+
+## Pegando resultados 
 
 Rode o comando scripts/refresh_results.sh
 

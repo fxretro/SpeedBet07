@@ -323,6 +323,8 @@ export class HistoryPage {
     info.finalValueStr = Number(info.finalValue).toFixed(2)
     info.betValueStr = Number(info.betValue).toFixed(2)
 
+    console.log(info)
+
     this.worksArray.push(info)
     this.totalComission += Number(info.finalValue)
     this.totalJobs++

@@ -5,7 +5,6 @@ from uteis.helper import *
 import configparser
 import asyncio
 import uteis.database as Db
-import re
 
 ###########################################################
 # Variáveis 

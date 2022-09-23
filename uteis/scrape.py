@@ -39,6 +39,8 @@ def parse(all_bets):
                 logo_a_path  = "https://img.sportradar.com/ls/crest/medium/"+logo_a
                 logo_b_path  = "https://img.sportradar.com/ls/crest/medium/"+logo_b
 
+                link_odds    = match.find_all(class_="totalOutcomes-button")[0]['href']                                
+
                 matches.append({
                     'data': data, 
                     'hora': hora, 
@@ -47,6 +49,7 @@ def parse(all_bets):
                     'odd_casa': odd_casa, 
                     'odd_empate': odd_empate, 
                     'odd_fora': odd_fora, 
+                    'link_odds': link_odds,
                     'logo_a_path': logo_a_path, 
                     'logo_b_path': logo_b_path, 
                     'status': 'Aguardando'})
@@ -57,3 +60,5 @@ def parse(all_bets):
 
 print('Inicializando Scrape dos jogos do dia')                                                                            
 start()
+
+

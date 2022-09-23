@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Atualiza os resultados das apostas realizadas
+
+
 while true
 do
 

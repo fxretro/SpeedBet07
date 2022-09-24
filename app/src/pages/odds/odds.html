@@ -27,14 +27,6 @@
     <ion-input type="number" [(ngModel)]="finalValue" [disabled]="true"></ion-input>
   </ion-item>  
 
-  <ion-item no-lines *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3">    
-
-    <ion-label stacked>{{dataText.selectClients}}</ion-label>  
-    <ion-select [(ngModel)]="client" (ionChange)="clientChanged()">         
-      <ion-option *ngFor="let cl of usersClientsArray">{{cl.name}}</ion-option>
-    </ion-select>                          
-  </ion-item> 
-
   <ion-list no-padding  no-lines>    
 
     <ion-card class="trip card" text-wrap no-lines  *ngIf="payload">

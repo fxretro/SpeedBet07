@@ -25,6 +25,7 @@ def check_infomations(matches):
 
         link = match.get('link_odds')
         bashCommand = "/home/diego/Documentos/Projetos/Ghost/SpeedBet07/scripts/save_page_as.sh \""+link+"\" --browser \"firefox\" --destination \"/tmp/bet/bet.html\" --load-wait-time 5"
+        print(bashCommand)
         
         os.system("rm -rf /tmp/bet/*")
         os.system(bashCommand)

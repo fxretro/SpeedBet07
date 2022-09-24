@@ -1,29 +1,33 @@
 from bs4 import BeautifulSoup
-import database as Db
 
 
-def start():    
+def start(match):    
 
     with open("/tmp/bet/bet.html") as fp:
-        soup = BeautifulSoup(fp, "lxml")                       
+        soup = BeautifulSoup(fp, "lxml") 
+
+        odds_info = []                      
 
         for all_bets in soup.find_all(class_='eventdetail-market'):                                
-            parse(all_bets)    
+            odds_info.append(parse(all_bets, match))
+
+
+        return odds_info
 
 
 
-def parse(all_bets):     
+def parse(all_bets, match):     
+
+    odds_info = []
     
     for match in all_bets:        
 
-        market_name = match.find_all(id="nomeMercado")
+        market_name_all = match.find_all(id="nomeMercado")
         markets = match.find_all(class_="eventdetail-optionItem")
 
         try:
-            market_name = market_name[0].getText()
-            print('Nome do mercado: ', market_name)
-
-        except:
+            market_name = market_name_all[0].getText()
+        except :
             pass
 
 
@@ -31,15 +35,10 @@ def parse(all_bets):
 
             name = market.find_all(class_='name')[0].getText()
             odd  = market.find_all(class_='odd')[0].getText() 
-
-            print(name, odd)
-            
+            odds_info.append({'market_name': market_name, 'name': name, 'odd': odd})
 
 
-       
+    return odds_info
 
 
-                
 
-print('Inicializando Scrape dos jogos do dia')                                                                            
-start()

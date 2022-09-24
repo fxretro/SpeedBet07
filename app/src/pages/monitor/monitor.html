@@ -6,10 +6,6 @@
     
     <ion-buttons end>       
       
-      <button ion-button style="color: white" (click)="get()" class="mrg-bt-10">                          
-        ATUALIZAR
-      </button>
-
       <button ion-button style="color: white" (click)="clear()" class="mrg-bt-10">                          
         LIMPAR
       </button>
@@ -17,10 +13,6 @@
       <button ion-button style="color: white" (click)="goPageHistory()" class="mrg-bt-10">                          
         HISTÓRICO
       </button>
-
-
-      
-
       
     </ion-buttons>
 
@@ -54,6 +46,11 @@
   <ion-item>
     <ion-label stacked>Valor da aposta</ion-label>
     <ion-input type="number" [(ngModel)]="betValue" [attr.maxlength]="18" (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
+  </ion-item>  
+
+  <ion-item>
+    <ion-label stacked>Resultado positivo</ion-label>
+    <ion-input type="number" [(ngModel)]="finalValue" [disabled]="true"></ion-input>
   </ion-item>  
 
   <ion-list no-padding  no-lines>    
@@ -135,21 +132,31 @@
                   </button>
                 </ion-col> 
 
+                <ion-row *ngFor="let odd of match.allOddsArray">                
 
-                <ion-col>  
-                  <button ion-button icon-start clear small (click)="goPageBets(match)" color="secondary">
+                  <ion-col  *ngIf="odd.active" style="margin-left: 15px">
+  
+                    <button ion-button icon-start clear small (click)="remove(odd, match)" color="secondary">
                       <ion-icon name="md-clipboard"></ion-icon>
-                      Verificar todas
+                      {{odd.market_name}} {{odd.name}} {{odd.odd}}
+                    </button>
+                    
+                  </ion-col>
+                                      
+                </ion-row>
+
+                <ion-col *ngIf="match.all_odds">  
+                  <button ion-button icon-start clear small (click)="goPageOdds(match)" color="primary">
+                      <ion-icon name="md-clipboard"></ion-icon>
+                      Todas possibilidades
                   </button>
                 </ion-col>  
                 
               </ion-row>
+             
 
             </ion-item>
-            
-            
-
-                 
+                                         
         </ion-item>
                                                                     
 
@@ -159,8 +166,8 @@
 
 <ion-footer>
 
-  <button ion-button  full (click)="finish()" class="mrg-bt-10" [disabled]="finalValue <= 0">                          
-    FINALIZAR R${{finalValue}}
+  <button ion-button  full (click)="finish()" class="mrg-bt-10" [disabled]="finalValue <= 0 || finalValue <= 0">                          
+    FINALIZAR R${{betValue}}
   </button>
 
 </ion-footer>

@@ -134,7 +134,13 @@ def add_championship_game(championship, matches):
 
 def update_championship_game(key, match_tmp):
 
-  path = "championship_matches/" + moment.now().format('DDMMYYYY')+'/'+key
-  #path = "championship_matches/19092022"+'/'+key
-  
+  path = "championship_matches/" + moment.now().format('DDMMYYYY')+'/'+key  
   db_speed.child(path).update({'datetimeChanged': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'match_results': match_tmp, 'status': 'Verificado'})
+
+
+
+def update_game_odds(key, matches):
+
+  path = "championship_matches/" + moment.now().format('DDMMYYYY')+'/'+key
+  print('path ', path)  
+  db_speed.child(path).update({'datetimeOdds': moment.now().format('DD/MM/YYYY HH:mm:ss'), 'matches': matches})

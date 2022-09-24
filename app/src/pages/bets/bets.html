@@ -32,7 +32,6 @@
     <ion-card class="trip card" text-wrap no-lines  *ngIf="payload">
 
       <ion-item text-wrap *ngFor="let match of payload" no-lines no-padding>          
-
         
           <ion-title *ngIf="match.odd_casa_ativo === 1">Casa</ion-title>
           <ion-title *ngIf="match.odd_empate_ativo === 1">Empate</ion-title>
@@ -44,6 +43,15 @@
           <p *ngIf="match.odd_casa_ativo === 1">Cotação: {{match.odd_casa}}</p>
           <p *ngIf="match.odd_empate_ativo === 1">Cotação: {{match.odd_empate}}</p>
           <p *ngIf="match.odd_fora_ativo === 1">Cotação: {{match.odd_fora}}</p>
+
+
+          <ion-item text-wrap *ngFor="let odd of match.allOddsArray" no-lines no-padding>   
+
+            <ion-title>{{odd.market_name }} </ion-title>
+            <p><b>Aposta:</b> {{odd.name }} </p>
+            <p><b>Cotação:</b> {{odd.odd }} </p>
+
+          </ion-item>
                                                    
       </ion-item>
                                                            

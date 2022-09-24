@@ -1,25 +1,15 @@
 __pycache__/
 
-app/GhostBet/.firebase
-app/GhostBet/.sourcemaps
-app/GhostBet/node_modules/
-app/GhostBet/platforms/
-app/GhostBet/plugins/
-app/GhostBet/www/
-app/GhostBet/functions/node_modules/
-app/GhostBet/src/assets/fonts/
-
-app/SpeedBet07/.firebase
-app/SpeedBet07/.sourcemaps
-app/SpeedBet07/node_modules/
-app/SpeedBet07/platforms/
-app/SpeedBet07/plugins/
-app/SpeedBet07/www/
-app/SpeedBet07/functions/node_modules/
-app/SpeedBet07/src/assets/fonts/
+app/.firebase
+app/.sourcemaps
+app/node_modules/
+app/platforms/
+app/plugins/
+app/www/
+app/functions/node_modules/
+app/src/assets/fonts/
 
 
 geckodriver.log
 name.session
-.gitignore
 name.session-journal

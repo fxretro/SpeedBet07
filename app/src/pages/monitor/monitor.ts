@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, ActionSheetController, Events } from 'ionic-angular';
 import { UiUtilsProvider } from '../../providers/ui-utils/ui-utils'
 import { DataInfoProvider } from '../../providers/data-info/data-info'
 import { DataTextProvider } from '../../providers/data-text/data-text'
@@ -7,7 +7,6 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 import { AlertController } from 'ionic-angular';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @IonicPage()
 @Component({
@@ -20,10 +19,12 @@ export class MonitorPage {
   championships: any = []
   championshipsLeagues: any = []
   matchesArray: any = []
+  allOddsArray: any = []
 
   finalValue: number = 0
   betValue: number = 0
   client: string = ""
+  allowMultiples: Boolean  = false // TODO: Permitir fazer apostas multiplas
 
   
   constructor(
@@ -35,9 +36,28 @@ export class MonitorPage {
     public dataText: DataTextProvider,
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController, 
-    private iab: InAppBrowser,
+    public events: Events,
     public db: DatabaseProvider,
     public navParams: NavParams) {
+
+      this.events.subscribe('update-odds', (data) => {        
+        this.updateBets(data)
+      })
+
+      this.events.subscribe('finish-odds', () => {        
+        this.finish()
+      })
+      
+
+      this.events.subscribe('update-finalvalue', (data) => {        
+        this.finalValue = Number(data)
+      })
+
+      this.events.subscribe('update-betsvalue', (data) => {        
+        this.betValue = Number(data)
+      })
+      
+      
   }
 
 
@@ -47,6 +67,14 @@ export class MonitorPage {
       this.startInterface()
     else
       this.navCtrl.setRoot('LoginPage') 
+  }
+
+  ngOnDestroy(){
+
+    this.events.unsubscribe('update-odds')
+    this.events.unsubscribe('finish-odds')
+    this.events.unsubscribe('update-finalvalue')
+    this.events.unsubscribe('update-betsvalue')
   }
 
   startInterface(){
@@ -104,6 +132,7 @@ export class MonitorPage {
           element.odd_empate_ativo = 0
           element.odd_fora_ativo = 0
           element.key = info.key
+          element.allOddsArray = []
   
           this.matchesArray.push({name: element.time_a})
           this.matchesArray.push({name: element.time_b})
@@ -137,6 +166,7 @@ export class MonitorPage {
         element.odd_casa_ativo = 0
         element.odd_empate_ativo = 0
         element.odd_fora_ativo = 0
+        element.allOddsArray = []
         
       });
 
@@ -153,8 +183,11 @@ export class MonitorPage {
 
   addBet(work, type){
 
+    this.clearAllOdds(work)
+
     this.unmark(work, type) 
-    this.refreshValues()                  
+    this.refreshValues()   
+    
   }
 
 
@@ -202,7 +235,10 @@ export class MonitorPage {
 
         if(element1.odd_fora_ativo === 1){
           this.finalValue += this.finalValue + Number(odd_c)
-        }             
+        } 
+        
+        this.refreshAllOdds(element1)
+
         
       });
 
@@ -217,8 +253,77 @@ export class MonitorPage {
   }
 
 
-  goPageBets(work){
-    this.uiUtils.showAlertSuccess("Disponível em breve")
+  remove(odd, match){
+    
+    odd.active = false
+    this.updateBets(match)
+    this.refreshValues()
+
+  }
+
+  clearAllOdds(work){
+
+
+    this.championships.forEach(element => {
+
+      element.matches.forEach(element1 => {        
+
+        if(element1.time_a === work.time_a){
+
+
+          if(element1.allOddsArray){
+            element1.allOddsArray = []
+          }
+  
+          if(element1.all_odds){
+  
+            element1.all_odds.forEach(element2 => {
+  
+              element2.forEach(element3 => {
+                
+                element3.active = false  
+  
+              });
+  
+              
+              
+            });
+  
+          }
+          
+        }
+        
+        
+
+        
+      });
+      
+
+    });
+                
+    
+  }
+
+  refreshAllOdds(element){
+
+    if(element.all_odds && Array.isArray(element.all_odds)){
+
+      element.all_odds.forEach(element1 => {
+
+        if(element1.active){
+          this.finalValue += this.finalValue + Number(element1.odd)
+        }
+        
+      });
+      
+      
+    }
+    
+  }
+
+
+  goPageOdds(work){    
+    this.navCtrl.push('OddsPage', {payload: work, betValue: this.betValue, finalValue: this.finalValue, allowMultiples: this.allowMultiples})
   }
   
  
@@ -227,14 +332,10 @@ export class MonitorPage {
     this.get()
     .then(() => {
 
-
       if(event.value && event.value.name.length > 0)
         this.matchChangedContinue(event)
 
-    })
-
-    
-    
+    })        
             
   }
 
@@ -303,6 +404,32 @@ export class MonitorPage {
 
         if(element1.odd_fora_ativo === 1)
           this.championshipsLeagues.push(element1)
+
+
+        if(element1.odd_casa_ativo === 0 && 
+            element1.odd_empate_ativo === 0 && 
+            element1.odd_fora_ativo === 0 && 
+            element1.all_odds && Array.isArray(element1.all_odds)){
+
+          element1.all_odds.forEach(element2 => {
+
+            element2.forEach(element3 => {
+
+              if(element3.active){
+
+                let merged = Object.assign(element1, element3);
+                this.championshipsLeagues.push(merged)
+
+
+
+              }
+              
+            });
+            
+          });
+
+
+        }
                 
       });      
       
@@ -326,8 +453,6 @@ export class MonitorPage {
 
 
   doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-
     this.get()
 
     setTimeout(() => {
@@ -336,7 +461,82 @@ export class MonitorPage {
     }, 2000);
   }
  
+  updateBets(payload){
+  
+    this.championships.forEach(info => {      
+      
+      info.matches.forEach(element => {
 
+        if(element.time_a === payload.time_a)
+          this.replaceOdds(element, payload)          
+                
+        
+      });
+
+    });
+
+
+  }
+
+
+  replaceOdds(element, payload){
+
+    element.allOddsArray = []
+    element.odd_casa_ativo = 0
+    element.odd_empate_ativo = 0
+    element.odd_fora_ativo = 0
+
+    payload.all_odds.forEach(element1 => {
+
+      element1.forEach(element2 => {        
+
+        if(element2.active){    
+      
+
+          if(element2.market_name === "Vencedor do Encontro"){
+
+
+            if(element2.name === "Casa"){
+  
+              element.odd_casa_ativo = 1
+              element.odd_empate_ativo = 0
+              element.odd_fora_ativo = 0
+            }
+              
+    
+            if(element2.name === "Empate"){
+    
+              element.odd_casa_ativo = 0
+              element.odd_empate_ativo = 1
+              element.odd_fora_ativo = 0
+            }
+              
+    
+            if(element2.name === "Fora"){
+    
+              element.odd_casa_ativo = 0
+              element.odd_empate_ativo = 0
+              element.odd_fora_ativo = 1
+            }
+  
+          }
+
+          else {
+
+            element.allOddsArray.push(element2)
+    
+          }
+          
+        } 
+               
+        
+      });
+              
+      
+    });
+
+
+  }
 
 
 }

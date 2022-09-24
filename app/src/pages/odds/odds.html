@@ -1,0 +1,87 @@
+
+<ion-header  class="bg-theme text-white">
+  <ion-navbar text-center no-border-bottom>    
+    <ion-title>Apostas</ion-title>   
+
+    <ion-buttons end>       
+      
+      <button ion-button style="color: white" (click)="clear()" class="mrg-bt-10">                          
+        LIMPAR
+      </button>
+
+    </ion-buttons>
+  </ion-navbar>     
+
+</ion-header>
+
+<ion-content class="trips detail-bg">
+
+  <ion-item>
+    <ion-label stacked>Valor da aposta</ion-label>
+    <ion-input type="number" [(ngModel)]="betValue"  (keyup.enter)="apostaChanged()" (ionBlur)="apostaChanged()"></ion-input>
+  </ion-item>  
+
+
+  <ion-item>
+    <ion-label stacked>Resultado positivo</ion-label>
+    <ion-input type="number" [(ngModel)]="finalValue" [disabled]="true"></ion-input>
+  </ion-item>  
+
+  <ion-item no-lines *ngIf="dataInfo.userInfo && dataInfo.userInfo.userType !== 3">    
+
+    <ion-label stacked>{{dataText.selectClients}}</ion-label>  
+    <ion-select [(ngModel)]="client" (ionChange)="clientChanged()">         
+      <ion-option *ngFor="let cl of usersClientsArray">{{cl.name}}</ion-option>
+    </ion-select>                          
+  </ion-item> 
+
+  <ion-list no-padding  no-lines>    
+
+    <ion-card class="trip card" text-wrap no-lines  *ngIf="payload">
+
+      <ion-item text-wrap *ngFor="let odds of payload.all_odds" no-lines no-padding>          
+
+        <ion-list-header color="primary">{{odds.market_name}}</ion-list-header>
+
+        <ion-row *ngFor="let odd of odds" >                
+
+          <ion-col *ngIf="odd.active">
+            <button ion-button icon-start clear small (click)="addBet(odd)" color="secondary">
+                <ion-icon name="md-clipboard"></ion-icon>
+                {{odd.name}} {{odd.odd}} 
+            </button>
+          </ion-col> 
+          
+
+          <ion-col *ngIf="!odd.active">
+            <button ion-button icon-start clear small (click)="addBet(odd)" color="primary">
+                <ion-icon name="md-clipboard"></ion-icon>
+                {{odd.name}} {{odd.odd}} 
+            </button>
+          </ion-col> 
+
+
+        </ion-row>
+  
+      </ion-item>
+
+    </ion-card>
+
+      
+                                                                    
+
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+
+  <button ion-button  full (click)="goBack()" class="mrg-bt-10" [disabled]="finalValue <= 0">                          
+    CONTINUAR R${{finalValue}}
+  </button>
+
+  <button ion-button  full (click)="finish()" class="mrg-bt-10" [disabled]="finalValue <= 0" color="secondary">                          
+    FINALIZAR R${{finalValue}}
+  </button>
+
+</ion-footer>

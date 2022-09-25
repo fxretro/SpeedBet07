@@ -29,32 +29,43 @@
 
   <ion-list  no-lines no-padding>     
   
-    <ion-card class="trip card" text-wrap no-lines  *ngIf="payload">
-
-      <ion-item text-wrap *ngFor="let match of payload" no-lines no-padding>          
+      <ion-card text-wrap *ngFor="let match of payload" no-lines no-padding style="border-top: 0px solid transparent; border-bottom: 0px solid transparent;border-left: 2px solid green;">          
+                  
+          <ion-title text-wrap>{{match.championship}} </ion-title>
         
-          <ion-title *ngIf="match.odd_casa_ativo === 1">Casa</ion-title>
-          <ion-title *ngIf="match.odd_empate_ativo === 1">Empate</ion-title>
-          <ion-title *ngIf="match.odd_fora_ativo === 1">Fora</ion-title>
 
-          <p>{{match.championship}} </p>
-          <p>{{match.data}} {{match.hora}}</p>
-          <p>{{match.time_a}} x {{match.time_b}}</p>
-          <p *ngIf="match.odd_casa_ativo === 1">Cotação: {{match.odd_casa}}</p>
-          <p *ngIf="match.odd_empate_ativo === 1">Cotação: {{match.odd_empate}}</p>
-          <p *ngIf="match.odd_fora_ativo === 1">Cotação: {{match.odd_fora}}</p>
+          <ion-card-content>
 
 
-          <ion-item text-wrap *ngFor="let odd of match.allOddsArray" no-lines no-padding>   
 
-            <ion-title>{{odd.market_name }} </ion-title>
-            <p><b>Aposta:</b> {{odd.name }} </p>
-            <p><b>Cotação:</b> {{odd.odd }} </p>
+            <p><b>Horário: </b>{{match.data}} {{match.hora}}</p>
+            <p><b>Jogo: </b>{{match.time_a}} x {{match.time_b}}</p>
 
-          </ion-item>
-                                                   
-      </ion-item>
-                                                           
+            <ion-item *ngIf="match.odd_casa_ativo === 1 || match.odd_empate_ativo === 1 || match.odd_fora_ativo === 1" style="border-bottom: 0px solid;">
+
+              <h1 *ngIf="match.odd_casa_ativo === 1">Casa GANHA</h1>
+              <h1 *ngIf="match.odd_empate_ativo === 1">Empate GANHA</h1>
+              <h1 *ngIf="match.odd_fora_ativo === 1">Fora GANHA</h1>
+
+                <p *ngIf="match.odd_casa_ativo === 1"><b>Cotação: </b>{{match.odd_casa}}</p>
+                <p *ngIf="match.odd_empate_ativo === 1"><b>Cotação: </b>{{match.odd_empate}}</p>
+                <p *ngIf="match.odd_fora_ativo === 1"><b>Cotação: </b>{{match.odd_fora}}</p>      
+
+              </ion-item>
+
+              <ion-item text-wrap *ngFor="let odd of match.allOddsArray" no-lines no-padding  style="border-bottom: 0px solid;">   
+
+                <h1 text-wrap>{{odd.market_name }}</h1>
+                <p><b>Apostou em:</b> {{odd.name }} </p>
+                <p><b>Cotação:</b> {{odd.odd }} </p>
+
+              </ion-item>
+              
+          </ion-card-content>
+
+
+          
+                                                                                                              
     </ion-card>
 
 

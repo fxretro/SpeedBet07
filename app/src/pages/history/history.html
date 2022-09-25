@@ -147,9 +147,9 @@
                 <p *ngIf="matchh.odd_empate_ativo === 1"><b>Cotação:</b> {{matchh.odd_empate}}</p>
                 <p *ngIf="matchh.odd_fora_ativo === 1"><b>Cotação:</b> {{matchh.odd_fora}}</p>
 
-                <ion-item text-wrap *ngFor="let odd of matchh.allOddsArray" no-lines no-padding>   
+                <ion-item text-wrap *ngFor="let odd of matchh.allOddsArray" no-lines no-padding style="border-bottom: 0px solid;">   
 
-                  <ion-title>{{odd.market_name }} </ion-title>
+                  <ion-title text-wrap ><b>{{odd.market_name }}</b></ion-title>
                   <p><b>Aposta:</b> {{odd.name }} </p>
                   <p><b>Cotação:</b> {{odd.odd }} </p>
       

@@ -56,6 +56,10 @@ export class MonitorPage {
       this.events.subscribe('update-betsvalue', (data) => {        
         this.betValue = Number(data)
       })
+
+      this.events.subscribe('bet-done', () => {        
+        this.clear()
+      })
       
       
   }
@@ -75,6 +79,7 @@ export class MonitorPage {
     this.events.unsubscribe('finish-odds')
     this.events.unsubscribe('update-finalvalue')
     this.events.unsubscribe('update-betsvalue')
+    this.events.unsubscribe('bet-done')
   }
 
   startInterface(){

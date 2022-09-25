@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Events } from 'ionic-angular';
 import { UiUtilsProvider } from '../../providers/ui-utils/ui-utils'
 import { DataInfoProvider } from '../../providers/data-info/data-info'
 import { DatabaseProvider } from '../../providers/database/database';
@@ -52,7 +52,8 @@ export class BetsPage {
     public db: DatabaseProvider,    
     public storageNative: Storage,
     public modalCtrl: ModalController,    
-    public dataText: DataTextProvider,  
+    public dataText: DataTextProvider, 
+    public events: Events,
     public navParams: NavParams) {
   }
   
@@ -261,7 +262,6 @@ export class BetsPage {
       if(!this.selectedService)  
         this.selectedService = "Multipla"
       
-
       let data = {
 
         match: this.payload, 
@@ -274,12 +274,8 @@ export class BetsPage {
         status: this.dataInfo.userInfo.userType === 3 ? "Aguardando confirmação" : "Confirmado",
         id: this.makeid(6),
         betValue: this.betValue
-        
-        
+                
       }
-
-
-      console.log(data)
 
       this.enviaQuickRunFim(data)
 
@@ -316,7 +312,8 @@ export class BetsPage {
     this.navCtrl.pop()
     this.uiUtils.showAlert("Aposta realizada com sucesso", "Identificador <h1 style=\" text-align: center;\">" + data.id + "</h1>")   .present()
     this.requestSent = false
-    this.anArray = []    
+    this.anArray = []  
+    this.events.publish('bet-done')
     this.searchCode(data.id)
     
    }

@@ -1,16 +1,22 @@
 # SpeedBet07
 
 
-O sistema SpeedBet07 é composto de um aplicativo e vários scripts que fazem o scrape, ou seja, pegam as informações 
-utilizadas de um site na internet.
+O sistema SpeedBet07 é composto de um aplicativo e vários scripts que fazem o scrape, ou seja, pegam as informações dos jogos de futebol
+utilizadas de um site na internet. Considero esse um negócio sem riscos, porque você vai apenas refazer a aposta na casa de apostas principal.
+
+Como funciona? Você pode ter a sua plataforma de apostas esportivas de forma rápida e sem riscos. 
+
+1. O sistema pega todos os jogos e as odds.
+2. A odd sempre vai ser menor que nas casas de apostas conhecidas, como bet e betano
+3. O seu cliente vai fazer a aposta usando o app, o cambista vai validar a aposta e fazer no site da casa principal (bet por exemplo)
+4. Se a aposta der green, você pega o valor da odd da casa principal e subtrai do valor da odd do app. Esse valor é o lucro da pessoa dona do sistema. O restante repassa para o cliente.
+5. Caso aconteça o red, o sistema avisa o cliente.
+
 
 
 ## Pegando os dados dos jogos de hoje
 
 Esse script serve para pegar todos os jogos do dia atual
-
-
-
 
 ## Scripts
 
@@ -38,3 +44,4 @@ basta alterar o path no arquivo database.py. Exemplo:
 
 Telegram [[https://t.me/+lXFTyWd85ro3ZGNh]]
 WhatsApp (61) 98301-3768
+Youtube [[https://www.youtube.com/playlist?list=PL3CNm1uwGm_BLmbkOnvhkp1AVKfndx7wz]]

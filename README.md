@@ -1,7 +1,7 @@
 # SpeedBet07
 
 
-O Sistmea SpeedBet07 é composto de um aplicativo e vários scripts que fazem o scrape, ou seja, pegam as informações 
+O sistema SpeedBet07 é composto de um aplicativo e vários scripts que fazem o scrape, ou seja, pegam as informações 
 utilizadas de um site na internet.
 
 
